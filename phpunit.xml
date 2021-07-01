@@ -2,30 +2,29 @@
 <phpunit backupGlobals="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="true"
          stopOnError="false"
-         stopOnFailure="false">
-		 <logging>
-			<testdoxHtml outputFile="./reports/report/testdox.html"/>
-			<testdoxText outputFile="./reports/report/testdox.txt"/>
-			<text outputFile="./reports/report/logfile.txt"/>
-		 </logging>
+         stopOnFailure="false"
+         bootstrap="./tests/bootstrap/autoload.php">
+
 		 <testsuites>
-			<testsuite name="Use Cases for Entities in Administration Module Tests">
-				<directory suffix="Test.php">./tests/Module/Administration/User/Application/create</directory>
-			</testsuite>
+			 <testsuite name="Use Cases for Entities in Administration Module">
+				<directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
+			 </testsuite>
+			 <!-- testsuite name="Use Cases for Entities in Administration Module Tests">
+				 <directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
+			 </testsuite -->
 		 </testsuites>
 		<!-- https://www.gitmemory.com/issue/symfony/symfony/41409/853165049 -->
-		 <coverage processUncoveredFiles="true">
+		 <!-- coverage processUncoveredFiles="true">
 			<include>
 				<directory suffix=".php">./vendor</directory>
 			</include>
-		</coverage>
+		</coverage -->
 		 <php>
 		 </php>
 </phpunit>

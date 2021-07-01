@@ -1,11 +1,26 @@
 {
-	"autoload": {
+    "name": "proyectotau/tau-on-ddd",
+    "description": "New TAU version on DDD and agnostic framework",
+    "type": "project",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Javier Garrido",
+            "email": "ProyectoTAU2@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
         "psr-4": {
-			"TAU\\": "Module/",
-			"Tests\\": "tests/"
-		}
+          "TAU\\": "src/"
+     },
+     "autoload-dev": {
+        "psr-4": {
+          "Tests\\": "tests/"
+        }
+     }
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "8.5.x-dev"
     }
 }
