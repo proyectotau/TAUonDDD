@@ -25,6 +25,7 @@
 				<directory suffix=".php">./vendor</directory>
 			</include>
 		</coverage -->
-		 <php>
-		 </php>
+		<php>
+			<env name="PHP_IDE_CONFIG" value="serverName=localhost" force="true" />
+		</php>
 </phpunit>

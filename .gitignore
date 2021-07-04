@@ -1,4 +1,6 @@
-vendor/
-.idea/
 .phpunit.result.cache
+workspace.code-workspace
+.vscode/
+.idea/
+vendor/
 reports/

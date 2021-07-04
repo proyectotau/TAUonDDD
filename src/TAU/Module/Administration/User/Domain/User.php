@@ -1,6 +1,6 @@
 <?php
 
-namespace TAU\Module\Administration\User\Domain;
+namespace ProyectoTAU\TAU\Module\Administration\User\Domain;
 
 final class User
 {

@@ -10,9 +10,12 @@
         }
     ],
     "minimum-stability": "dev",
+    "config": {
+      "optimize-autoloader": true
+    },
     "autoload": {
         "psr-4": {
-          "TAU\\": "src/"
+          "ProyectoTAU\\": "src/"
      },
      "autoload-dev": {
         "psr-4": {

@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use TAU\Module\Administration\User\Domain\Repository;
-use TAU\Module\Administration\User\Application\create\UserCreator;
+use ProyectoTAU\TAU\Module\Administration\User\Domain\Repository;
+use ProyectoTAU\TAU\Module\Administration\User\Application\create\UserCreator;
 
 final class UserCreatorTest extends TestCase {
 	public function testItCanCreateAdminUser()
@@ -10,6 +10,8 @@ final class UserCreatorTest extends TestCase {
         $userRepository = new DummyUserRepository();
 
         $user = new UserCreator($userRepository);
+        echo "en test";
+        var_dump($user);
         $user->create(0, "Name", "Surname", "login");
         $this->assertTrue(true);
 	}
@@ -17,12 +19,13 @@ final class UserCreatorTest extends TestCase {
 
 class DummyUserRepository implements Repository {
 
-    public function save()
+    public function save(): void
     {
         // TODO: Implement save() method.
+        echo "SAVE";
     }
 
-    public function delete()
+    public function delete(): void
     {
         // TODO: Implement delete() method.
     }
