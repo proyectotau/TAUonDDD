@@ -6,13 +6,14 @@ use ProyectoTAU\TAU\Module\Administration\User\Domain\Repository;
 
 final class UserDestroyer {
 
-    private $userRepository;
+    private $handler;
 
     public function __construct(Repository $user){
-        $this->userRepository = $user;
+        $this->handler = new UserDestroyCommandHandler($user);
     }
 
     public function destroy($id){
-        $this->userRepository->delete($id);
+        $userCommand = new UserDestroyCommand($id);
+        $this->handler->handle($userCommand);
     }
 }
