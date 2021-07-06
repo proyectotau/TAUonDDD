@@ -6,6 +6,7 @@ use ProyectoTAU\TAU\Module\Administration\User\Domain\Repository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\create\UserCreator;
 use ProyectoTAU\TAU\Module\Administration\User\Application\destroy\UserDestroyer;
 use ProyectoTAU\TAU\Module\Administration\User\Application\update\UserUpdater;
+use ProyectoTAU\TAU\Module\Administration\User\Application\read\UserReader;
 
 class DummyUserRepository implements Repository {
 
@@ -35,6 +36,14 @@ class DummyUserRepository implements Repository {
             $surname === 'Dummy' &&
             $login === 'fakelogin') )
             throw new \InvalidArgumentException("Mismatched User received by update method");
+    }
+
+    public function read($id): void
+    {
+        // Should receive a call with id === 0
+        if( ! ($id === 0) ) {
+            throw new \InvalidArgumentException("Mismatched User received by read method");
+        }
     }
 }
 
@@ -72,5 +81,15 @@ final class UserTest extends TestCase {
 
         $user = new UserUpdater($userRepository);
         $user->update(0, "Test", "Dummy", "fakelogin");
+    }
+
+    public function testItCanReadAdminUser()
+    {
+        $userRepository = Mockery::mock(DummyUserRepository::class);
+
+        $userRepository->shouldReceive('read')->once()->with(0);
+
+        $user = new UserReader($userRepository);
+        $user->read(0);
     }
 }
