@@ -77,6 +77,9 @@ final class UserTest extends TestCase {
     {
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
+        /*$userRepository->shouldReceive('read')->once()->with(0)->andReturnUsing(function (){
+            return new \StdClass;
+        });*/
         $userRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy", "fakelogin");
 
         $user = new UserUpdater($userRepository);

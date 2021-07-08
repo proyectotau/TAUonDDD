@@ -12,12 +12,12 @@
          bootstrap="./tests/bootstrap/autoload.php">
 
 		 <testsuites>
-			 <testsuite name="Use Cases for Entities in Administration Module">
+			 <testsuite name="Use Cases for User Entity in Administration Module">
 				<directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
 			 </testsuite>
-			 <!-- testsuite name="Use Cases for Entities in Administration Module Tests">
-				 <directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
-			 </testsuite -->
+			 <testsuite name="Use Cases for Group Entity in Administration Module Tests">
+				 <directory suffix="Test.php">./tests/Module/Administration/Group/Application</directory>
+			 </testsuite>
 		 </testsuites>
 		<!-- https://www.gitmemory.com/issue/symfony/symfony/41409/853165049 -->
 		 <!-- coverage processUncoveredFiles="true">
