@@ -2,15 +2,14 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Domain;
 
-/**
- * @method void setId($id)
- * @method void setName($name)
- * @method void setDesc($desc)
- */
-
 use ProyectoTAU\TAU\Common\PropertiesBag;
 use ProyectoTAU\TAU\Common\SettersBag;
 
+/**
+ * @method void setId(int $id)
+ * @method void setName(string $name)
+ * @method void setDesc(string $desc)
+ */
 class Group
 {
     use PropertiesBag;
