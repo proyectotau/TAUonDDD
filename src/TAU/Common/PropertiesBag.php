@@ -19,7 +19,6 @@ trait PropertiesBag
 
     protected function isPropertyAllowed($name): bool
     {
-        echo "Verificando '$name'\n";
         return in_array($name, $this->attributes, true);
     }
 
@@ -29,13 +28,11 @@ trait PropertiesBag
      */
     protected function defined($name): bool
     {
-        echo "Consultando '$name'\n";
         return array_key_exists($name, $this->data);
     }
 
 	public function __set($name, $value)
     {
-        echo "Estableciendo '$name' a '$value'\n";
         $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
             trigger_error(
@@ -51,7 +48,6 @@ trait PropertiesBag
 	
 	public function __get($name)
     {
-        echo "Obteniendo '$name'\n";
         $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
             trigger_error(
@@ -76,7 +72,6 @@ trait PropertiesBag
 	
 	public function __isset($name)
     {
-        echo "¿Está definido '$name'?\n";
         $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
             trigger_error(
@@ -101,7 +96,6 @@ trait PropertiesBag
 
     public function __unset($name)
     {
-        echo "Eliminando '$name'\n";
         $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
             trigger_error(

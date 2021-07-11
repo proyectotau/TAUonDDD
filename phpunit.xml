@@ -15,8 +15,11 @@
 			 <testsuite name="Use Cases for User Entity in Administration Module">
 				<directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
 			 </testsuite>
-			 <testsuite name="Use Cases for Group Entity in Administration Module Tests">
+			 <testsuite name="Use Cases for Group Entity in Administration Module">
 				 <directory suffix="Test.php">./tests/Module/Administration/Group/Application</directory>
+			 </testsuite>
+			 <testsuite name="Use Cases for Role Entity in Administration Module">
+				 <directory suffix="Test.php">./tests/Module/Administration/Role/Application</directory>
 			 </testsuite>
 		 </testsuites>
 		<!-- https://www.gitmemory.com/issue/symfony/symfony/41409/853165049 -->

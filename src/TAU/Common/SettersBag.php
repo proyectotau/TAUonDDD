@@ -2,7 +2,6 @@
 
 namespace ProyectoTAU\TAU\Common;
 
-
 trait SettersBag
 {
     private $setters = [];
@@ -18,7 +17,6 @@ trait SettersBag
 
     protected function isSetterAllowed($name): bool
     {
-        echo "Verificando '$name'\n";
         return in_array($name, $this->setters, true);
     }
 
@@ -34,8 +32,7 @@ trait SettersBag
             return null;
         }
 
-        echo "Llamando al método de objeto '$name' "
-            . implode(', ', $arguments). "\n";
+        //echo "Llamando al método de objeto '$name' " . implode(', ', $arguments). "\n";
 
         $attribute = strtolower(substr($name, 3));
         if( substr($name, 0, 1) === 's' ){
