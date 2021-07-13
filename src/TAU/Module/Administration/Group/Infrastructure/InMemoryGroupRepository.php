@@ -2,31 +2,29 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Infrastructure;
 
+use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 class InMemoryGroupRepository implements GroupRepository
 {
-    private $groupDataStore = [];
-
     public function create(Group $group): void
     {
-        $this->groupDataStore[$group->getId()] = $group;
+        InMemoryRepository::getInstance()->createGroup($group);
     }
 
     public function read($id): Group
     {
-        return $this->groupDataStore[$id];
+        return InMemoryRepository::getInstance()->readGroup($id);
     }
 
     public function update($id, $name, $desc): void
     {
-        $this->groupDataStore[$id]->setName($name);
-        $this->groupDataStore[$id]->setName($desc);
+        InMemoryRepository::getInstance()->updateGroup($id, $name, $desc);
     }
 
     public function delete($id): void
     {
-        unset($this->groupDataStore[$id]);
+        InMemoryRepository::getInstance()->deleteGroup($id);
     }
 }

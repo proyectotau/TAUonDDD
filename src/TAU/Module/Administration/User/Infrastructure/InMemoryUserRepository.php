@@ -2,32 +2,29 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Infrastructure;
 
+use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 class InMemoryUserRepository implements UserRepository
 {
-    private $userDataStore = [];
-
     public function create(User $user): void
     {
-        $this->userDataStore[$user->getId()] = $user;
+        InMemoryRepository::getInstance()->createUser($user);
     }
 
     public function read($id): User
     {
-        return $this->userDataStore[$id];
+        return InMemoryRepository::getInstance()->readUser($id);
     }
 
     public function update($id, $name, $surname, $login): void
     {
-        $this->userDataStore[$id]->setName($name);
-        $this->userDataStore[$id]->setName($surname);
-        $this->userDataStore[$id]->setName($login);
+        InMemoryRepository::getInstance()->updateUser($id, $name, $surname, $login);
     }
 
     public function delete($id): void
     {
-        unset($this->userDataStore[$id]);
+        InMemoryRepository::getInstance()->deleteUser($id);
     }
 }

@@ -99,7 +99,7 @@ class GroupTest extends TestCase
     public function testItCanUpdateAdminGroup()
     {
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
-        
+
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
         $group = new UpdateGroup($groupRepository);
