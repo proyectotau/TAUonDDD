@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Application\create;
 
+use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 final class CreateUserCommandHandler
@@ -15,6 +16,6 @@ final class CreateUserCommandHandler
 
     public function handle(CreateUserCommand $command)
     {
-        $this->userRepository->create($command->id, $command->name, $command->surname, $command->login);
+        $this->userRepository->create(new User($command->id, $command->name, $command->surname, $command->login));
     }
 }

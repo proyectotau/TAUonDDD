@@ -4,6 +4,7 @@ namespace Tests\Module\Administration\Role\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRole;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRole;
@@ -12,16 +13,16 @@ use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRole;
 
 class DummyRoleRepository implements RoleRepository {
 
-    public function create($id, $name, $desc): void
+    public function create(Role $role): void
     {
         // Should receive a call once with the same Dummy Role as argument
-        if( ! ($id === 0 &&
-            $name === 'Test' &&
-            $desc === 'Dummy') )
+        if( ! ($role->getId() === 0 &&
+            $role->getName() === 'Test' &&
+            $role->getDesc() === 'Dummy') )
             throw new \InvalidArgumentException("Mismatched Role received by create method");
     }
 
-    public function read($id): void
+    public function read($id): Role
     {
         // Should receive a call with id === 0
         if( ! ($id === 0) ) {
@@ -57,7 +58,10 @@ class RoleTest extends TestCase
     {
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
-        $groupRepository->shouldReceive('create')->once()->with(0, "Test", "Dummy");
+        $groupRepository->shouldReceive('create')
+            ->once()
+            ->with(\Hamcrest\Core\IsEqual::equalTo(
+                new Role(0, "Test", "Dummy")));
 
         $group = new CreateRole($groupRepository);
         $group->create(0, "Test", "Dummy");
@@ -77,9 +81,6 @@ class RoleTest extends TestCase
     {
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
-        /*$userRepository->shouldReceive('read')->once()->with(0)->andReturnUsing(function (){
-            return new \StdClass;
-        });*/
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
         $group = new UpdateRole($groupRepository);

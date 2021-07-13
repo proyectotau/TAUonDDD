@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Role\Application\create;
 
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 
 final class CreateRoleCommandHandler
@@ -15,6 +16,6 @@ final class CreateRoleCommandHandler
 
     public function handle(CreateRoleCommand $command)
     {
-        $this->roleRepository->create($command->id, $command->name, $command->desc);
+        $this->roleRepository->create(new Role($command->id, $command->name, $command->desc));
     }
 }

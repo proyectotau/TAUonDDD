@@ -13,16 +13,16 @@ use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroup;
 
 class DummyGroupRepository implements GroupRepository {
 
-    public function create($id, $name, $desc): void
+    public function create(Group $group): void
     {
         // Should receive a call once with the same Dummy Group as argument
-        if( ! ($id === 0 &&
-            $name === 'Test' &&
-            $desc === 'Dummy') )
+        if( ! ($group->getId() === 0 &&
+            $group->getName() === 'Test' &&
+            $group->getDesc() === 'Dummy') )
             throw new \InvalidArgumentException("Mismatched Group received by create method");
     }
 
-    public function read($id): void
+    public function read($id): Group
     {
         // Should receive a call with id === 0
         if( ! ($id === 0) ) {
@@ -77,7 +77,10 @@ class GroupTest extends TestCase
     {
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
 
-        $groupRepository->shouldReceive('create')->once()->with(0, "Test", "Dummy");
+        $groupRepository->shouldReceive('create')
+            ->once()
+            ->with(\Hamcrest\Core\IsEqual::equalTo(
+                new Group(0, "Test", "Dummy")));
 
         $group = new CreateGroup($groupRepository);
         $group->create(0, "Test", "Dummy");
@@ -96,10 +99,7 @@ class GroupTest extends TestCase
     public function testItCanUpdateAdminGroup()
     {
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
-
-        /*$userRepository->shouldReceive('read')->once()->with(0)->andReturnUsing(function (){
-            return new \StdClass;
-        });*/
+        
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
         $group = new UpdateGroup($groupRepository);

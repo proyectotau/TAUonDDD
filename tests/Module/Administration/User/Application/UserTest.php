@@ -1,6 +1,7 @@
 <?php
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\create\CreateUser;
 use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;
@@ -9,17 +10,17 @@ use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUser;
 
 class DummyUserRepository implements UserRepository {
 
-    public function create($id, $name, $surname, $login): void
+    public function create(User $user): void
     {
         // Should receive a call once with the same Dummy User as argument
-        if( ! ($id === 0 &&
-               $name === 'Test' &&
-               $surname === 'Dummy' &&
-               $login === 'fakelogin') )
+        if( ! ($user->getId() === 0 &&
+               $user->getName() === 'Test' &&
+               $user->getSurname() === 'Dummy' &&
+               $user->getLogin() === 'fakelogin') )
             throw new \InvalidArgumentException("Mismatched User received by create method");
     }
 
-    public function read($id): void
+    public function read($id): User
     {
         // Should receive a call with id === 0
         if( ! ($id === 0) ) {
@@ -55,7 +56,10 @@ final class UserTest extends TestCase {
     {
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
-        $userRepository->shouldReceive('create')->once()->with(0, "Test", "Dummy", "fakelogin");
+        $userRepository->shouldReceive('create')
+            ->once()
+            ->with(\Hamcrest\Core\IsEqual::equalTo(
+                new User(0, "Test", "Dummy", "fakelogin")));
 
         $user = new CreateUser($userRepository);
         $user->create(0, "Test", "Dummy", "fakelogin");
@@ -75,9 +79,6 @@ final class UserTest extends TestCase {
     {
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
-        /*$userRepository->shouldReceive('read')->once()->with(0)->andReturnUsing(function (){
-            return new \StdClass;
-        });*/
         $userRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy", "fakelogin");
 
         $user = new UpdateUser($userRepository);

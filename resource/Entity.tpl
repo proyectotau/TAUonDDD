@@ -6,7 +6,7 @@ use ProyectoTAU\TAU\Common\PropertiesBag;
 use ProyectoTAU\TAU\Common\SettersBag;
 
 %phpdoc_block%
-final class %Entity%
+class %Entity%
 {
     use PropertiesBag;
     use SettersBag;

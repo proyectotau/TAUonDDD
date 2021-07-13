@@ -13,12 +13,15 @@
 
 		 <testsuites>
 			 <testsuite name="Use Cases for User Entity in Administration Module">
-				<directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
+				 <directory suffix="Test.php">./tests/Module/Administration/User/Infrastructure</directory>
+				 <directory suffix="Test.php">./tests/Module/Administration/User/Application</directory>
 			 </testsuite>
 			 <testsuite name="Use Cases for Group Entity in Administration Module">
+				 <directory suffix="Test.php">./tests/Module/Administration/Group/Infrastructure</directory>
 				 <directory suffix="Test.php">./tests/Module/Administration/Group/Application</directory>
 			 </testsuite>
 			 <testsuite name="Use Cases for Role Entity in Administration Module">
+				 <directory suffix="Test.php">./tests/Module/Administration/Role/Infrastructure</directory>
 				 <directory suffix="Test.php">./tests/Module/Administration/Role/Application</directory>
 			 </testsuite>
 		 </testsuites>

@@ -13,7 +13,7 @@ use ProyectoTAU\TAU\Common\SettersBag;
  * @method void setDesc(string $desc)
  * @method string getDesc()
  */
-final class Role
+class Role
 {
     use PropertiesBag;
     use SettersBag;

@@ -2,7 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Domain;
 
-final class User
+class User
 {
     private $id;
     private $name;
