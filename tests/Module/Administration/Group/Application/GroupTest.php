@@ -4,6 +4,7 @@ namespace Tests\Module\Administration\Group\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroup;
@@ -45,6 +46,9 @@ class DummyGroupRepository implements GroupRepository {
             throw new \InvalidArgumentException("Mismatched Group received by delete method");
         }
     }
+
+    public function addUserToGroup(User $user, Group $group){}
+    public function getUsersFromGroup(Group $group): array {return null;}
 }
 
 class GroupTest extends TestCase

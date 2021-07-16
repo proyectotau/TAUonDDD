@@ -2,19 +2,25 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Application\read;
 
+use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 final class ReadUserCommandHandler
 {
     private $userRepository;
+    //private $dataTransformer;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository /*, DataTransformer $dataTransformer*/)
     {
         $this->userRepository = $userRepository;
+        //$this->dataTransformer = $dataTransformer;
     }
 
-    public function handle(ReadUserCommand $command)
+    public function handle(ReadUserCommand $command): User //| mixed
     {
-        $this->userRepository->read($command->id);
+        return //$this->dataTransformer->write(
+            $this->userRepository->read($command->id)
+        //)->read()
+        ;
     }
 }

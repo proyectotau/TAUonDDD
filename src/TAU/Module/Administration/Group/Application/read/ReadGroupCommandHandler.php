@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Application\read;
 
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 final class ReadGroupCommandHandler
@@ -13,8 +14,8 @@ final class ReadGroupCommandHandler
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(ReadGroupCommand $command)
+    public function handle(ReadGroupCommand $command): Group
     {
-        $this->groupRepository->read($command->id);
+        return $this->groupRepository->read($command->id);
     }
 }

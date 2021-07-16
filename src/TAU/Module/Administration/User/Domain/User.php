@@ -15,6 +15,8 @@ class User
         $this->setName($name);
         $this->setSurname($surname);
         $this->setLogin($login);
+
+        // TODO: Raise CreateUserDomainEvent($this)
     }
 
     public function setId($id)
@@ -55,5 +57,14 @@ class User
     public function getLogin()
     {
         return $this->login;
+    }
+
+    public function __toString()
+    {
+        return
+            "id: " . $this->id . "\n" .
+            "name: " . $this->name . "\n" .
+            "surname: " . $this->surname . "\n" .
+            "login: " . $this->login . "\n";
     }
 }

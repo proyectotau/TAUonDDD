@@ -18,6 +18,9 @@ class Group
     use PropertiesBag;
     use SettersBag;
 
+
+    private $members = [];
+
      public function __construct($id, $name, $desc)
      {
         $this->setPropertiesBag(['id', 'name', 'desc']);
@@ -26,5 +29,26 @@ class Group
         $this->setId($id);
         $this->setName($name);
         $this->setDesc($desc);
+
+         // TODO: Raise CreateGroupDomainEvent($this)
      }
+
+    public function addUser($user)
+    {
+        $this->members[] = $user;
+        // TODO: Raise AddUserToGroupDomainEvent($user, $this)
+    }
+
+    public function getUsers(): array
+    {
+        return $this->members;
+    }
+
+    public function __toString()
+    {
+        return
+            "id: " . $this->id . "\n" .
+            "name: " . $this->name . "\n" .
+            "desc: " . $this->desc . "\n";
+    }
 }

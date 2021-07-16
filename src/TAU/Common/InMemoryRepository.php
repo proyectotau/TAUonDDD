@@ -11,13 +11,18 @@ use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
  */
 
 // General singleton class.
-class InMemoryRepository {
+class InMemoryRepository
+{
     // Hold the class instance.
     private static $instance = null;
 
+    // Tables
     private $userDataStore = [];
     private $groupDataStore = [];
     private $roleDataStore = [];
+
+    // Relations
+    private $user_group = [];
 
     // The constructor is private
     // to prevent initiation with outer code.
@@ -32,7 +37,7 @@ class InMemoryRepository {
     {
         if (self::$instance == null)
         {
-            self::$instance = new self();
+            self::$instance = new static();
         }
 
         return self::$instance;
@@ -112,5 +117,19 @@ class InMemoryRepository {
     public function deleteRole($id): void
     {
         unset($this->roleDataStore[$id]);
+    }
+
+    /*
+     * Relations
+     */
+
+    public function addUserToGroup(User $user, Group $group)
+    {
+        $this->user_group[$user->getId()][$group->getId()] = [$user, $group];
+    }
+
+    public function getUsersFromGroup(Group $group)
+    {
+        return array_column($this->user_group, $group->getId());
     }
 }
