@@ -59,4 +59,30 @@ class UserGroupRelationTest extends TestCase
             'available' => []
         ], $actual);
     }
+
+    public function testItCanGetAvailableGroupsFromUser()
+    {
+        InMemoryRepository::getInstance()->clear();
+
+        $userRepository = new InMemoryUserRepository();
+        $groupRepository = new InMemoryGroupRepository();
+
+        $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
+        $groupRepository->create($group1 = new Group(1, "Test1", "Dummy1"));
+        $groupRepository->create($group2 = new Group(2, "Test2", "Dummy2"));
+
+        InMemoryRepository::getInstance()->addUserToGroup($user, $group1);
+
+        $getUsersFromGroupService = new GetGroupsFromUser($userRepository);
+        $actual = $getUsersFromGroupService->getGroupsFromUser(0);
+
+        $this->assertSame([
+            'belongsto' => [
+                $group1
+            ],
+            'available' => [
+                $group2
+            ]
+        ], $actual);
+    }
 }
