@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Role\Application\read;
 
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 
 final class ReadRole
@@ -12,8 +13,9 @@ final class ReadRole
         $this->handler = new ReadRoleCommandHandler($role);
     }
 
-	public function read($id){
+	public function read($id): Role
+    {
 		$roleCommand = new ReadRoleCommand($id);
-		$this->handler->handle($roleCommand);
+		return $this->handler->handle($roleCommand);
 	}
 }

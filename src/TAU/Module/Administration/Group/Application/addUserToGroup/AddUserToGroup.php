@@ -2,8 +2,6 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup;
 
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;

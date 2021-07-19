@@ -1,9 +1,6 @@
 <?php
 require "functions.php";
 
-// Usage:
-// php tools/makeUseCaseEntity.php UseCase Entity fields,...
-
 const INDENT = "    "; // 4 spaces
 const DEBUG = false;
 
@@ -12,7 +9,7 @@ $resource_file = 'UseCaseEntity.tpl';
 
 if( $argc != 4){
     echo "Usage:\n";
-    echo "php tools/UseCaseEntity.php UseCase Entity fields,...\n";
+    echo "php tools/makeUseCaseEntity.php UseCase Entity fields,...\n";
     exit(1);
 }
 
@@ -46,12 +43,12 @@ $pa = substr($pa, 0, strlen($pa)-2); // strip trailing , and space
 
 $next = str_replace('%param_attributes%', $pa, $next);
 
-/*if( DEBUG ){*/echo 'next';echo $next;//}
+/*if( DEBUG ){echo 'next';*/echo $next;//}
 
 $destination = 'src' . namespace2dir($next) . '/' . $UseCase . $Entity . '.php';
 
 if( ($count = file_force_contents($destination, $next)) === false ){
     echo 'file_put_contents returned false';
 } else {
-    echo $destination . ': ' .$count . ' bytes written';
+    echo $destination . ': ' . $count . ' bytes written';
 }

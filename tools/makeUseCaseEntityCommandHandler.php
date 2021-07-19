@@ -1,9 +1,6 @@
 <?php
 require "functions.php";
 
-// Usage:
-// php tools/makeEntityUseCaseCommandHandler.php UseCase Entity fields,...
-
 const INDENT = "    "; // 4 spaces
 const DEBUG = false;
 
@@ -28,7 +25,17 @@ $template = file_get_contents($resource_dir . $resource_file);
 
 if( DEBUG ){echo 'Template';echo $template;}
 
-$next = str_replace('%usecase%', $usecase, $template);
+if( $usecase === 'create' ){
+    $next = str_replace('%usecase_params%', 'new %Entity%(%command_field_attributes%)', $template);
+} else {
+    $next = str_replace('%usecase_params%', '%command_field_attributes%', $template);
+}
+
+if( $usecase === 'read' ){
+    $next = str_replace('%return_if_read%', 'return', $next);
+}
+
+$next = str_replace('%usecase%', $usecase, $next);
 $next = str_replace('%Usecase%', $UseCase, $next);
 
 if( DEBUG ){echo 'next';echo $next;}
@@ -47,12 +54,12 @@ $cfa = substr($cfa, 0, strlen($cfa)-2); // strip trailing , and space
 
 $next = str_replace('%command_field_attributes%', $cfa, $next);
 
-/*if( DEBUG ){*/echo 'next';echo $next;//}
+/*if( DEBUG ){echo 'next';*/echo $next;//}
 
 $destination = 'src' . namespace2dir($next) . '/' . $UseCase . $Entity . 'CommandHandler.php';
 
 if( ($count = file_force_contents($destination, $next)) === false ){
     echo 'file_put_contents returned false';
 } else {
-    echo $destination . ': ' .$count . ' bytes written';
+    echo $destination . ': ' . $count . ' bytes written';
 }

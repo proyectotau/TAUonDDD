@@ -4,6 +4,9 @@ namespace Tests\Module\Administration\Role\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use ProyectoTAU\TAU\Common\InMemoryRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRole;
@@ -45,6 +48,9 @@ class DummyRoleRepository implements RoleRepository {
             throw new \InvalidArgumentException("Mismatched Role received by delete method");
         }
     }
+
+    public function addGroupToRole(Group $group, Role $role){return null;}
+    public function addModuleToRole(Module $module, Role $role){return null;}
 }
 
 class RoleTest extends TestCase
@@ -56,6 +62,8 @@ class RoleTest extends TestCase
 
     public function testItCanCreateAdminRole()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
         $groupRepository->shouldReceive('create')
@@ -69,6 +77,8 @@ class RoleTest extends TestCase
 
     public function testItCanReadAdminRole()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
         $groupRepository->shouldReceive('read')->once()->with(0);
@@ -79,6 +89,8 @@ class RoleTest extends TestCase
 
     public function testItCanUpdateAdminRole()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
@@ -89,6 +101,8 @@ class RoleTest extends TestCase
 
     public function testItCanDeleteAdminRole()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyRoleRepository::class);
 
         $groupRepository->shouldReceive('delete')->once()->with(0);

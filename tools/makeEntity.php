@@ -1,9 +1,6 @@
 <?php
 require "functions.php";
 
-// Usage:
-// php tools/makeEntity.php Entity fields,...
-
 const INDENT = "    "; // 4 spaces
 const DEBUG = false;
 
@@ -65,12 +62,12 @@ $next = str_replace('%param_attributes%', $pa, $next);
 $next = str_replace('%$public_field_attributes%', $pfa, $next);
 $next = str_replace('%this_setter_field%', $sfa, $next);
 
-/*if( DEBUG ){*/echo 'next';echo $next;//}
+/*if( DEBUG ){echo 'next';*/echo $next;//}
 
 $destination = 'src' . namespace2dir($next) . '/' . $Entity . '.php';
 
 if( ($count = file_force_contents($destination, $next)) === false ){
     echo 'file_put_contents returned false';
 } else {
-    echo $destination . ': ' .$count . ' bytes written';
+    echo $destination . ': ' . $count . ' bytes written';
 }

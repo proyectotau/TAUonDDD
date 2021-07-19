@@ -4,6 +4,7 @@
 # php tools/makeEntity.php User id,name,surname,login
 php tools/makeEntity.php Group id,name,desc
 php tools/makeEntity.php Role id,name,desc
+php tools/makeEntity.php Module id,name,desc
 
 # User use-case
 php tools/makeUseCaseEntity.php create User id,name,surname,login
@@ -58,3 +59,21 @@ php tools/makeUseCaseEntityCommandHandler.php create Role id,name,desc
 php tools/makeUseCaseEntityCommandHandler.php read Role id
 php tools/makeUseCaseEntityCommandHandler.php update Role id,name,desc
 php tools/makeUseCaseEntityCommandHandler.php delete Role id
+
+# Module use-case
+php tools/makeUseCaseEntity.php create Module id,name,desc
+php tools/makeUseCaseEntity.php read Module id
+php tools/makeUseCaseEntity.php update Module id,name,desc
+php tools/makeUseCaseEntity.php delete Module id
+
+# Module Command
+php tools/makeUseCaseEntityCommand.php create Module id,name,desc
+php tools/makeUseCaseEntityCommand.php read Module id
+php tools/makeUseCaseEntityCommand.php update Module id,name,desc
+php tools/makeUseCaseEntityCommand.php delete Module id
+
+# Module Command handler
+php tools/makeUseCaseEntityCommandHandler.php create Module id,name,desc
+php tools/makeUseCaseEntityCommandHandler.php read Module id
+php tools/makeUseCaseEntityCommandHandler.php update Module id,name,desc
+php tools/makeUseCaseEntityCommandHandler.php delete Module id

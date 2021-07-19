@@ -1,9 +1,6 @@
 <?php
 require "functions.php";
 
-// Usage:
-// php tools/makeEntityUseCaseCommand.php UseCase Entity fields,...
-
 const INDENT = "    "; // 4 spaces
 const DEBUG = false;
 
@@ -12,7 +9,7 @@ $resource_file = 'UseCaseEntityCommand.tpl';
 
 if( $argc != 4){
     echo "Usage:\n";
-    echo "php tools/makeEntityUseCaseCommand.php UseCase Entity fields,...\n";
+    echo "php tools/makeUseCaseEntityCommand.php UseCase Entity fields,...\n";
     exit(1);
 }
 
@@ -64,12 +61,12 @@ $tfa = substr($tfa, 0, strlen($tfa)-1); // strip trailing \n
 
 $next = str_replace('%this_field_attributes%', $tfa, $next);
 
-/*if( DEBUG ){*/echo 'next';echo $next;//}
+/*if( DEBUG ){echo 'next';*/echo $next;//}
 
 $destination = 'src' . namespace2dir($next) . '/' . $UseCase . $Entity . 'Command.php';
 
 if( ($count = file_force_contents($destination, $next)) === false ){
     echo 'file_put_contents returned false';
 } else {
-    echo $destination . ': ' .$count . ' bytes written';
+    echo $destination . ': ' . $count . ' bytes written';
 }

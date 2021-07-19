@@ -3,6 +3,8 @@
 namespace ProyectoTAU\TAU\Module\Administration\Role\Infrastructure;
 
 use ProyectoTAU\TAU\Common\InMemoryRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 
@@ -26,5 +28,15 @@ class InMemoryRoleRepository implements RoleRepository
     public function delete($id): void
     {
         InMemoryRepository::getInstance()->deleteRole($id);
+    }
+
+    public function addGroupToRole(Group $group, Role $role)
+    {
+        InMemoryRepository::getInstance()->addGroupToRole($group, $role);
+    }
+
+    public function addModuleToRole(Module $module, Role $role)
+    {
+        InMemoryRepository::getInstance()->addModuleToRole($module, $role);
     }
 }

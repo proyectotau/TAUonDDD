@@ -9,6 +9,8 @@ class User
     private $surname;
     private $login;
 
+    private $belongsto = [];
+
     public function __construct($id, $name, $surname, $login)
     {
         $this->setId($id);
@@ -57,6 +59,17 @@ class User
     public function getLogin()
     {
         return $this->login;
+    }
+
+    public function addGroup($group)
+    {
+        $this->belongsto[] = $group;
+        // TODO: Raise AddGroupToUserDomainEvent($this, $group)
+    }
+
+    public function getGroups(): array
+    {
+        return $this->belongsto;
     }
 
     public function __toString()

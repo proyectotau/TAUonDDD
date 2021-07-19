@@ -5,6 +5,7 @@ namespace ProyectoTAU\TAU\Module\Administration\Group\Infrastructure;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 class InMemoryGroupRepository implements GroupRepository
@@ -37,5 +38,15 @@ class InMemoryGroupRepository implements GroupRepository
     public function getUsersFromGroup(Group $group): array
     {
         return InMemoryRepository::getInstance()->getUsersFromGroup($group);
+    }
+
+    public function addRoleToGroup(Role $role, Group $group)
+    {
+        InMemoryRepository::getInstance()->addRoleToGroup($role, $group);
+    }
+
+    public function getRolesFromGroup(Group $group): array
+    {
+        return InMemoryRepository::getInstance()->getRolesFromGroup($group);
     }
 }

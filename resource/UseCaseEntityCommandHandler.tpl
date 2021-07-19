@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\%Entity%\Application\%usecase%;
 
+use ProyectoTAU\TAU\Module\Administration\%Entity%\Domain\%Entity%;
 use ProyectoTAU\TAU\Module\Administration\%Entity%\Domain\%Entity%Repository;
 
 final class %Usecase%%Entity%CommandHandler
@@ -15,6 +16,6 @@ final class %Usecase%%Entity%CommandHandler
 
     public function handle(%Usecase%%Entity%Command $command)
     {
-        $this->%entity%Repository->%usecase%(%command_field_attributes%);
+        %return_if_read% $this->%entity%Repository->%usecase%(%usecase_params%);
     }
 }

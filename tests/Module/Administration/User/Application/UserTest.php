@@ -1,5 +1,6 @@
 <?php
 
+use ProyectoTAU\TAU\Common\InMemoryRepository;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
@@ -27,6 +28,7 @@ class DummyUserRepository implements UserRepository {
             throw new \InvalidArgumentException("Mismatched User received by read method");
         }
     }
+
     public function update($id, $name, $surname, $login): void
     {
         // Should receive a call once with the same Dummy User as argument
@@ -44,6 +46,8 @@ class DummyUserRepository implements UserRepository {
             throw new \InvalidArgumentException("Mismatched User received by delete method");
         }
     }
+
+    public function addGroupToUser($group, $user){}
 }
 
 final class UserTest extends TestCase {
@@ -54,6 +58,8 @@ final class UserTest extends TestCase {
 
 	public function testItCanCreateAdminUser()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('create')
@@ -67,6 +73,8 @@ final class UserTest extends TestCase {
 
     public function testItCanReadAdminUser()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('read')->once()->with(0);
@@ -77,6 +85,8 @@ final class UserTest extends TestCase {
 
     public function testItCanUpdateAdminUser()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy", "fakelogin");
@@ -87,6 +97,8 @@ final class UserTest extends TestCase {
 
     public function testItCanDeleteAdminUser()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('delete')->once()->with(0);

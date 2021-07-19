@@ -24,6 +24,10 @@
 				 <directory suffix="Test.php">./tests/Module/Administration/Role/Infrastructure</directory>
 				 <directory suffix="Test.php">./tests/Module/Administration/Role/Application</directory>
 			 </testsuite>
+			 <testsuite name="Use Cases for Module Entity in Administration Module">
+				 <directory suffix="Test.php">./tests/Module/Administration/Module/Infrastructure</directory>
+				 <directory suffix="Test.php">./tests/Module/Administration/Module/Application</directory>
+			 </testsuite>
 		 </testsuites>
 		<!-- https://www.gitmemory.com/issue/symfony/symfony/41409/853165049 -->
 		 <!-- coverage processUncoveredFiles="true">

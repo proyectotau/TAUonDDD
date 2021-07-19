@@ -17,5 +17,7 @@ class %Entity%
         $this->setSettersBag($this->getPropertiesBag());
 
 %this_setter_field%
+
+        // TODO: Raise Create%Entity%DomainEvent($this)
      }
 }

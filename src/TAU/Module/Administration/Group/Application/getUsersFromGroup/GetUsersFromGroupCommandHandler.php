@@ -16,10 +16,11 @@ final class GetUsersFromGroupCommandHandler
 
     public function handle(GetUsersFromGroupCommand $command)
     {
-        return $this->groupRepository->getUsersFromGroup($command->group);
-        /*
+        $r = $this->groupRepository->getUsersFromGroup($command->group);
+
         $group = $command->group;
         $group->getUsers();
-        */
+
+        return $r;
     }
 }

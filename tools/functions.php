@@ -21,14 +21,16 @@ function namespace2dir($namespace){
 }
 
 // https://www.php.net/manual/en/function.file-put-contents.php#84180
-function file_force_contents($dir, $contents)
+function file_force_contents($destination, $contents)
 {
-    $parts = explode('/', $dir);
+    $parts = explode('/', $destination);
     $file = array_pop($parts);
     $dir = '';
     foreach ($parts as $part) {
-        echo $dir . "$part/\n";
         if (!is_dir($dir .= "$part/")) mkdir($dir);
     }
-    return file_put_contents($dir . $file, $contents);
+    if( is_file($destination) ){
+        rename($destination, $destination . '.bak');
+    }
+    return file_put_contents($destination, $contents);
 }

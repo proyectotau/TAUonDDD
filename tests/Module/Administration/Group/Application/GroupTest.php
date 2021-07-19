@@ -4,6 +4,7 @@ namespace Tests\Module\Administration\Group\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
@@ -49,6 +50,7 @@ class DummyGroupRepository implements GroupRepository {
 
     public function addUserToGroup(User $user, Group $group){}
     public function getUsersFromGroup(Group $group): array {return null;}
+    public function getRolesFromGroup(Group $group): array {return null;}
 }
 
 class GroupTest extends TestCase
@@ -58,27 +60,10 @@ class GroupTest extends TestCase
         Mockery::close();
     }
 
-    public function skipItCanAccessAttribute()
-    {
-        $group = new Group(0, "", "");
-
-        $group->id = 1;
-        $group->name = 'Administration';
-        $group->desc = 'TAU Administration group';
-
-        // $group->nonexist = "ERROR";
-
-        $group->setId(2);
-        $group->setName('Group Name');
-        $group->setDesc('Group Desc');
-
-        echo $group->getId();
-        echo $group->getName();
-        echo $group->getDesc();
-    }
-
     public function testItCanCreateAdminGroup()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
 
         $groupRepository->shouldReceive('create')
@@ -92,6 +77,8 @@ class GroupTest extends TestCase
 
     public function testItCanReadAdminGroup()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
 
         $groupRepository->shouldReceive('read')->once()->with(0);
@@ -102,6 +89,8 @@ class GroupTest extends TestCase
 
     public function testItCanUpdateAdminGroup()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
 
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
@@ -112,6 +101,8 @@ class GroupTest extends TestCase
 
     public function testItCanDeleteAdminGroup()
     {
+        InMemoryRepository::getInstance()->clear();
+
         $groupRepository = Mockery::mock(DummyGroupRepository::class);
 
         $groupRepository->shouldReceive('delete')->once()->with(0);

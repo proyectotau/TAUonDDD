@@ -20,6 +20,7 @@ class Group
 
 
     private $members = [];
+    private $authorizedBy = [];
 
      public function __construct($id, $name, $desc)
      {
@@ -30,7 +31,7 @@ class Group
         $this->setName($name);
         $this->setDesc($desc);
 
-         // TODO: Raise CreateGroupDomainEvent($this)
+        // TODO: Raise CreateGroupDomainEvent($this)
      }
 
     public function addUser($user)
@@ -42,6 +43,17 @@ class Group
     public function getUsers(): array
     {
         return $this->members;
+    }
+
+    public function addRole($role)
+    {
+        $this->authorizedBy[] = $role;
+        // TODO: Raise AddRoleToGroupDomainEvent($role, $this)
+    }
+
+    public function getRoles()
+    {
+        return $this->authorizedBy;
     }
 
     public function __toString()

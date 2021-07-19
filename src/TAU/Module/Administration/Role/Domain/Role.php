@@ -18,6 +18,9 @@ class Role
     use PropertiesBag;
     use SettersBag;
 
+    private $groups = [];
+    private $modules = [];
+
      public function __construct($id, $name, $desc)
      {
         $this->setPropertiesBag(['id', 'name', 'desc']);
@@ -26,5 +29,19 @@ class Role
         $this->setId($id);
         $this->setName($name);
         $this->setDesc($desc);
+
+		// TODO: Raise CreateRoleDomainEvent($this)
      }
+
+    public function addGroup($group)
+    {
+        $this->groups[] = $group;
+        // TODO: RaiseAddGroupToRoleDomainEvent($group, $this)
+    }
+
+    public function addModule($module)
+    {
+        $this->modules[] = $module;
+        // TODO: RaiseAddModuleToRoleDomainEvent($module, $this)
+    }
 }
