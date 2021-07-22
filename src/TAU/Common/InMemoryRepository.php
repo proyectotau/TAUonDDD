@@ -175,12 +175,12 @@ class InMemoryRepository
 
     public function getGroupsFromUser(User $user): array
     {
-        return $this->extractY($this->user_group, 'belongsto', $user);
+        return $this->extractY($this->user_group, 'belongsto', $this->groupDataStore, $user);
     }
 
     public function getUsersFromGroup(Group $group): array
     {
-        return $this->extractX($this->user_group, 'members', $group);
+        return $this->extractX($this->user_group, 'members', $this->userDataStore, $group);
     }
 
     public function addGroupToRole(Group $group, Role $role)
@@ -195,12 +195,12 @@ class InMemoryRepository
 
     public function getRolesFromGroup(Group $group): array
     {
-        return $this->extractY($this->group_role, 'grants', $group);
+        return $this->extractY($this->group_role, 'grants', $this->roleDataStore, $group);
     }
 
     public function getGroupsFromRole(Role $role): array
     {
-        return $this->extractX($this->group_role, 'authorizedBy', $role);
+        return $this->extractX($this->group_role, 'authorizedBy', $this->groupDataStore, $role);
     }
 
     public function addRoleToModule(Role $role, Module $module)
@@ -215,50 +215,48 @@ class InMemoryRepository
 
     public function getModulesFromRole(Role $role): array
     {
-        return $this->extractY($this->role_module, 'canRun', $role);
+        return $this->extractY($this->role_module, 'canRun', $this->moduleDataStore, $role);
     }
 
     public function getRolesFromModule(Module $module): array
     {
-        return $this->extractX($this->role_module, 'grantedBy', $module);
+        return $this->extractX($this->role_module, 'grantedBy', $this->roleDataStore, $module);
     }
 
     /*
      * Privates
      */
 
-    private function extractX($from, $who, $entityY)
+    private function extractX($from, $who, $available, $entityY)
     {
         $r = [
             $who => [],
-            'available' => []
+            'available' => $available
         ];
 
         foreach($from as $xKey => $xs)
-            foreach($xs as $yKey => $pair){
-                if( $yKey === $entityY->getId() )
-                    $r[$who][] = $pair[0];
-                else
-                    $r['available'][] = $pair[0];
-            }
+            foreach($xs as $yKey => $pair)
+                if( $yKey === $entityY->getId() ) {
+                    $r[$who][$xKey] = $pair[0];
+                    unset($r['available'][$xKey]);
+                }
 
         return $r;
     }
 
-    private function extractY($from, $who, $entityX)
+    public function extractY($from, $who, $available, $entityX)
     {
         $r = [
             $who => [],
-            'available' => []
+            'available' => $available
         ];
 
         foreach($from as $xKey => $xs)
-            foreach($xs as $yKey => $pair){
-                if( $xKey === $entityX->getId() )
-                    $r[$who][] = $pair[1];
-                else
-                    $r['available'][] = $pair[1];
-            }
+            foreach($xs as $yKey => $pair)
+                if ($xKey === $entityX->getId()) {
+                    $r[$who][$yKey] = $pair[1];
+                    unset($r['available'][$yKey]);
+                }
 
         return $r;
     }
