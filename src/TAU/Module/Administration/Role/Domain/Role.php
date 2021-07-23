@@ -39,6 +39,11 @@ class Role
         // TODO: RaiseAddGroupToRoleDomainEvent($group, $this)
     }
 
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
     public function addModule($module)
     {
         $this->modules[] = $module;

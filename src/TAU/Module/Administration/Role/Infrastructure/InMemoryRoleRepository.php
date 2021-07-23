@@ -35,6 +35,11 @@ class InMemoryRoleRepository implements RoleRepository
         InMemoryRepository::getInstance()->addGroupToRole($group, $role);
     }
 
+    public function getGroupsFromRole(Role $role)
+    {
+        return InMemoryRepository::getInstance()->getGroupsFromRole($role);
+    }
+
     public function addModuleToRole(Module $module, Role $role)
     {
         InMemoryRepository::getInstance()->addModuleToRole($module, $role);

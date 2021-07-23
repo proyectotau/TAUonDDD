@@ -51,6 +51,7 @@ class DummyRoleRepository implements RoleRepository {
 
     public function addGroupToRole(Group $group, Role $role){return null;}
     public function addModuleToRole(Module $module, Role $role){return null;}
+    public function getGroupsFromRole($role){return null;}
 }
 
 class RoleTest extends TestCase
