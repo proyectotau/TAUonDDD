@@ -49,4 +49,9 @@ class Role
         $this->modules[] = $module;
         // TODO: RaiseAddModuleToRoleDomainEvent($module, $this)
     }
+
+    public function getModules()
+    {
+        return $this->modules;
+    }
 }

@@ -85,30 +85,4 @@ class RoleGroupRelationTest extends TestCase
             ]
         ], $actual);
     }
-
-    public function testItCanGetAvailableGroupsFromRole()
-    {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryGroupRepository();
-
-        $roleRepository->create($role = new Role(0, "Test", "Dummy", "fakelogin"));
-        $groupRepository->create($group1 = new Group(1, "Test1", "Dummy1"));
-        $groupRepository->create($group2 = new Group(2, "Test2", "Dummy2"));
-
-        InMemoryRepository::getInstance()->addRoleToGroup($role, $group1);
-
-        $getRolesFromGroupService = new GetGroupsFromRole($roleRepository);
-        $actual = $getRolesFromGroupService->getGroupsFromRole(0);
-
-        $this->assertSame([
-            'authorizedBy' => [
-                1 => $group1
-            ],
-            'available' => [
-                2 => $group2
-            ]
-        ], $actual);
-    }
 }
