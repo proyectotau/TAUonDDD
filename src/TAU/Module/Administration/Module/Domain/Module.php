@@ -18,7 +18,7 @@ class Module
     use PropertiesBag;
     use SettersBag;
 
-    private $roles = [];
+    use ModuleUseCases;
 
      public function __construct($id, $name, $desc)
      {
@@ -32,14 +32,8 @@ class Module
 		// TODO: Raise CreateModuleDomainEvent($this)
      }
 
-    public function addRole($role)
+    public function __toString()
     {
-        $this->roles[] = $role;
-        // TODO: Raise AddRoleToModuleDomainEvent($role, $this)
-    }
-
-    public function getRoles(): array
-    {
-        return $this->roles;
+        return $this->propertiesBagToString();
     }
 }

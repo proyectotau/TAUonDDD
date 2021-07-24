@@ -17,6 +17,16 @@ trait PropertiesBag
         return $this->attributes;
     }
 
+    protected function propertiesBagToString()
+    {
+        $s = '';
+        foreach ($this->attributes as $attr)
+        {
+            $s .= $attr . ': ' . $this->$attr . "\n";
+        }
+        return $s;
+    }
+
     protected function isPropertyAllowed($name): bool
     {
         return in_array($name, $this->attributes, true);

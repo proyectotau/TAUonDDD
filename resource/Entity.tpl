@@ -11,6 +11,8 @@ class %Entity%
     use PropertiesBag;
     use SettersBag;
 
+    use %Entity%UseCases;
+
      public function __construct(%param_attributes%)
      {
         $this->setPropertiesBag([%$public_field_attributes%]);
@@ -20,4 +22,9 @@ class %Entity%
 
         // TODO: Raise Create%Entity%DomainEvent($this)
      }
+
+    public function __toString()
+    {
+        return $this->propertiesBagToString();
+    }
 }
