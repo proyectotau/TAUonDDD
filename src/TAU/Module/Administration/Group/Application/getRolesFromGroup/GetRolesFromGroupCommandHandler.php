@@ -15,9 +15,9 @@ final class GetRolesFromGroupCommandHandler
 
     public function handle(GetRolesFromGroupCommand $command)
     {
-        $r = $this->groupRepository->getRolesFromGroup($command->group);
+        $group = $this->groupRepository->read($command->groupId);
+        $r = $this->groupRepository->getRolesFromGroup($group);
 
-        $group = $command->group;
         $group->getRoles();
 
         return $r;

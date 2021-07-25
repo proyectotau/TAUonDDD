@@ -2,14 +2,12 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole;
 
-use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-
 final class GetGroupsFromRoleCommand
 {
-    public $role;
+    public $roleId;
 
-    public function __construct(Role $role)
+    public function __construct($roleId)
     {
-        $this->role = $role;
+        $this->roleId = $roleId;
     }
 }

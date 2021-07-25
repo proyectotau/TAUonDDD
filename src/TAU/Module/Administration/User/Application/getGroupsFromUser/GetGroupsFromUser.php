@@ -3,7 +3,6 @@
 namespace ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser;
 
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
-use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;
 
 final class GetGroupsFromUser
 {
@@ -17,10 +16,7 @@ final class GetGroupsFromUser
     }
 
     public function getGroupsFromUser($userId){
-        $userService = new ReadUser($this->userRepository);
-        $user = $userService->read($userId);
-
-        $userCommand = new GetGroupsFromUserCommand($user);
+        $userCommand = new GetGroupsFromUserCommand($userId);
         return $this->handler->handle($userCommand);
     }
 }

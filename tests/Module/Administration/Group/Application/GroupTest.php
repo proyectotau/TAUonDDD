@@ -5,6 +5,7 @@ namespace Tests\Module\Administration\Group\Application;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
@@ -49,6 +50,7 @@ class DummyGroupRepository implements GroupRepository {
     }
 
     public function addUserToGroup(User $user, Group $group){}
+    public function addRoleToGroup(Role $role, Group $group){}
     public function getUsersFromGroup(Group $group): array {return null;}
     public function getRolesFromGroup(Group $group): array {return null;}
 }

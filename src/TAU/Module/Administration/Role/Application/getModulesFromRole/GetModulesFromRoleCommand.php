@@ -2,14 +2,12 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole;
 
-use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-
 final class GetModulesFromRoleCommand
 {
-    public $role;
+    public $roleId;
 
-    public function __construct(Role $role)
+    public function __construct($roleId)
     {
-        $this->role = $role;
+        $this->roleId = $roleId;
     }
 }

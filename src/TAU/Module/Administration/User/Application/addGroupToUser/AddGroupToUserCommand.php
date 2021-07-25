@@ -7,12 +7,12 @@ use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 
 final class AddGroupToUserCommand
 {
-    public $group;
-    public $user;
+    public $groupId;
+    public $userId;
 
-    public function __construct(Group $group, User $user)
+    public function __construct($groupId, $userId)
     {
-        $this->group = $group;
-        $this->user = $user;
+        $this->groupId = $groupId;
+        $this->userId = $userId;
     }
 }

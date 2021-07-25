@@ -6,7 +6,6 @@ use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 final class GetUsersFromGroupCommandHandler
 {
-    private $userRepository;
     private $groupRepository;
 
     public function __construct(GroupRepository $group)
@@ -16,9 +15,9 @@ final class GetUsersFromGroupCommandHandler
 
     public function handle(GetUsersFromGroupCommand $command)
     {
-        $r = $this->groupRepository->getUsersFromGroup($command->group);
+        $group = $this->groupRepository->read($command->groupId);
+        $r = $this->groupRepository->getUsersFromGroup($group);
 
-        $group = $command->group;
         $group->getUsers();
 
         return $r;

@@ -2,8 +2,8 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup;
 
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 final class AddUserToGroupCommandHandler
 {
@@ -18,10 +18,11 @@ final class AddUserToGroupCommandHandler
 
     public function handle(AddUserToGroupCommand $command)
     {
-        $this->groupRepository->addUserToGroup($command->user, $command->group);
+        $user = $this->userRepository->read($command->userId);
+        $group = $this->groupRepository->read($command->groupId);
 
-        $user = $command->user;
-        $group = $command->group;
-        $group->addUser($user);
+        $this->groupRepository->addUserToGroup($user, $group);
+
+        $group->adduser($user);
     }
 }

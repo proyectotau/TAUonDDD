@@ -3,6 +3,7 @@
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\create\CreateUser;
 use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;
@@ -47,7 +48,8 @@ class DummyUserRepository implements UserRepository {
         }
     }
 
-    public function addGroupToUser($group, $user){}
+    public function addGroupToUser(Group $group, User $user){}
+    public function getGroupsFromUser(User $user):array {return null;}
 }
 
 final class UserTest extends TestCase {

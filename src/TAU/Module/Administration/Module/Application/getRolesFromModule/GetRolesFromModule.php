@@ -3,7 +3,6 @@
 namespace ProyectoTAU\TAU\Module\Administration\Module\Application\getRolesFromModule;
 
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModule;
 
 final class GetRolesFromModule
 {
@@ -17,10 +16,7 @@ final class GetRolesFromModule
     }
 
     public function getRolesFromModule($moduleId){
-        $moduleService = new ReadModule($this->moduleRepository);
-        $module = $moduleService->read($moduleId);
-
-        $moduleCommand = new GetRolesFromModuleCommand($module);
+        $moduleCommand = new GetRolesFromModuleCommand($moduleId);
         return $this->handler->handle($moduleCommand);
     }
 }

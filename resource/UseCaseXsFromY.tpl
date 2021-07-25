@@ -3,7 +3,6 @@
 namespace ProyectoTAU\TAU\Module\Administration\%EntityY%\Application\%usecase%%EntityX%sFrom%EntityY%;
 
 use ProyectoTAU\TAU\Module\Administration\%EntityY%\Domain\%EntityY%Repository;
-use ProyectoTAU\TAU\Module\Administration\%EntityY%\Application\read\Read%EntityY%;
 
 final class %Usecase%%EntityX%sFrom%EntityY%
 {
@@ -17,10 +16,7 @@ final class %Usecase%%EntityX%sFrom%EntityY%
     }
 
     public function %usecase%%EntityX%sFrom%EntityY%($%entityY%Id){
-        $%entityY%Service = new Read%EntityY%($this->%entityY%Repository);
-        $%entityY% = $%entityY%Service->read($%entityY%Id);
-
-        $%entityY%Command = new %Usecase%%EntityX%sFrom%EntityY%Command($%entityY%);
+        $%entityY%Command = new %Usecase%%EntityX%sFrom%EntityY%Command($%entityY%Id);
         return $this->handler->handle($%entityY%Command);
     }
 }

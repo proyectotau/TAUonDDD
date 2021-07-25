@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Domain;
 
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 
 interface GroupRepository
@@ -12,6 +13,7 @@ interface GroupRepository
     public function delete($id): void;
 
     public function addUserToGroup(User $user, Group $group);
+    public function addRoleToGroup(Role $role, Group $group);
     public function getUsersFromGroup(Group $group): array;
     public function getRolesFromGroup(Group $group): array;
 }

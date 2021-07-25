@@ -4,14 +4,12 @@ namespace ProyectoTAU\TAU\Module\Administration\%EntityY%\Application\%usecase%%
 
 use ProyectoTAU\TAU\Module\Administration\%EntityX%\Domain\%EntityX%Repository;
 use ProyectoTAU\TAU\Module\Administration\%EntityY%\Domain\%EntityY%Repository;
-use ProyectoTAU\TAU\Module\Administration\%EntityX%\Application\read\Read%EntityX%;
-use ProyectoTAU\TAU\Module\Administration\%EntityY%\Application\read\Read%EntityY%;
 
 final class %Usecase%%EntityX%To%EntityY%
 {
-    private $handler;
     private $%entityX%Repository;
     private $%entityY%Repository;
+    private $handler;
 
     public function __construct(%EntityX%Repository $%entityX%, %EntityY%Repository $%entityY%)
     {
@@ -21,13 +19,7 @@ final class %Usecase%%EntityX%To%EntityY%
     }
 
     public function %usecase%%EntityX%To%EntityY%($%entityX%Id, $%entityY%Id){
-        $%entityX%Service = new Read%EntityX%($this->%entityX%Repository);
-        $%entityX% = $%entityX%Service->read($%entityX%Id);
-
-        $%entityY%Service = new Read%EntityY%($this->%entityY%Repository);
-        $%entityY% = $%entityY%Service->read($%entityY%Id);
-
-        $%entityY%Command = new %Usecase%%EntityX%To%EntityY%Command($%entityX%, $%entityY%);
+        $%entityY%Command = new %Usecase%%EntityX%To%EntityY%Command($%entityX%Id, $%entityY%Id);
         $this->handler->handle($%entityY%Command);
     }
 }

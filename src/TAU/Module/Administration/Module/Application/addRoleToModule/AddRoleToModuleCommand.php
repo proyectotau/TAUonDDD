@@ -7,12 +7,12 @@ use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 
 final class AddRoleToModuleCommand
 {
-    public $role;
-    public $module;
+    public $roleId;
+    public $moduleId;
 
-    public function __construct(Role $role, Module $module)
+    public function __construct($roleId, $moduleId)
     {
-        $this->role = $role;
-        $this->module = $module;
+        $this->roleId = $roleId;
+        $this->moduleId = $moduleId;
     }
 }

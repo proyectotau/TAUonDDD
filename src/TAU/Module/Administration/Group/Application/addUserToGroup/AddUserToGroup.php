@@ -4,14 +4,12 @@ namespace ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup
 
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
-use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroup;
 
 final class AddUserToGroup
 {
-    private $handler;
     private $userRepository;
     private $groupRepository;
+    private $handler;
 
     public function __construct(UserRepository $user, GroupRepository $group)
     {
@@ -21,13 +19,7 @@ final class AddUserToGroup
     }
 
     public function addUserToGroup($userId, $groupId){
-        $userService = new ReadUser($this->userRepository);
-        $user = $userService->read($userId);
-
-        $groupService = new ReadGroup($this->groupRepository);
-        $group = $groupService->read($groupId);
-
-        $groupCommand = new AddUserToGroupCommand($user, $group);
+        $groupCommand = new AddUserToGroupCommand($userId, $groupId);
         $this->handler->handle($groupCommand);
     }
 }

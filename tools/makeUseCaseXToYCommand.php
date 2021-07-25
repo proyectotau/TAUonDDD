@@ -23,24 +23,22 @@ $EntityY = ucwords(strtolower($argv[3]));
 
 $template = file_get_contents($resource_dir . $resource_file);
 
-if( DEBUG ){echo 'Template';echo $template;}
+if( DEBUG ){echo "Template\n";echo $template;}
 
 $next = str_replace('%usecase%', $usecase, $template);
 $next = str_replace('%Usecase%', $UseCase, $next);
 
-if( DEBUG ){echo 'next';echo $next;}
+if( DEBUG ){echo "next\n";echo $next;}
 
 $next = str_replace('%entityX%', $entityX, $next);
 $next = str_replace('%EntityX%', $EntityX, $next);
 
-if( DEBUG ){echo 'next';echo $next;}
+if( DEBUG ){echo "next\n";echo $next;}
 
 $next = str_replace('%entityY%', $entityY, $next);
 $next = str_replace('%EntityY%', $EntityY, $next);
 
-if( DEBUG ){echo 'next';echo $next;}
-
-/*if( DEBUG ){echo 'next';*/echo $next;//}
+/*if( DEBUG ){echo "next\n";*/echo $next;//}
 
 $destination = 'src' . namespace2dir($next) . '/' . $UseCase . $EntityX . 'To' . $EntityY . 'Command.php';
 

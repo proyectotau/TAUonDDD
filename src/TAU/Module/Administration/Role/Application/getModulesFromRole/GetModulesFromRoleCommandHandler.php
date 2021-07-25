@@ -15,9 +15,9 @@ final class GetModulesFromRoleCommandHandler
 
     public function handle(GetModulesFromRoleCommand $command)
     {
-        $r = $this->roleRepository->getModulesFromRole($command->role);
+        $role = $this->roleRepository->read($command->roleId);
+        $r = $this->roleRepository->getModulesFromRole($role);
 
-        $role = $command->role;
         $role->getModules();
 
         return $r;

@@ -4,6 +4,7 @@ namespace ProyectoTAU\TAU\Module\Administration\User\Infrastructure;
 
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 class InMemoryUserRepository implements UserRepository
@@ -28,12 +29,12 @@ class InMemoryUserRepository implements UserRepository
         InMemoryRepository::getInstance()->deleteUser($id);
     }
 
-    public function addGroupToUser($group, $user)
+    public function addGroupToUser(Group $group, User $user)
     {
         InMemoryRepository::getInstance()->addGroupToUser($group, $user);
     }
 
-    public function getGroupsFromUser(User $user)
+    public function getGroupsFromUser(User $user):array
     {
         return InMemoryRepository::getInstance()->getGroupsFromUser($user);
     }

@@ -7,12 +7,12 @@ use ProyectoTAU\TAU\Module\Administration\%EntityY%\Domain\%EntityY%;
 
 final class %Usecase%%EntityX%To%EntityY%Command
 {
-    public $%entityX%;
-    public $%entityY%;
+    public $%entityX%Id;
+    public $%entityY%Id;
 
-    public function __construct(%EntityX% $%entityX%, %EntityY% $%entityY%)
+    public function __construct($%entityX%Id, $%entityY%Id)
     {
-        $this->%entityX% = $%entityX%;
-        $this->%entityY% = $%entityY%;
+        $this->%entityX%Id = $%entityX%Id;
+        $this->%entityY%Id = $%entityY%Id;
     }
 }

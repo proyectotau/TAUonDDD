@@ -15,9 +15,9 @@ final class GetGroupsFromRoleCommandHandler
 
     public function handle(GetGroupsFromRoleCommand $command)
     {
-        $r = $this->roleRepository->getGroupsFromRole($command->role);
+        $role = $this->roleRepository->read($command->roleId);
+        $r = $this->roleRepository->getGroupsFromRole($role);
 
-        $role = $command->role;
         $role->getGroups();
 
         return $r;

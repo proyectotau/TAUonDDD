@@ -2,6 +2,8 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Domain;
 
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+
 interface UserRepository
 {
     public function create(User $user): void;
@@ -9,5 +11,6 @@ interface UserRepository
     public function update($id, $name, $surname, $login): void;
     public function delete($id): void;
 
-    public function addGroupToUser($group, $user);
+    public function addGroupToUser(Group $group, User $user);
+    public function getGroupsFromUser(User $user): array;
 }

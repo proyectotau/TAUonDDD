@@ -2,14 +2,12 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser;
 
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
-
 final class GetGroupsFromUserCommand
 {
-    public $user;
+    public $userId;
 
-    public function __construct(User $user)
+    public function __construct($userId)
     {
-        $this->user = $user;
+        $this->userId = $userId;
     }
 }

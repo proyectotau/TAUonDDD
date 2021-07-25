@@ -18,10 +18,11 @@ final class AddGroupToUserCommandHandler
 
     public function handle(AddGroupToUserCommand $command)
     {
-        $this->userRepository->addGroupToUser($command->group, $command->user);
+        $group = $this->groupRepository->read($command->groupId);
+        $user = $this->userRepository->read($command->userId);
 
-        $group = $command->group;
-        $user = $command->user;
-        $user->addGroup($group);
+        $this->userRepository->addGroupToUser($group, $user);
+
+        $user->addgroup($group);
     }
 }

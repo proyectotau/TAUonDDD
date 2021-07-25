@@ -3,7 +3,6 @@
 namespace ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup;
 
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroup;
 
 final class GetRolesFromGroup
 {
@@ -17,10 +16,7 @@ final class GetRolesFromGroup
     }
 
     public function getRolesFromGroup($groupId){
-        $groupService = new ReadGroup($this->groupRepository);
-        $group = $groupService->read($groupId);
-
-        $groupCommand = new GetRolesFromGroupCommand($group);
+        $groupCommand = new GetRolesFromGroupCommand($groupId);
         return $this->handler->handle($groupCommand);
     }
 }

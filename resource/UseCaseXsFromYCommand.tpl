@@ -2,14 +2,12 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\%EntityY%\Application\%usecase%%EntityX%sFrom%EntityY%;
 
-use ProyectoTAU\TAU\Module\Administration\%EntityY%\Domain\%EntityY%;
-
 final class %Usecase%%EntityX%sFrom%EntityY%Command
 {
-    public $%entityY%;
+    public $%entityY%Id;
 
-    public function __construct(%EntityY% $%entityY%)
+    public function __construct($%entityY%Id)
     {
-        $this->%entityY% = $%entityY%;
+        $this->%entityY%Id = $%entityY%Id;
     }
 }

@@ -7,12 +7,12 @@ use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 
 final class AddRoleToGroupCommand
 {
-    public $role;
-    public $group;
+    public $roleId;
+    public $groupId;
 
-    public function __construct(Role $role, Group $group)
+    public function __construct($roleId, $groupId)
     {
-        $this->role = $role;
-        $this->group = $group;
+        $this->roleId = $roleId;
+        $this->groupId = $groupId;
     }
 }

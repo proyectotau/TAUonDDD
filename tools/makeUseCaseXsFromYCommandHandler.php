@@ -22,8 +22,6 @@ $EntityX = ucwords(strtolower($argv[2]));
 $entityY = strtolower($argv[3]);
 $EntityY = ucwords(strtolower($argv[3]));
 
-$public_field_attributes = explode(',', $argv[3]);
-
 $template = file_get_contents($resource_dir . $resource_file);
 
 if( DEBUG ){echo 'Template';echo $template;}

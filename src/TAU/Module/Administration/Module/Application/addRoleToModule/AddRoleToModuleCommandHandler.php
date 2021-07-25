@@ -18,10 +18,11 @@ final class AddRoleToModuleCommandHandler
 
     public function handle(AddRoleToModuleCommand $command)
     {
-        $this->moduleRepository->addRoleToModule($command->role, $command->module);
+        $role = $this->roleRepository->read($command->roleId);
+        $module = $this->moduleRepository->read($command->moduleId);
 
-        $role = $command->role;
-        $module = $command->module;
+        $this->moduleRepository->addRoleToModule($role, $module);
+
         $module->addRole($role);
     }
 }

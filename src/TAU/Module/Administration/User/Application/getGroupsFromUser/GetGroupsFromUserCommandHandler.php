@@ -15,9 +15,9 @@ final class GetGroupsFromUserCommandHandler
 
     public function handle(GetGroupsFromUserCommand $command)
     {
-        $r = $this->userRepository->getGroupsFromUser($command->user);
+        $user = $this->userRepository->read($command->userId);
+        $r = $this->userRepository->getGroupsFromUser($user);
 
-        $user = $command->user;
         $user->getGroups();
 
         return $r;

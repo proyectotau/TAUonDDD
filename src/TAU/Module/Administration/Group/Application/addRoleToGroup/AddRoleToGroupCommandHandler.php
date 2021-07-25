@@ -18,10 +18,11 @@ final class AddRoleToGroupCommandHandler
 
     public function handle(AddRoleToGroupCommand $command)
     {
-        $this->groupRepository->addRoleToGroup($command->role, $command->group);
+        $role = $this->roleRepository->read($command->roleId);
+        $group = $this->groupRepository->read($command->groupId);
 
-        $role = $command->role;
-        $group = $command->group;
-        $group->addRole($role);
+        $this->groupRepository->addRoleToGroup($role, $group);
+
+        $group->addrole($role);
     }
 }

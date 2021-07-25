@@ -18,10 +18,11 @@ final class %Usecase%%EntityX%To%EntityY%CommandHandler
 
     public function handle(%Usecase%%EntityX%To%EntityY%Command $command)
     {
-        $this->%entityY%Repository->%usecase%%EntityX%To%EntityY%($command->%entityX%, $command->%entityY%);
+        $%entityX% = $this->%entityX%Repository->read($command->%entityX%Id);
+        $%entityY% = $this->%entityY%Repository->read($command->%entityY%Id);
 
-        $%entityX% = $command->%entityX%;
-        $%entityY% = $command->%entityY%;
+        $this->%entityY%Repository->%usecase%%EntityX%To%EntityY%($%entityX%, $%entityY%);
+
         $%entityY%->%usecase%%EntityX%($%entityX%);
     }
 }
