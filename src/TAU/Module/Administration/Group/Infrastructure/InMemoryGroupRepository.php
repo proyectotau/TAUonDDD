@@ -30,7 +30,7 @@ class InMemoryGroupRepository implements GroupRepository
         InMemoryRepository::getInstance()->deleteGroup($id);
     }
 
-    public function addUserToGroup(User $user, Group $group)
+    public function addUserToGroup(User $user, Group $group): void
     {
         InMemoryRepository::getInstance()->addUserToGroup($user, $group);
     }
@@ -40,7 +40,7 @@ class InMemoryGroupRepository implements GroupRepository
         return InMemoryRepository::getInstance()->getUsersFromGroup($group);
     }
 
-    public function addRoleToGroup(Role $role, Group $group)
+    public function addRoleToGroup(Role $role, Group $group): void
     {
         InMemoryRepository::getInstance()->addRoleToGroup($role, $group);
     }

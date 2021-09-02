@@ -2,7 +2,8 @@
 
 namespace Tests\Module\Administration\Group\Application;
 
-use PHPUnit\Framework\TestCase;
+//use PHPUnit\Framework\TestCase;
+use Tests\OrchestratedTestCase as TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;

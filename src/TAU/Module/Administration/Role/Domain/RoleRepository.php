@@ -12,8 +12,8 @@ interface RoleRepository
     public function update($id, $name, $desc): void;
     public function delete($id): void;
 
-    public function addGroupToRole(Group $group, Role $role);
-    public function addModuleToRole(Module $module, Role $role);
+    public function addGroupToRole(Group $group, Role $role): void;
+    public function addModuleToRole(Module $module, Role $role): void;
     public function getGroupsFromRole(Role $role): array;
     public function getModulesFromRole(Role $role): array;
 }

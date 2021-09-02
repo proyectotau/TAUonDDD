@@ -53,7 +53,7 @@ final class InMemoryRoleTest extends TestCase
 
         $roleRepository->delete(0);
 
-        $this->expectNotice();
+        $this->expectException(\InvalidArgumentException::class); // TODO Raise Domain event
 
         $roleRepository->read(0);
     }

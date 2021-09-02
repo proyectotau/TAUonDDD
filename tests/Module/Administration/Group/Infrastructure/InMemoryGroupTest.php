@@ -53,7 +53,7 @@ final class InMemoryGroupTest extends TestCase
 
         $groupRepository->delete(0);
 
-        $this->expectNotice();
+        $this->expectException(\InvalidArgumentException::class); // TODO Raise Domain event
 
         $groupRepository->read(0);
     }

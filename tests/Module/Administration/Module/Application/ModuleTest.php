@@ -3,7 +3,8 @@
 namespace Tests\Module\Administration\Module\Application;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+//use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Tests\OrchestratedTestCase as TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
@@ -50,7 +51,7 @@ class DummyModuleRepository implements ModuleRepository {
     }
 
     public function addRoleToModule(Role $role, Module $module){}
-    public function getRolesFromModule(Module $module): array {return null;}
+    public function getRolesFromModule(Module $module): array {return [];}
 }
 
 class ModuleTest extends TestCase

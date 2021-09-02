@@ -3,8 +3,15 @@
 namespace Tests\Module\Administration\Group\Application;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+//use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Tests\OrchestratedTestCase as TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
@@ -49,10 +56,10 @@ class DummyGroupRepository implements GroupRepository {
         }
     }
 
-    public function addUserToGroup(User $user, Group $group){}
-    public function addRoleToGroup(Role $role, Group $group){}
-    public function getUsersFromGroup(Group $group): array {return null;}
-    public function getRolesFromGroup(Group $group): array {return null;}
+    public function addUserToGroup(User $user, Group $group): void {}
+    public function addRoleToGroup(Role $role, Group $group): void {}
+    public function getUsersFromGroup(Group $group): array {return [];}
+    public function getRolesFromGroup(Group $group): array {return [];}
 }
 
 class GroupTest extends TestCase
@@ -75,6 +82,9 @@ class GroupTest extends TestCase
 
         $group = new CreateGroup($groupRepository);
         $group->create(0, "Test", "Dummy");
+
+        //$handler = new CreateGroupCommandHandler($groupRepository);
+        //$handler->handle(new CreateGroupCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanReadAdminGroup()
@@ -87,6 +97,9 @@ class GroupTest extends TestCase
 
         $group = new ReadGroup($groupRepository);
         $group->read(0);
+
+        //$handler = new ReadGroupCommandHandler($groupRepository);
+        //$handler->handle(new ReadGroupCommand(0));
     }
 
     public function testItCanUpdateAdminGroup()
@@ -99,6 +112,9 @@ class GroupTest extends TestCase
 
         $group = new UpdateGroup($groupRepository);
         $group->update(0, "Test", "Dummy");
+
+        //$handler = new UpdateGroupCommandHandler($groupRepository);
+        //$handler->handle(new UpdateGroupCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanDeleteAdminGroup()

@@ -12,8 +12,8 @@ final class %Usecase%%Entity%
         $this->handler = new %Usecase%%Entity%CommandHandler($%entity%);
     }
 
-	public function %usecase%(%param_attributes%){
-		$%entity%Command = new %Usecase%%Entity%Command(%param_attributes%);
-		$this->handler->handle($%entity%Command);
-	}
+    public function %usecase%(%param_attributes%){
+        $%entity%Command = new %Usecase%%Entity%Command(%param_attributes%);
+        $this->handler->handle($%entity%Command);
+    }
 }

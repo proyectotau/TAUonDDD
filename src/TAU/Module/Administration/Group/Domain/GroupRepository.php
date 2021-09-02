@@ -12,8 +12,8 @@ interface GroupRepository
     public function update($id, $name, $desc): void;
     public function delete($id): void;
 
-    public function addUserToGroup(User $user, Group $group);
-    public function addRoleToGroup(Role $role, Group $group);
+    public function addUserToGroup(User $user, Group $group): void;
+    public function addRoleToGroup(Role $role, Group $group): void;
     public function getUsersFromGroup(Group $group): array;
     public function getRolesFromGroup(Group $group): array;
 }

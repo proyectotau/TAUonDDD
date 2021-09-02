@@ -29,7 +29,7 @@ class InMemoryUserRepository implements UserRepository
         InMemoryRepository::getInstance()->deleteUser($id);
     }
 
-    public function addGroupToUser(Group $group, User $user)
+    public function addGroupToUser(Group $group, User $user): void
     {
         InMemoryRepository::getInstance()->addGroupToUser($group, $user);
     }

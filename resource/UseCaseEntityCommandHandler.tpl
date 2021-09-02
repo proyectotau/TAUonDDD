@@ -14,7 +14,7 @@ final class %Usecase%%Entity%CommandHandler
         $this->%entity%Repository = $%entity%Repository;
     }
 
-    public function handle(%Usecase%%Entity%Command $command)
+    public function handle(%Usecase%%Entity%Command $command) // TODO type %Entity% if read
     {
         %return_if_read% $this->%entity%Repository->%usecase%(%usecase_params%);
     }

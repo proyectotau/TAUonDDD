@@ -11,6 +11,6 @@ interface UserRepository
     public function update($id, $name, $surname, $login): void;
     public function delete($id): void;
 
-    public function addGroupToUser(Group $group, User $user);
+    public function addGroupToUser(Group $group, User $user): void;
     public function getGroupsFromUser(User $user): array;
 }

@@ -2,11 +2,12 @@
     "name": "proyectotau/tau-on-ddd",
     "description": "New TAU version on DDD and agnostic framework",
     "type": "project",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [
         {
             "name": "Javier Garrido",
-            "email": "ProyectoTAU2@gmail.com"
+            "email": "ProyectoTAU2@gmail.com",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
@@ -15,16 +16,26 @@
     },
     "autoload": {
         "psr-4": {
-          "ProyectoTAU\\": "src/"
+          "ProyectoTAU\\": "src/",
+          "Joselfonseca\\LaravelTactician\\": "vendor/jagarsoft/laravel-tactician/src/",
+          "Joselfonseca\\LaravelTactician\\Tests\\": "vendor/jagarsoft/laravel-tactician/tests/",
+          "Tests\\": "tests/"
      },
      "autoload-dev": {
         "psr-4": {
-          "Tests\\": "tests/"
+          "Tests\\": "tests/",
+          "ProyectoTAU\\Tests\\": "tests/",
+          "Joselfonseca\\LaravelTactician\\Tests\\": "vendor/jagarsoft/laravel-tactician/tests/"
         }
      }
     },
+    "require": {
+      "jagarsoft/laravel-tactician": "1.0.5"
+    },
     "require-dev": {
         "phpunit/phpunit": "8.5.x-dev",
-        "mockery/mockery": "1.3.x-dev"
+        "mockery/mockery": "1.3.x-dev",
+        "laravel/framework": "^6.20.12",
+        "orchestra/testbench": "^4.0"
     }
 }

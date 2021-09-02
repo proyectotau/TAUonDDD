@@ -2,6 +2,7 @@
 
 namespace ProyectoTAU\TAU\Common;
 
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
@@ -69,6 +70,10 @@ class InMemoryRepository
 
     public function readUser($id): User
     {
+        if( ! isset($this->userDataStore[$id]) ){
+            throw new InvalidArgumentException();
+        }
+
         return $this->userDataStore[$id];
     }
 
@@ -95,6 +100,10 @@ class InMemoryRepository
 
     public function readGroup($id): Group
     {
+        if( ! isset($this->groupDataStore[$id]) ){
+            throw new InvalidArgumentException();
+        }
+
         return $this->groupDataStore[$id];
     }
 
@@ -120,6 +129,10 @@ class InMemoryRepository
 
     public function readRole($id): Role
     {
+        if( ! isset($this->roleDataStore[$id]) ){
+            throw new InvalidArgumentException();
+        }
+
         return $this->roleDataStore[$id];
     }
 
@@ -145,6 +158,10 @@ class InMemoryRepository
 
     public function readModule($id): Module
     {
+        if( ! isset($this->moduleDataStore[$id]) ){
+            throw new InvalidArgumentException();
+        }
+
         return $this->moduleDataStore[$id];
     }
 

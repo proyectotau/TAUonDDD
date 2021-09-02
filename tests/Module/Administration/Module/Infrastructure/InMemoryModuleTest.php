@@ -53,7 +53,7 @@ final class InMemoryModuleTest extends TestCase
 
         $moduleRepository->delete(0);
 
-        $this->expectNotice();
+        $this->expectException(\InvalidArgumentException::class); // TODO Raise Domain event
 
         $moduleRepository->read(0);
     }

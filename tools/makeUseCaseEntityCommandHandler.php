@@ -33,6 +33,8 @@ if( $usecase === 'create' ){
 
 if( $usecase === 'read' ){
     $next = str_replace('%return_if_read%', 'return', $next);
+} else {
+    $next = str_replace('%return_if_read%'.' ', '', $next);
 }
 
 $next = str_replace('%usecase%', $usecase, $next);

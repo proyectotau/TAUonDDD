@@ -54,7 +54,7 @@ final class InMemoryUserTest extends TestCase
 
         $userRepository->delete(0);
 
-        $this->expectNotice();
+        $this->expectException(\InvalidArgumentException::class); // TODO Raise Domain event
 
         $userRepository->read(0);
     }

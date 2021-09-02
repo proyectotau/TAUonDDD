@@ -1,23 +1,46 @@
 <?php
 
-function namespace2dir($namespace){
-    if( ($pos = strpos($namespace, 'namespace ')) === false ) {
-        echo 'namespace not found'."\n";
+function getEntityRepository($content){
+    return getArgumentOfKeyword($content, 'use');
+}
+
+function getNamespace($content)
+{
+    return getArgumentOfKeyword($content, 'namespace');
+}
+
+function getEntityXYRepository($content){
+    $fcerX = getEntityRepository($content, 'use');
+    $pos = strpos($content, $fcerX);
+    $fcerY = getEntityRepository(substr($content, $pos+strlen($fcerX)), 'use');
+    return [$fcerX, $fcerY];
+}
+
+function getArgumentOfKeyword($content, $keyword){
+    if( ($pos = strpos($content, $keyword.' ')) === false ) {
+        echo $keyword.' not found'."\n";
         exit(2);
     }
+    $vendor = $pos+strlen($keyword)+1;
 
-    if( ($pos = strpos($namespace, '\\', $pos)) === false ) {
-        echo 'namespace has no backslash'."\n";
+    if( ($pos = strpos($content, '\\', $pos)) === false ) {
+        echo $keyword.' has no backslash'."\n";
         exit(3);
     }
 
-    if( ($end = strpos($namespace, ';', $pos)) === false ) {
-        echo 'namespace does not end in ;'."\n";
+    if( ($end = strpos($content, ';', $pos)) === false ) {
+        echo $keyword.' does not end in ;'."\n";
         exit(4);
     }
 
-    $n = substr($namespace, $pos, $end-$pos);
-    return str_replace('\\', '/', $n); // DIRECTORY_SEPARATOR
+    return substr($content, $vendor, $end-$vendor);
+}
+
+// TODO rename namespace2pathVendorStripped
+function namespace2dir($namespace){
+    $pos = strpos($namespace, '\\');
+    $vs = substr($namespace, $pos);
+    return str_replace('\\', '/', $vs); // DIRECTORY_SEPARATOR
 }
 
 // https://www.php.net/manual/en/function.file-put-contents.php#84180
