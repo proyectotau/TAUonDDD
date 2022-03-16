@@ -3,8 +3,7 @@
 namespace Tests\Module\Administration\User\Application;
 
 use Mockery;
-//use Tests\MockedOrchestratedTestCase as TestCase;
-use Tests\OrchestratedTestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserCommand;
 use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserCommandHandler;

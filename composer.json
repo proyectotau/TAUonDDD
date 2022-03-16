@@ -15,27 +15,24 @@
       "optimize-autoloader": true
     },
     "autoload": {
-        "psr-4": {
-          "ProyectoTAU\\": "src/",
-          "Joselfonseca\\LaravelTactician\\": "vendor/jagarsoft/laravel-tactician/src/",
-          "Joselfonseca\\LaravelTactician\\Tests\\": "vendor/jagarsoft/laravel-tactician/tests/",
-          "Tests\\": "tests/"
-     },
-     "autoload-dev": {
-        "psr-4": {
-          "Tests\\": "tests/",
-          "ProyectoTAU\\Tests\\": "tests/",
-          "Joselfonseca\\LaravelTactician\\Tests\\": "vendor/jagarsoft/laravel-tactician/tests/"
-        }
-     }
+      "psr-4": {
+        "ProyectoTAU\\": "src/"
+      },
+      "classmap": ["vendor/proyectotau/command-bus/src/Locator/"]
     },
+    "autoload-dev": {
+        "psr-4": {
+          "ProyectoTAU\\Tests\\": "tests/"
+        },
+        "files": [
+          "tests/app/app.php"
+        ]
+     },
     "require": {
-      "jagarsoft/laravel-tactician": "1.0.5"
+        "proyectotau/command-bus": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "8.5.x-dev",
-        "mockery/mockery": "1.3.x-dev",
-        "laravel/framework": "^6.20.12",
-        "orchestra/testbench": "^4.0"
+        "mockery/mockery": "^1.5"
     }
 }

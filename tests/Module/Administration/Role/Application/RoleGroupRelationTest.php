@@ -2,8 +2,7 @@
 
 namespace Tests\Module\Administration\Role\Application;
 
-//use PHPUnit\Framework\TestCase;
-use Tests\OrchestratedTestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\addGroupToRole\AddGroupToRole;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRole;

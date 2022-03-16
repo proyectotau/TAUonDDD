@@ -3,8 +3,7 @@
 namespace Tests\Module\Administration\Role\Application;
 
 use Mockery;
-//use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Tests\OrchestratedTestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;

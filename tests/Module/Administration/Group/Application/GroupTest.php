@@ -3,8 +3,7 @@
 namespace Tests\Module\Administration\Group\Application;
 
 use Mockery;
-//use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Tests\OrchestratedTestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommandHandler;
