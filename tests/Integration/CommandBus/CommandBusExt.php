@@ -2,7 +2,9 @@
 
 namespace ProyectoTAU\Tests\Integration\CommandBus;
 
-class CommandBusExt extends \ProyectoTAU\CommandBus\CommandBus
+use ProyectoTAU\CommandBus\CommandBus;
+
+class CommandBusExt extends CommandBus
 {
     public function addHandler($cmd, $classhandler)
     {
