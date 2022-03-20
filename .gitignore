@@ -3,4 +3,4 @@ workspace.code-workspace
 .vscode/
 .idea/
 vendor/
-reports/
+coverage-report/

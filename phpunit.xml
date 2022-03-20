@@ -2,15 +2,14 @@
 <phpunit backupGlobals="false"
          beStrictAboutTestsThatDoNotTestAnything="false"
          backupStaticAttributes="false"
+		 bootstrap="./tests/bootstrap/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnError="false"
-         stopOnFailure="false"
-         bootstrap="./tests/bootstrap/autoload.php"
-		 >
+         stopOnFailure="false">
 		 <testsuites>
 			 <testsuite name="Use Cases for User Entity in Administration Module">
 				 <directory suffix="Test.php">./tests/Module/Administration/User/Infrastructure</directory>
@@ -32,13 +31,13 @@
 				 <directory suffix="Test.php">./tests/Integration/CommandBus</directory>
 			 </testsuite>
 		 </testsuites>
-		<!-- https://www.gitmemory.com/issue/symfony/symfony/41409/853165049 -->
-		 <!-- coverage processUncoveredFiles="true">
-			<include>
-				<directory suffix=".php">./vendor</directory>
-			</include>
-		</coverage -->
-		<php>
-			<env name="PHP_IDE_CONFIG" value="serverName=localhost" force="true" />
-		</php>
+		<filter>
+			<whitelist>
+				<directory suffix=".php">src/</directory>
+			</whitelist>
+		</filter>
+		<logging>
+			<log type="coverage-html" target="coverage-report" lowUpperBound="35" highLowerBound="70" />
+			<log type="coverage-clover" target="coverage-report/coverage.xml"/>
+		</logging>
 </phpunit>
