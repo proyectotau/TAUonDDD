@@ -17,8 +17,7 @@
     "autoload": {
       "psr-4": {
         "ProyectoTAU\\": "src/"
-      },
-      "classmap": ["vendor/proyectotau/command-bus/src/Locator/"]
+      }
     },
     "autoload-dev": {
         "psr-4": {
