@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f20fa2e2281f766f03714e07a213b398",
+    "content-hash": "25c86532833a16ca9626a7542979b949",
     "packages": [
         {
             "name": "league/tactician",
@@ -70,22 +70,21 @@
         },
         {
             "name": "proyectotau/command-bus",
-            "version": "dev-master",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/proyectotau/command-bus.git",
-                "reference": "b1ed6fa5a5ac13179a767f285918bfc90af0a56f"
+                "reference": "2ba2ce1dfd12f8a16ca030297006f77c35528ed3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/proyectotau/command-bus/zipball/b1ed6fa5a5ac13179a767f285918bfc90af0a56f",
-                "reference": "b1ed6fa5a5ac13179a767f285918bfc90af0a56f",
+                "url": "https://api.github.com/repos/proyectotau/command-bus/zipball/2ba2ce1dfd12f8a16ca030297006f77c35528ed3",
+                "reference": "2ba2ce1dfd12f8a16ca030297006f77c35528ed3",
                 "shasum": ""
             },
             "require-dev": {
                 "phpunit/phpunit": "^7"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -105,9 +104,9 @@
             "description": "Minimalist implementation of CommandBus pattern for test purpose only",
             "support": {
                 "issues": "https://github.com/proyectotau/command-bus/issues",
-                "source": "https://github.com/proyectotau/command-bus/tree/1.1.0-dev"
+                "source": "https://github.com/proyectotau/command-bus/tree/1.2.0"
             },
-            "time": "2019-07-23T19:31:56+00:00"
+            "time": "2022-03-21T21:10:53+00:00"
         },
         {
             "name": "psr/container",
@@ -2081,7 +2080,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "proyectotau/command-bus": 20,
         "league/tactician": 20,
         "phpunit/phpunit": 20
     },

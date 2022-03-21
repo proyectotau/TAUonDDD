@@ -14,6 +14,7 @@ use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 
 use ProyectoTAU\Tests\Integration\CommandBus\CommandBusExt;
+use ProyectoTAU\Tests\Integration\CommandBus\Inflector\HandlerInflector;
 use ProyectoTAU\Tests\Integration\CommandBus\Locator\HandlerLocator;
 
 class UserGroupRelationTest extends TestCase
@@ -24,7 +25,8 @@ class UserGroupRelationTest extends TestCase
 
         app()->bind('Joselfonseca\LaravelTactician\CommandBusInterface',
             new CommandBusExt(
-                new HandlerLocator()
+                new HandlerLocator(),
+                new HandlerInflector()
             ));
 
         /*app()->bind('ProyectoTAU\TAU\Module\Administration\User\Application\addGroupToUser\AddGroupToUserCommandHandler',
