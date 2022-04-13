@@ -47,7 +47,7 @@ final class GroupService
 
     public static function addUserToGroup($userId, $groupId)
     {
-        app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\addUserToGroup\AddUserToGroupCommandHandler',
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommandHandler',
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommandHandler(
                 app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository'),
                 app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
