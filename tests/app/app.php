@@ -6,7 +6,7 @@ if( ! function_exists("app") ){
         static $app = null;
 
         if( $app == null ){
-            $app = new ProyectoTAU\Tests\Integration\App\PseudoApp();
+            $app = new League\Container\container();
         }
 
         if( $alias != null )

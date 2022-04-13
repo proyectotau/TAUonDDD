@@ -1,12 +1,15 @@
 <?php
 
-namespace Tests\Module\Administration\Group\Application;
+namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommand;
@@ -15,10 +18,6 @@ use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroup;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroup;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroup;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroup;
 
 class DummyGroupRepository implements GroupRepository {
 
@@ -37,6 +36,8 @@ class DummyGroupRepository implements GroupRepository {
         if( ! ($id === 0) ) {
             throw new \InvalidArgumentException("Mismatched Group received by read method");
         }
+
+        return new Group(0, "Test", "Dummy");
     }
     public function update($id, $name, $desc): void
     {
@@ -79,11 +80,12 @@ class GroupTest extends TestCase
             ->with(\Hamcrest\Core\IsEqual::equalTo(
                 new Group(0, "Test", "Dummy")));
 
-        $group = new CreateGroup($groupRepository);
-        $group->create(0, "Test", "Dummy");
+        //$group = new CreateGroup($groupRepository);
+        //$group->create(0, "Test", "Dummy");
+        //GroupService::create(0, "Test", "Dummy");
 
-        //$handler = new CreateGroupCommandHandler($groupRepository);
-        //$handler->handle(new CreateGroupCommand(0, "Test", "Dummy"));
+        $handler = new CreateGroupCommandHandler($groupRepository);
+        $handler->handle(new CreateGroupCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanReadAdminGroup()
@@ -94,11 +96,12 @@ class GroupTest extends TestCase
 
         $groupRepository->shouldReceive('read')->once()->with(0);
 
-        $group = new ReadGroup($groupRepository);
-        $group->read(0);
+        //$group = new ReadGroup($groupRepository);
+        //$group->read(0);
+        //GroupService::read(0);
 
-        //$handler = new ReadGroupCommandHandler($groupRepository);
-        //$handler->handle(new ReadGroupCommand(0));
+        $handler = new ReadGroupCommandHandler($groupRepository);
+        $handler->handle(new ReadGroupCommand(0));
     }
 
     public function testItCanUpdateAdminGroup()
@@ -109,11 +112,10 @@ class GroupTest extends TestCase
 
         $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
-        $group = new UpdateGroup($groupRepository);
-        $group->update(0, "Test", "Dummy");
+        //GroupService::update(0, "Test", "Dummy");
 
-        //$handler = new UpdateGroupCommandHandler($groupRepository);
-        //$handler->handle(new UpdateGroupCommand(0, "Test", "Dummy"));
+        $handler = new UpdateGroupCommandHandler($groupRepository);
+        $handler->handle(new UpdateGroupCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanDeleteAdminGroup()
@@ -124,7 +126,9 @@ class GroupTest extends TestCase
 
         $groupRepository->shouldReceive('delete')->once()->with(0);
 
-        $group = new DeleteGroup($groupRepository);
-        $group->delete(0);
+        //GroupService::delete(0);
+
+        $handler = new DeleteGroupCommandHandler($groupRepository);
+        $handler->handle(new DeleteGroupCommand(0));
     }
 }

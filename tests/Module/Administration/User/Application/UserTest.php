@@ -11,6 +11,7 @@ use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUserCommand;
 use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUserCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\User\Application\update\UpdateUserCommand;
 use ProyectoTAU\TAU\Module\Administration\User\Application\update\UpdateUserCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
@@ -77,6 +78,7 @@ final class UserTest extends TestCase {
         InMemoryRepository::getInstance()->clear();
 
         $userRepository = Mockery::mock(DummyUserRepository::class);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', $userRepository);
 
         $userRepository->shouldReceive('create')
             ->once()
@@ -85,15 +87,14 @@ final class UserTest extends TestCase {
 
         // Mi primera alternativa orignal. Sin CommandBus, pero se inyesta el Repo via Service Provider
         // En create se invoca directamente al Handler adecuado pasado los arg en su Command
-        $user = new CreateUser($userRepository);
-        $user->create(0, "Test", "Dummy", "fakelogin"); // TODO remove
+        //$user = new CreateUser($userRepository);
+        //$user->create(0, "Test", "Dummy", "fakelogin"); // TODO remove
+        //UserService::create(0, "Test", "Dummy", "fakelogin");
 
-/*
         // Alternativa de CodelyTV. Sin CommandBus, ni mapeo entre el Command y su Handler.
         //Se inyecta el Repo en el Handler y se le pasa los arg en su Command como DTO.
         $handler = new CreateUserCommandHandler($userRepository);
         $handler->handle(new CreateUserCommand(0, "Test", "Dummy", "fakelogin"));
-*/
 	}
 
     public function testItCanReadAdminUser()
@@ -104,11 +105,11 @@ final class UserTest extends TestCase {
 
         $userRepository->shouldReceive('read')->once()->with(0);
 
-        $user = new ReadUser($userRepository);
-        $user->read(0);
+        //$user = new ReadUser($userRepository);
+        //$user->read(0);
 
-        //$handler = new ReadUserCommandHandler($userRepository);
-        //$handler->handle(new ReadUserCommand(0));
+        $handler = new ReadUserCommandHandler($userRepository);
+        $handler->handle(new ReadUserCommand(0));
     }
 
     public function testItCanUpdateAdminUser()
@@ -119,11 +120,12 @@ final class UserTest extends TestCase {
 
         $userRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy", "fakelogin");
 
-        $user = new UpdateUser($userRepository);
-        $user->update(0, "Test", "Dummy", "fakelogin");
+        //$user = new UpdateUser($userRepository);
+        //$user->update(0, "Test", "Dummy", "fakelogin");
+        //UserService::update(0, "Test", "Dummy", "fakelogin");
 
-        //$handler = new UpdateUserCommandHandler($userRepository);
-        //$handler->handle(new UpdateUserCommand(0, "Test", "Dummy", "fakelogin"));
+        $handler = new UpdateUserCommandHandler($userRepository);
+        $handler->handle(new UpdateUserCommand(0, "Test", "Dummy", "fakelogin"));
     }
 
     public function testItCanDeleteAdminUser()
@@ -134,10 +136,11 @@ final class UserTest extends TestCase {
 
         $userRepository->shouldReceive('delete')->once()->with(0);
 
-        $user = new DeleteUser($userRepository);
-        $user->delete(0);
+        //$user = new DeleteUser($userRepository);
+        //$user->delete(0);
+        //UserService::delete(0);
 
-        //$handler = new DeleteUserCommandHandler($userRepository);
-        //$handler->handle(new DeleteUserCommand(0));
+        $handler = new DeleteUserCommandHandler($userRepository);
+        $handler->handle(new DeleteUserCommand(0));
     }
 }
