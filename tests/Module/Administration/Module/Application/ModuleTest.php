@@ -3,7 +3,7 @@
 namespace Tests\Module\Administration\Module\Application;
 
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
@@ -53,7 +53,7 @@ class DummyModuleRepository implements ModuleRepository {
     public function getRolesFromModule(Module $module): array {return [];}
 }
 
-class ModuleTest extends TestCase
+class ModuleTest extends MockeryTestCase
 {
     public function mockeryTestTearDown()
     {

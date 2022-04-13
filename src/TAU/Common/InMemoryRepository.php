@@ -70,15 +70,15 @@ class InMemoryRepository
 
     public function readUser($id): User
     {
-        if( ! isset($this->userDataStore[$id]) ){
-            throw new InvalidArgumentException();
-        }
+        $this->failIfNotExists('User', $id);
 
         return $this->userDataStore[$id];
     }
 
     public function updateUser($id, $name, $surname, $login): void
     {
+        $this->failIfNotExists('User', $id);
+
         $this->userDataStore[$id]->setName($name);
         $this->userDataStore[$id]->setName($surname);
         $this->userDataStore[$id]->setName($login);
@@ -86,6 +86,8 @@ class InMemoryRepository
 
     public function deleteUser($id): void
     {
+        $this->failIfNotExists('User', $id);
+
         unset($this->userDataStore[$id]);
     }
 
@@ -100,21 +102,23 @@ class InMemoryRepository
 
     public function readGroup($id): Group
     {
-        if( ! isset($this->groupDataStore[$id]) ){
-            throw new InvalidArgumentException();
-        }
+        $this->failIfNotExists('Group', $id);
 
         return $this->groupDataStore[$id];
     }
 
     public function updateGroup($id, $name, $desc): void
     {
+        $this->failIfNotExists('Group', $id);
+
         $this->groupDataStore[$id]->setName($name);
         $this->groupDataStore[$id]->setName($desc);
     }
 
     public function deleteGroup($id): void
     {
+        $this->failIfNotExists('Group', $id);
+
         unset($this->groupDataStore[$id]);
     }
 
@@ -129,21 +133,23 @@ class InMemoryRepository
 
     public function readRole($id): Role
     {
-        if( ! isset($this->roleDataStore[$id]) ){
-            throw new InvalidArgumentException();
-        }
+        $this->failIfNotExists('Role', $id);
 
         return $this->roleDataStore[$id];
     }
 
     public function updateRole($id, $name, $desc): void
     {
+        $this->failIfNotExists('Role', $id);
+
         $this->roleDataStore[$id]->setName($name);
         $this->roleDataStore[$id]->setName($desc);
     }
 
     public function deleteRole($id): void
     {
+        $this->failIfNotExists('Role', $id);
+
         unset($this->roleDataStore[$id]);
     }
 
@@ -158,15 +164,15 @@ class InMemoryRepository
 
     public function readModule($id): Module
     {
-        if( ! isset($this->moduleDataStore[$id]) ){
-            throw new InvalidArgumentException();
-        }
+        $this->failIfNotExists('Module', $id);
 
         return $this->moduleDataStore[$id];
     }
 
     public function updateModule($id, $name, $desc): void
     {
+        $this->failIfNotExists('Module', $id);
+
         $this->moduleDataStore[$id]->setName($name);
         $this->moduleDataStore[$id]->setName($desc);
     }
@@ -261,7 +267,7 @@ class InMemoryRepository
         return $r;
     }
 
-    public function extractY($from, $who, $available, $entityX)
+    private function extractY($from, $who, $available, $entityX)
     {
         $r = [
             $who => [],
@@ -276,5 +282,13 @@ class InMemoryRepository
                 }
 
         return $r;
+    }
+
+    private function failIfNotExists($entity, $id)
+    {
+        $datastore = strtolower($entity) . 'DataStore';
+        if( ! isset($this->$datastore[$id]) ){
+            throw new InvalidArgumentException(ucfirst($entity)." with id = {$id} not found");
+        }
     }
 }

@@ -1,18 +1,24 @@
 <?php
 
-namespace Tests\Module\Administration\Role\Application;
+namespace ProyectoTAU\Tests\Module\Administration\Role\Application;
 
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRole;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRole;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRole;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRole;
+
 
 class DummyRoleRepository implements RoleRepository {
 
@@ -31,7 +37,10 @@ class DummyRoleRepository implements RoleRepository {
         if( ! ($id === 0) ) {
             throw new \InvalidArgumentException("Mismatched Role received by read method");
         }
+
+        return new Role(0, "Test", "Dummy");
     }
+
     public function update($id, $name, $desc): void
     {
         // Should receive a call once with the same Dummy Role as argument
@@ -55,7 +64,7 @@ class DummyRoleRepository implements RoleRepository {
     public function getModulesFromRole(Role $role): array {return [];}
 }
 
-class RoleTest extends TestCase
+class RoleTest extends MockeryTestCase
 {
     public function mockeryTestTearDown()
     {
@@ -66,50 +75,66 @@ class RoleTest extends TestCase
     {
         InMemoryRepository::getInstance()->clear();
 
-        $groupRepository = Mockery::mock(DummyRoleRepository::class);
+        $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
-        $groupRepository->shouldReceive('create')
+        $roleRepository->shouldReceive('create')
             ->once()
             ->with(\Hamcrest\Core\IsEqual::equalTo(
                 new Role(0, "Test", "Dummy")));
 
-        $group = new CreateRole($groupRepository);
-        $group->create(0, "Test", "Dummy");
+        //$roleservice = new CreateRole($roleRepository);
+        //$roleservice->create(0, "Test", "Dummy");
+        //RoleService::create(0, "Test", "Dummy");
+
+        $handler = new CreateRoleCommandHandler($roleRepository);
+        $handler->handle(new CreateRoleCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanReadAdminRole()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $groupRepository = Mockery::mock(DummyRoleRepository::class);
+        $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
-        $groupRepository->shouldReceive('read')->once()->with(0);
+        $roleRepository->shouldReceive('read')->once()->with(0);
 
-        $group = new ReadRole($groupRepository);
-        $group->read(0);
+        //$roleservice = new ReadRole($roleRepository);
+        //$roleservice->read(0);
+        //RoleService::read(0);
+
+        $handler = new ReadRoleCommandHandler($roleRepository);
+        $handler->handle(new ReadRoleCommand(0));
     }
 
     public function testItCanUpdateAdminRole()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $groupRepository = Mockery::mock(DummyRoleRepository::class);
+        $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
-        $groupRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
+        $roleRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
-        $group = new UpdateRole($groupRepository);
-        $group->update(0, "Test", "Dummy");
+        //$roleservice = new UpdateRole($groupRepository);
+        //$roleservice->update(0, "Test", "Dummy");
+        //RoleService::update(0, "Test", "Dummy");
+
+        $handler = new UpdateRoleCommandHandler($roleRepository);
+        $handler->handle(new UpdateRoleCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanDeleteAdminRole()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $groupRepository = Mockery::mock(DummyRoleRepository::class);
+        $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
-        $groupRepository->shouldReceive('delete')->once()->with(0);
+        $roleRepository->shouldReceive('delete')->once()->with(0);
 
-        $group = new DeleteRole($groupRepository);
-        $group->delete(0);
+        //$roleservice = new DeleteRole($roleRepository);
+        //$roleservice->delete(0);
+        //RoleService::delete(0);
+
+        $handler = new DeleteRoleCommandHandler($roleRepository);
+        $handler->handle(new DeleteRoleCommand(0));
     }
 }

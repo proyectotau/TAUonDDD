@@ -3,7 +3,7 @@
 namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommandHandler;
@@ -62,7 +62,7 @@ class DummyGroupRepository implements GroupRepository {
     public function getRolesFromGroup(Group $group): array {return [];}
 }
 
-class GroupTest extends TestCase
+class GroupTest extends MockeryTestCase
 {
     public function mockeryTestTearDown()
     {

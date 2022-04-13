@@ -3,7 +3,7 @@
 namespace Tests\Module\Administration\User\Application;
 
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserCommand;
 use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserCommandHandler;
@@ -67,7 +67,7 @@ class DummyUserRepository implements UserRepository {
     public function getGroupsFromUser(User $user):array {return [];}
 }
 
-final class UserTest extends TestCase {
+final class UserTest extends MockeryTestCase {
     public function mockeryTestTearDown()
     {
         Mockery::close();

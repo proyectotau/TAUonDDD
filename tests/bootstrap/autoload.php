@@ -14,7 +14,7 @@ use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRe
  */
 app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new InMemoryUserRepository());
 app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new InMemoryGroupRepository());
-app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\ModuleRepository', new InMemoryRoleRepository());
+app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new InMemoryRoleRepository());
 app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', new InMemoryModuleRepository());
 
 /*
