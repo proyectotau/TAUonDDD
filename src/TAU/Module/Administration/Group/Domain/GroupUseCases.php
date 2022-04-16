@@ -9,8 +9,15 @@ trait GroupUseCases
 
     public function addUser($user)
     {
-        $this->members[] = $user;
+        $this->members[$user->getId()] = $user; // TODO: use ID in other relations !!!
         // TODO: Raise AddUserToGroupDomainEvent($user, $this)
+        //$user->addGroup($this); //TODO: this causes an infinite loop
+    }
+
+    public function removeUser($user)
+    {
+        unset($this->members[$user->getId()]);
+        // TODO: Raise RemoveUserToGroupDomainEvent($user, $this)
     }
 
     public function getUsers(): array

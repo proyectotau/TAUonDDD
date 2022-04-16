@@ -191,6 +191,11 @@ class InMemoryRepository
         $this->user_group[$user->getId()][$group->getId()] = [$user, $group];
     }
 
+    public function removeUserToGroup(User $user, Group $group)
+    {
+        unset($this->user_group[$user->getId()][$group->getId()]);
+    }
+
     public function addGroupToUser(Group $group, User $user)
     {
         $this->user_group[$user->getId()][$group->getId()] = [$user, $group];

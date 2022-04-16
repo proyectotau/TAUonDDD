@@ -59,6 +59,20 @@ final class GroupService
         );
     }
 
+    public static function removeUserFromGroup($userId, $groupId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository'),
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
+            )
+        );
+
+        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommand($userId, $groupId)
+        );
+    }
+
     //TODO: Move to Query
     public static function read($id): User
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup;
+namespace ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup;
 
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
-final class AddUserToGroupCommandHandler
+final class RemoveUserFromGroupCommandHandler
 {
     private $userRepository;
     private $groupRepository;
@@ -16,14 +16,13 @@ final class AddUserToGroupCommandHandler
         $this->groupRepository = $group;
     }
 
-    public function handle(AddUserToGroupCommand $command)
+public function handle(RemoveUserFromGroupCommand $command)
     {
         $user = $this->userRepository->read($command->userId);
         $group = $this->groupRepository->read($command->groupId);
 
-        $this->groupRepository->addUserToGroup($user, $group);
+        $this->groupRepository->removeUserFromGroup($user, $group);
 
-        $group->addUser($user);
-        //$user->addGroup($group); //TODO: Here or in $group->addUser($user) itself? One or two events must be raised? Infinite loop?
+        $group->removeUser($user);
     }
 }

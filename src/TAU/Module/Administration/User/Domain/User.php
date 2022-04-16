@@ -65,6 +65,7 @@ class User
     {
         $this->belongsto[] = $group;
         // TODO: Raise AddGroupToUserDomainEvent($this, $group)
+        //$user->addGroup($this); //TODO: this causes an infinite loop
     }
 
     public function getGroups(): array
