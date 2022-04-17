@@ -221,6 +221,11 @@ class InMemoryRepository
         $this->group_role[$group->getId()][$role->getId()] = [$group, $role];
     }
 
+    public function removeGroupFromRole(Group $group, Role $role)
+    {
+        unset($this->group_role[$group->getId()][$role->getId()]);
+    }
+
     public function addRoleToGroup(Role $role, Group $group)
     {
         $this->group_role[$group->getId()][$role->getId()] = [$group, $role];
@@ -228,12 +233,12 @@ class InMemoryRepository
 
     public function getRolesFromGroup(Group $group): array
     {
-        return $this->extractY($this->group_role, 'grants', $this->roleDataStore, $group);
+        return $this->extractY($this->group_role, 'plays', $this->roleDataStore, $group);
     }
 
     public function getGroupsFromRole(Role $role): array
     {
-        return $this->extractX($this->group_role, 'authorizedBy', $this->groupDataStore, $role);
+        return $this->extractX($this->group_role, 'grantedby', $this->groupDataStore, $role);
     }
 
     public function addRoleToModule(Role $role, Module $module)
@@ -253,7 +258,7 @@ class InMemoryRepository
 
     public function getRolesFromModule(Module $module): array
     {
-        return $this->extractX($this->role_module, 'grantedBy', $this->roleDataStore, $module);
+        return $this->extractX($this->role_module, 'authorizedBy', $this->roleDataStore, $module);
     }
 
     /*

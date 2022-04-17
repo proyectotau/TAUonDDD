@@ -5,7 +5,7 @@ namespace ProyectoTAU\TAU\Module\Administration\Group\Domain;
 trait GroupUseCases
 {
     private $members = [];
-    private $authorizedBy = [];
+    private $plays = [];
 
     public function addUser($user)
     {
@@ -27,12 +27,12 @@ trait GroupUseCases
 
     public function addRole($role)
     {
-        $this->authorizedBy[] = $role;
+        $this->plays[] = $role;
         // TODO: Raise AddRoleToGroupDomainEvent($role, $this)
     }
 
     public function getRoles()
     {
-        return $this->authorizedBy;
+        return $this->plays;
     }
 }

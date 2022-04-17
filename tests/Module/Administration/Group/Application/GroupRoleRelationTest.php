@@ -1,20 +1,20 @@
 <?php
 
-namespace Tests\Module\Administration\Group\Application;
+namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroup;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroup;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRole;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole\RemoveGroupFromRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole\RemoveGroupFromRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
 
 class GroupRoleRelationTest  extends TestCase
 {
-    public function testItCanAddRoleToGroup()
+    public function testItCanAddGroupToRole()
     {
         InMemoryRepository::getInstance()->clear();
 
@@ -24,20 +24,22 @@ class GroupRoleRelationTest  extends TestCase
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        $addRoleToGroupService = new AddRoleToGroup($roleRepository, $groupRepository);
-        $addRoleToGroupService->addRoleToGroup(0, 0);
+        RoleService::addGroupToRole(0,0);
 
-        $actual = InMemoryRepository::getInstance()->getRolesFromGroup($group);
+        //$handler = new AddGroupToRoleCommandHandler($groupRepository, $roleRepository);
+        //$handler->handle(new AddGroupToRoleCommand(0,0));
+
+        $actual = InMemoryRepository::getInstance()->getGroupsFromRole($role);
 
         $this->assertSame([
-            'grants' => [
-                            $role
+            'grantedby' => [
+                            $group
                         ],
             'available' => []
         ], $actual);
     }
 
-    public function testItCanGetRolesFromGroup()
+    public function testItCanGetGroupsFromRole()
     {
         InMemoryRepository::getInstance()->clear();
 
@@ -47,20 +49,22 @@ class GroupRoleRelationTest  extends TestCase
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToGroup($role, $group);
+        InMemoryRepository::getInstance()->addGroupToRole($group, $role);
 
-        $getRolesFromGroupService = new GetRolesFromGroup($groupRepository);
-        $actual = $getRolesFromGroupService->getRolesFromGroup(0);
+        $actual = RoleService::getGroupsFromRole(0);
+
+        //$handler = new GetGroupsFromRoleCommandHandler($roleRepository);
+        //$actual = $handler->handle(new GetGroupsFromRoleCommand(0));
 
         $this->assertSame([
-            'grants' => [
-                            $role
+            'grantedby' => [
+                            $group
                         ],
             'available' => []
         ], $actual);
     }
 
-    public function testItCanGetAvailableGroupsFromRole()
+    public function testICanRemoveGroupFromRole()
     {
         InMemoryRepository::getInstance()->clear();
 
@@ -68,20 +72,22 @@ class GroupRoleRelationTest  extends TestCase
         $groupRepository = new InMemoryGroupRepository();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy", "fakelogin"));
-        $groupRepository->create($group1 = new Group(1, "Test1", "Dummy1"));
-        $groupRepository->create($group2 = new Group(2, "Test2", "Dummy2"));
+        $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToGroup($role, $group1);
+        InMemoryRepository::getInstance()->addGroupToRole($group, $role);
 
-        $getRolesFromGroupService = new GetGroupsFromRole($roleRepository);
-        $actual = $getRolesFromGroupService->getGroupsFromRole(0);
+        RoleService::removeGroupFromRole(0, 0);
+
+        //$handler = new RemoveGroupFromRoleCommandHandler($groupRepository, $roleRepository);
+        //$handler->handle(new RemoveGroupFromRoleCommand(0, 0));
+
+        $actual = InMemoryRepository::getInstance()->getGroupsFromRole($role);
 
         $this->assertSame([
-            'authorizedBy' => [
-                1 => $group1
+            'grantedby' => [
             ],
             'available' => [
-                2 => $group2
+                $group
             ]
         ], $actual);
     }

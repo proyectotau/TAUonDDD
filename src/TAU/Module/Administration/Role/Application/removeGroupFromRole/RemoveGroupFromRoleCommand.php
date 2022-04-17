@@ -1,8 +1,8 @@
 <?php
 
-namespace ProyectoTAU\TAU\Module\Administration\Role\Application\addGroupToRole;
+namespace ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole;
 
-final class AddGroupToRoleCommand
+final class RemoveGroupFromRoleCommand
 {
     public $groupId;
     public $roleId;

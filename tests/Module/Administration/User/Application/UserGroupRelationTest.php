@@ -42,7 +42,7 @@ class UserGroupRelationTest extends TestCase
 
         // act
         foreach ($relations as $pair) {
-            GroupService::addUserToGroup($pair[0]->getId(), $pair[1]->getId()); // (x,y) pair
+            GroupService::addUserToGroup($pair[0]->getId(), $pair[1]->getId()); // (user,group) pair
             $expected['belongsto'][$pair[1]->getId()] = $pair[1];
         }
 
