@@ -231,6 +231,11 @@ class InMemoryRepository
         $this->group_role[$group->getId()][$role->getId()] = [$group, $role];
     }
 
+    public function removeRoleToGroup(Role $role, Group $group)
+    {
+        unset($this->group_role[$group->getId()][$role->getId()]);
+    }
+
     public function getRolesFromGroup(Group $group): array
     {
         return $this->extractY($this->group_role, 'plays', $this->roleDataStore, $group);

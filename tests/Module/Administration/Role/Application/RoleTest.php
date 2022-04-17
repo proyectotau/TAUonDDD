@@ -59,6 +59,7 @@ class DummyRoleRepository implements RoleRepository {
     }
 
     public function addGroupToRole(Group $group, Role $role): void {}
+    public function removeGroupFromRole(Group $group, Role $role): void {}
     public function addModuleToRole(Module $module, Role $role): void {}
     public function getGroupsFromRole($role):array {return [];}
     public function getModulesFromRole(Role $role): array {return [];}

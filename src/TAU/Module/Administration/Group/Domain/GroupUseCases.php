@@ -2,6 +2,8 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Domain;
 
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+
 trait GroupUseCases
 {
     private $members = [];
@@ -27,8 +29,14 @@ trait GroupUseCases
 
     public function addRole($role)
     {
-        $this->plays[] = $role;
+        $this->plays[$role->getId()] = $role;
         // TODO: Raise AddRoleToGroupDomainEvent($role, $this)
+    }
+
+    public function removeRole(Role $role)
+    {
+        unset($this->plays[$role->getId()]);
+        // TODO: Raise RemoveRoleFromGroupDomainEvent($role, $this)
     }
 
     public function getRoles()

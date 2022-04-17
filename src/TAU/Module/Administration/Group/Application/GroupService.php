@@ -73,6 +73,20 @@ final class GroupService
         );
     }
 
+    public static function addRoleToGroup($roleId, $groupId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository'),
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
+            )
+        );
+
+        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommand($roleId, $groupId)
+        );
+    }
+
     //TODO: Move to Query
     public static function read($id): User
     {
@@ -98,6 +112,20 @@ final class GroupService
 
         return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommand($groupId)
+        );
+    }
+
+    //TODO: Move to Query
+    public static function getRolesFromGroup($groupId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
+            )
+        );
+
+        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommand($groupId)
         );
     }
 }
