@@ -1,8 +1,8 @@
 <?php
 
-namespace ProyectoTAU\TAU\Module\Administration\User\Application\addGroupToUser;
+namespace ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser;
 
-final class AddGroupToUserCommand
+final class RemoveGroupFromUserCommand
 {
     public $groupId;
     public $userId;

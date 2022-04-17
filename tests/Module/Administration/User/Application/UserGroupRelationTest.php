@@ -94,7 +94,7 @@ class UserGroupRelationTest extends TestCase
     {
         // arrange
         InMemoryRepository::getInstance()->clear();
-        
+
         $userRepository = new InMemoryUserRepository();
         $groupRepository = new InMemoryGroupRepository();
 

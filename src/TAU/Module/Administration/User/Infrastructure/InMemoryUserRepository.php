@@ -34,6 +34,11 @@ class InMemoryUserRepository implements UserRepository
         InMemoryRepository::getInstance()->addGroupToUser($group, $user);
     }
 
+    public function removeGroupFromUser(Group $group, User $user): void
+    {
+        InMemoryRepository::getInstance()->removeGroupFromUser($group, $user);
+    }
+
     public function getGroupsFromUser(User $user): array
     {
         return InMemoryRepository::getInstance()->getGroupsFromUser($user);

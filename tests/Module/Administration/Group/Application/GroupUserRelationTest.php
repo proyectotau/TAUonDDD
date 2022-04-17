@@ -6,21 +6,13 @@ use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommand;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommand;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommand;
-use ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommandHandler;
-
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 
 class GroupUserRelationTest extends TestCase
 {
-    public function testItCanAddUserToGroup()
+    public function testItCanAddGroupToUser()
     {
         InMemoryRepository::getInstance()->clear();
 
@@ -30,24 +22,22 @@ class GroupUserRelationTest extends TestCase
         $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        //$addUserToGroupService = new AddUserToGroup($userRepository, $groupRepository);
-        //$addUserToGroupService->addUserToGroup(0, 0);
-        GroupService::addUserToGroup(0, 0);
+        UserService::addGroupToUser(0, 0);
 
-        //$handler = new AddUserToGroupCommandHandler($userRepository, $groupRepository);
-        //$handler->handle(new AddUserToGroupCommand(0, 0) );
+        //$handler = new AddGroupToUserCommandHandler($groupRepository, $userRepository);
+        //$handler->handle(new AddGroupToUserCommand(0, 0) );
 
-        $actual = InMemoryRepository::getInstance()->getUsersFromGroup($group);
+        $actual = InMemoryRepository::getInstance()->getGroupsFromUser($user);
 
         $this->assertSame([
-            'members' => [
-                            $user
+            'belongsto' => [
+                            $group
                          ],
             'available' => []
         ], $actual);
     }
 
-    public function testItCanGetUsersFromGroup()
+    public function testItCanGetGroupsFromUser()
     {
         InMemoryRepository::getInstance()->clear();
 
@@ -59,36 +49,6 @@ class GroupUserRelationTest extends TestCase
 
         InMemoryRepository::getInstance()->addUserToGroup($user, $group);
 
-        //$getUsersFromGroupService = new GetUsersFromGroup($groupRepository);
-        //$actual = $getUsersFromGroupService->getUsersFromGroup(0);
-        $actual = GroupService::getUsersFromGroup(0);
-
-        //$handler = new GetUsersFromGroupCommandHandler($groupRepository);
-        //$actual = $handler->handle(new GetUsersFromGroupCommand(0));
-
-        $this->assertSame([
-            'members' => [
-                            $user
-                         ],
-            'available' => []
-        ], $actual);
-    }
-
-    public function testItCanGetAvailableGroupsFromUser()
-    {
-        InMemoryRepository::getInstance()->clear();
-
-        $userRepository = new InMemoryUserRepository();
-        $groupRepository = new InMemoryGroupRepository();
-
-        $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
-        $groupRepository->create($group1 = new Group(1, "Test1", "Dummy1"));
-        $groupRepository->create($group2 = new Group(2, "Test2", "Dummy2"));
-
-        InMemoryRepository::getInstance()->addUserToGroup($user, $group1);
-
-        //$getUsersFromGroupService = new GetGroupsFromUser($userRepository);
-        //$actual = $getUsersFromGroupService->getGroupsFromUser(0);
         $actual = UserService::getGroupsFromUser(0);
 
         //$handler = new GetGroupsFromUserCommandHandler($userRepository);
@@ -96,10 +56,33 @@ class GroupUserRelationTest extends TestCase
 
         $this->assertSame([
             'belongsto' => [
-                1 => $group1
-            ],
+                            $group
+                         ],
+            'available' => []
+        ], $actual);
+    }
+
+    public function testItCanRemoveGroupFromUser()
+    {
+        InMemoryRepository::getInstance()->clear();
+
+        $userRepository = new InMemoryUserRepository();
+        $groupRepository = new InMemoryGroupRepository();
+
+        $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
+        $groupRepository->create($group = new Group(0, "Test", "Dummy"));
+
+        UserService::removeGroupFromUser(0, 0);
+
+        //$handler = new RemoveGroupFromUserCommandHandler($groupRepository, $userRepository);
+        //$handler->handle(new RemoveGroupFromUserCommand(0, 0));
+
+        $actual = InMemoryRepository::getInstance()->getGroupsFromUser($user);
+
+            $this->assertSame([
+            'belongsto' => [],
             'available' => [
-                2 => $group2
+                $group
             ]
         ], $actual);
     }

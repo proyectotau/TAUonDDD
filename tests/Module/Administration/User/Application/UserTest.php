@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Module\Administration\User\Application;
+namespace ProyectoTAU\Tests\Module\Administration\User\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -15,7 +15,6 @@ use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
-use ProyectoTAU\TAU\Module\Administration\User\Application\create\CreateUser;
 use ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUser;
 use ProyectoTAU\TAU\Module\Administration\User\Application\update\UpdateUser;
 use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUser;
@@ -64,6 +63,7 @@ class DummyUserRepository implements UserRepository {
     }
 
     public function addGroupToUser(Group $group, User $user): void {}
+    public function removeGroupFromUser(Group $group, User $user): void {}
     public function getGroupsFromUser(User $user):array {return [];}
 }
 

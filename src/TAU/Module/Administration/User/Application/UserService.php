@@ -59,6 +59,20 @@ final class UserService
         );
     }
 
+    public static function removeGroupFromUser($groupId, $userId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser\RemoveGroupFromUserCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser\RemoveGroupFromUserCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository'),
+                app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository')
+            )
+        );
+
+        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser\removeGroupFromUserCommand($groupId, $userId)
+        );
+    }
+
     //TODO: Move to Query (rename Command to Query)
     public static function read($id): User
     {

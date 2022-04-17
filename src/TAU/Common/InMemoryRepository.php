@@ -201,6 +201,11 @@ class InMemoryRepository
         $this->user_group[$user->getId()][$group->getId()] = [$user, $group];
     }
 
+    public function removeGroupFromUser(Group $group, User $user)
+    {
+        unset($this->user_group[$user->getId()][$group->getId()]);
+    }
+
     public function getGroupsFromUser(User $user): array
     {
         return $this->extractY($this->user_group, 'belongsto', $this->groupDataStore, $user);

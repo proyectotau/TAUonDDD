@@ -1,11 +1,11 @@
 <?php
 
-namespace ProyectoTAU\TAU\Module\Administration\User\Application\addGroupToUser;
+namespace ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser;
 
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
-final class AddGroupToUserCommandHandler
+final class RemoveGroupFromUserCommandHandler
 {
     private $groupRepository;
     private $userRepository;
@@ -16,13 +16,13 @@ final class AddGroupToUserCommandHandler
         $this->userRepository = $user;
     }
 
-    public function handle(AddGroupToUserCommand $command)
+    public function handle(RemoveGroupFromUserCommand $command)
     {
         $group = $this->groupRepository->read($command->groupId);
         $user = $this->userRepository->read($command->userId);
 
-        $this->userRepository->addGroupToUser($group, $user);
+        $this->userRepository->removeGroupFromUser($group, $user);
 
-        $user->addGroup($group);
+        //$user->removeGroup($group);
     }
 }
