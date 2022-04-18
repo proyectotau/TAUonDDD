@@ -251,6 +251,11 @@ class InMemoryRepository
         $this->role_module[$role->getId()][$module->getId()] = [$role, $module];
     }
 
+    public function removeRoleFromModule(Role $role, Module $module)
+    {
+        unset($this->role_module[$role->getId()][$module->getId()]);
+    }
+
     public function addModuleToRole(Module $module, Role $role)
     {
         $this->role_module[$role->getId()][$module->getId()] = [$role, $module];
@@ -263,7 +268,7 @@ class InMemoryRepository
 
     public function getRolesFromModule(Module $module): array
     {
-        return $this->extractX($this->role_module, 'authorizedBy', $this->roleDataStore, $module);
+        return $this->extractX($this->role_module, 'authorizedby', $this->roleDataStore, $module);
     }
 
     /*

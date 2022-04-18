@@ -29,9 +29,14 @@ class InMemoryModuleRepository implements ModuleRepository
         InMemoryRepository::getInstance()->deleteModule($id);
     }
 
-    public function addRoleToModule(Role $role, Module $module)
+    public function addRoleToModule(Role $role, Module $module): void
     {
         InMemoryRepository::getInstance()->addRoleToModule($role, $module);
+    }
+
+    public function removeRoleFromModule(Role $role, Module $module): void
+    {
+        InMemoryRepository::getInstance()->removeRoleFromModule($role, $module);
     }
 
     public function getRolesFromModule(Module $module): array

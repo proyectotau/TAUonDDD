@@ -11,6 +11,7 @@ interface ModuleRepository
     public function update($id, $name, $desc): void;
     public function delete($id): void;
 
-    public function addRoleToModule(Role $role, Module $module);
+    public function addRoleToModule(Role $role, Module $module): void;
+    public function removeRoleFromModule(Role $role, Module $module): void;
     public function getRolesFromModule(Module $module): array;
 }

@@ -97,7 +97,7 @@ final class RoleService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\AddModuleToRole\AddModuleToRoleCommand($moduleId, $roleId)
         );
     }
