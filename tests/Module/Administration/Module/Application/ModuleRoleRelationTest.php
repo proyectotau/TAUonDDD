@@ -1,87 +1,97 @@
 <?php
 
-namespace Tests\Module\Administration\Module\Application;
+namespace ProyectoTAU\Tests\Module\Administration\Module\Application;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\addRoleToModule\AddRoleToModule;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\getRolesFromModule\GetRolesFromModule;
-use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRole;
 use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
+use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\removeModuleFromRole\RemoveModuleFromRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\removeModuleFromRole\RemoveModuleFromRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 class ModuleRoleRelationTest extends TestCase
 {
-    public function testItCanAddRoleToModule()
-    {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryModuleRepository();
-
-        $roleRepository->create($role = new Role(0, "Test", "Dummy"));
-        $groupRepository->create($group = new Module(0, "Test", "Dummy"));
-
-        $addRoleToModuleService = new AddRoleToModule($roleRepository, $groupRepository);
-        $addRoleToModuleService->addRoleToModule(0, 0);
-
-        $actual = InMemoryRepository::getInstance()->getRolesFromModule($group);
-
-        $this->assertSame([
-            'grantedBy' => [
-                $role
-            ],
-            'available' => []
-        ], $actual);
-    }
-
-    public function testItCanGetRolesFromModule()
-    {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryModuleRepository();
-
-        $roleRepository->create($role = new Role(0, "Test", "Dummy"));
-        $groupRepository->create($group = new Module(0, "Test", "Dummy"));
-
-        InMemoryRepository::getInstance()->addRoleToModule($role, $group);
-
-        $getRolesFromModuleService = new GetRolesFromModule($groupRepository);
-        $actual = $getRolesFromModuleService->getRolesFromModule(0);
-
-        $this->assertSame([
-            'grantedBy' => [
-                $role
-            ],
-            'available' => []
-        ], $actual);
-    }
-
-    public function testItCanGetAvailableModulesFromRole()
+    public function testItCanAddModuleToRole()
     {
         InMemoryRepository::getInstance()->clear();
 
         $roleRepository = new InMemoryRoleRepository();
         $moduleRepository = new InMemoryModuleRepository();
 
-        $moduleRepository->create($module1 = new Module(1, "Test1", "Dummy1", "fakelogin1"));
-        $moduleRepository->create($module2 = new Module(2, "Test2", "Dummy2", "fakelogin2"));
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
+        $moduleRepository->create($module = new Module(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addModuleToRole($module1, $role);
+        //RoleService::addModuleToRole(0,0);
 
-        $getModulesFromRoleService = new GetModulesFromRole($roleRepository);
-        $actual = $getModulesFromRoleService->getModulesFromRole(0);
+        $handle = new AddModuleToRoleCommandHandler($moduleRepository, $roleRepository);
+        $handle->handle(new AddModuleToRoleCommand(0,0));
+
+        $actual = InMemoryRepository::getInstance()->getModulesFromRole($role);
 
         $this->assertSame([
-            'canRun' => [
-                1 => $module1
+            'canrun' => [
+                $module
+            ],
+            'available' => []
+        ], $actual);
+    }
+
+    public function testItCanGetModulesFromRole()
+    {
+        InMemoryRepository::getInstance()->clear();
+
+        $roleRepository = new InMemoryRoleRepository();
+        $moduleRepository = new InMemoryModuleRepository();
+
+        $roleRepository->create($role = new Role(0, "Test", "Dummy"));
+        $moduleRepository->create($module = new Module(0, "Test", "Dummy"));
+
+        InMemoryRepository::getInstance()->addModuleToRole($module, $role);
+
+        //RoleService::addModuleToRole(0,0);
+
+        $handler = new GetModulesFromRoleCommandHandler($roleRepository);
+        $actual = $handler->handle(new GetModulesFromRoleCommand(0));
+
+        $this->assertSame([
+            'canrun' => [
+                $module
+            ],
+            'available' => []
+        ], $actual);
+    }
+
+    public function testItCanRemoveModuleFromRole()
+    {
+        InMemoryRepository::getInstance()->clear();
+
+        $roleRepository = new InMemoryRoleRepository();
+        $moduleRepository = new InMemoryModuleRepository();
+
+        $moduleRepository->create($module = new Module(0, "Test0", "Dummy", "fakelogin"));
+        $roleRepository->create($role = new Role(0, "Test", "Dummy"));
+
+        InMemoryRepository::getInstance()->addModuleToRole($module, $role);
+
+        //RoleService::removeModuleFromRole(0, 0);
+
+        $handler = new RemoveModuleFromRoleCommandHandler($moduleRepository, $roleRepository);
+        $handler->handle(new RemoveModuleFromRoleCommand(0, 0));
+
+        $actual = InMemoryRepository::getInstance()->getModulesFromRole($role);
+
+        $this->assertSame([
+            'canrun' => [
             ],
             'available' => [
-                2 => $module2
+                $module
             ]
         ], $actual);
     }

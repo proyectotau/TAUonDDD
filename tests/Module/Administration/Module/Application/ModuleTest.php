@@ -1,18 +1,23 @@
 <?php
 
-namespace Tests\Module\Administration\Module\Application;
+namespace ProyectoTAU\Tests\Module\Administration\Module\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModule;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModule;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModule;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\delete\DeleteModule;
-use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModuleCommand;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModuleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModuleCommand;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModuleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommand;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\delete\DeleteModuleCommand;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\delete\DeleteModuleCommandHandler;
+
 
 class DummyModuleRepository implements ModuleRepository {
 
@@ -31,7 +36,9 @@ class DummyModuleRepository implements ModuleRepository {
         if( ! ($id === 0) ) {
             throw new \InvalidArgumentException("Mismatched Module received by read method");
         }
+        return new Module(0,null,null);
     }
+
     public function update($id, $name, $desc): void
     {
         // Should receive a call once with the same Dummy Module as argument
@@ -49,7 +56,8 @@ class DummyModuleRepository implements ModuleRepository {
         }
     }
 
-    public function addRoleToModule(Role $role, Module $module){}
+    public function addRoleToModule(Role $role, Module $module): void {}
+    public function removeRoleFromModule(Role $role, Module $module): void {}
     public function getRolesFromModule(Module $module): array {return [];}
 }
 
@@ -64,50 +72,58 @@ class ModuleTest extends MockeryTestCase
     {
         InMemoryRepository::getInstance()->clear();
 
-        $moduleRepository = Mockery::mock(DummyModuleRepository::class);
+        $modulerepository = Mockery::mock(DummyModuleRepository::class);
 
-        $moduleRepository->shouldReceive('create')
+        $modulerepository->shouldReceive('create')
             ->once()
             ->with(\Hamcrest\Core\IsEqual::equalTo(
                 new Module(0, "Test", "Dummy")));
 
-        $module = new CreateModule($moduleRepository);
-        $module->create(0, "Test", "Dummy");
+        //ModuleService::create(0, "Test", "Dummy");
+
+        $handler = new CreateModuleCommandHandler($modulerepository);
+        $handler->handle(new CreateModuleCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanReadAdminModule()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $moduleRepository = Mockery::mock(DummyModuleRepository::class);
+        $modulerepository = Mockery::mock(DummyModuleRepository::class);
 
-        $moduleRepository->shouldReceive('read')->once()->with(0);
+        $modulerepository->shouldReceive('read')->once()->with(0);
 
-        $module = new ReadModule($moduleRepository);
-        $module->read(0);
+        //ModuleService::read(0);
+
+        $handler = new ReadModuleCommandHandler($modulerepository);
+        $handler->handle(new ReadModuleCommand(0));
     }
 
     public function testItCanUpdateAdminModule()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $moduleRepository = Mockery::mock(DummyModuleRepository::class);
+        $modulerepository = Mockery::mock(DummyModuleRepository::class);
 
-        $moduleRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
+        $modulerepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
-        $module = new UpdateModule($moduleRepository);
-        $module->update(0, "Test", "Dummy");
+        //ModuleService::update(0, "Test", "Dummy");
+
+        $handler = new UpdateModuleCommandHandler($modulerepository);
+        $handler->handle(new UpdateModuleCommand(0, "Test", "Dummy"));
     }
 
     public function testItCanDeleteAdminModule()
     {
         InMemoryRepository::getInstance()->clear();
 
-        $moduleRepository = Mockery::mock(DummyModuleRepository::class);
+        $modulerepository = Mockery::mock(DummyModuleRepository::class);
 
-        $moduleRepository->shouldReceive('delete')->once()->with(0);
+        $modulerepository->shouldReceive('delete')->once()->with(0);
 
-        $module = new DeleteModule($moduleRepository);
-        $module->delete(0);
+        //ModuleService::delete(0);
+
+        $handler = new DeleteModuleCommandHandler($modulerepository);
+        $handler->handle(new DeleteModuleCommand(0));
     }
 }

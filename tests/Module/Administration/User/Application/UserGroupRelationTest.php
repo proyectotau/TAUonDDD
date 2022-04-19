@@ -4,12 +4,17 @@ namespace ProyectoTAU\Tests\Module\Administration\User\Application;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
-
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 
 class UserGroupRelationTest extends TestCase
 {
@@ -40,9 +45,12 @@ class UserGroupRelationTest extends TestCase
         foreach ($available as $group)
             $expected['available'][$group->getId()] = $group;
 
+        $handler = new AddUserToGroupCommandHandler($userRepository, $groupRepository);
+
         // act
         foreach ($relations as $pair) {
-            GroupService::addUserToGroup($pair[0]->getId(), $pair[1]->getId()); // (user,group) pair
+            //GroupService::addUserToGroup($pair[0]->getId(), $pair[1]->getId()); // (user,group) pair
+            $handler->handle(new AddUserToGroupCommand($pair[0]->getId(), $pair[1]->getId()));
             $expected['belongsto'][$pair[1]->getId()] = $pair[1];
         }
 
@@ -83,8 +91,11 @@ class UserGroupRelationTest extends TestCase
             $expected['members'][$pair[0]->getId()] = $pair[0];
         }
 
+        $handler = new GetUsersFromGroupCommandHandler($groupRepository);
+
         // act
-        $actual = GroupService::getUsersFromGroup($groups[0]->getId());
+        //$actual = GroupService::getUsersFromGroup($groups[0]->getId());
+        $actual = $handler->handle(new GetUsersFromGroupCommand($groups[0]->getId()));
 
         // assert
         $this->assertSame($expected, $actual);
@@ -110,8 +121,11 @@ class UserGroupRelationTest extends TestCase
             ]
         ];
 
+        $handler = new RemoveUserFromGroupCommandHandler($userRepository, $groupRepository);
+
         // act
-        GroupService::removeUserFromGroup($user->getId(), $group->getId());
+        //GroupService::removeUserFromGroup($user->getId(), $group->getId());
+        $handler->handle(new RemoveUserFromGroupCommand($user->getId(), $group->getId()));
 
         // assert
         $actual = InMemoryRepository::getInstance()->getUsersFromGroup($group);

@@ -5,19 +5,19 @@ namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommand;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 
 class DummyGroupRepository implements GroupRepository {
 
@@ -82,8 +82,6 @@ class GroupTest extends MockeryTestCase
             ->with(\Hamcrest\Core\IsEqual::equalTo(
                 new Group(0, "Test", "Dummy")));
 
-        //$group = new CreateGroup($groupRepository);
-        //$group->create(0, "Test", "Dummy");
         //GroupService::create(0, "Test", "Dummy");
 
         $handler = new CreateGroupCommandHandler($groupRepository);
@@ -98,8 +96,6 @@ class GroupTest extends MockeryTestCase
 
         $groupRepository->shouldReceive('read')->once()->with(0);
 
-        //$group = new ReadGroup($groupRepository);
-        //$group->read(0);
         //GroupService::read(0);
 
         $handler = new ReadGroupCommandHandler($groupRepository);

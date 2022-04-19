@@ -20,7 +20,7 @@ app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository
 /*
  * Instantiate CommandBus
  */
-app()->add('Joselfonseca\LaravelTactician\CommandBusInterface',
+app()->add('CommandBus',
     new CommandBus(
         new CommandRunner()
     )

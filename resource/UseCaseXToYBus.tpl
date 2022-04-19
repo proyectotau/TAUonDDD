@@ -14,7 +14,7 @@ final class %Usecase%%EntityX%To%EntityY%
 
     public function __construct(%EntityX%Repository $%entityX%, %EntityY%Repository $%entityY%)
     {
-        $this->bus = app('Joselfonseca\LaravelTactician\CommandBusInterface');
+        $this->bus = app('CommandBus');
 
         app()->bind('%fcerX%',
             function () use ($%entityX%){

@@ -8,7 +8,7 @@ final class GetUsersFromGroupCommandHandler
 {
     private $groupRepository;
 
-    public function __construct(GroupRepository $group)
+    public function  __construct(GroupRepository $group)
     {
         $this->groupRepository = $group;
     }

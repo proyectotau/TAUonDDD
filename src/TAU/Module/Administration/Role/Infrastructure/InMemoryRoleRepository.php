@@ -50,6 +50,11 @@ class InMemoryRoleRepository implements RoleRepository
         InMemoryRepository::getInstance()->addModuleToRole($module, $role);
     }
 
+    public function removeModuleFromRole(Module $module, Role $role): void
+    {
+        InMemoryRepository::getInstance()->removeModuleFromRole($module, $role);
+    }
+
     public function getModulesFromRole(Role $role): array
     {
         return InMemoryRepository::getInstance()->getModulesFromRole($role);

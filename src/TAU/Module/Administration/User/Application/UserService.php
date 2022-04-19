@@ -14,7 +14,7 @@ final class UserService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\create\CreateUserCommand($id, $name, $surname, $login)
         );
     }
@@ -27,7 +27,7 @@ final class UserService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserCommand($id)
         );
     }
@@ -40,7 +40,7 @@ final class UserService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\update\UpdateUserCommand($id, $name, $surname, $login)
         );
     }
@@ -54,7 +54,7 @@ final class UserService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\addGroupToUser\AddGroupToUserCommand($groupId, $userId)
         );
     }
@@ -68,7 +68,7 @@ final class UserService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\removeGroupFromUser\removeGroupFromUserCommand($groupId, $userId)
         );
     }
@@ -82,7 +82,7 @@ final class UserService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUserCommand($id)
         );
     }
@@ -96,7 +96,7 @@ final class UserService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommand($userId)
         );
     }

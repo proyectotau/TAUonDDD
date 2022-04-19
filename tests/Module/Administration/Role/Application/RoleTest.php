@@ -7,17 +7,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommand;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommand;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommand;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 
 class DummyRoleRepository implements RoleRepository {
@@ -61,6 +61,7 @@ class DummyRoleRepository implements RoleRepository {
     public function addGroupToRole(Group $group, Role $role): void {}
     public function removeGroupFromRole(Group $group, Role $role): void {}
     public function addModuleToRole(Module $module, Role $role): void {}
+    public function removeModuleFromRole(Module $module, Role $role): void {}
     public function getGroupsFromRole($role):array {return [];}
     public function getModulesFromRole(Role $role): array {return [];}
 }
@@ -83,8 +84,6 @@ class RoleTest extends MockeryTestCase
             ->with(\Hamcrest\Core\IsEqual::equalTo(
                 new Role(0, "Test", "Dummy")));
 
-        //$roleservice = new CreateRole($roleRepository);
-        //$roleservice->create(0, "Test", "Dummy");
         //RoleService::create(0, "Test", "Dummy");
 
         $handler = new CreateRoleCommandHandler($roleRepository);
@@ -99,8 +98,6 @@ class RoleTest extends MockeryTestCase
 
         $roleRepository->shouldReceive('read')->once()->with(0);
 
-        //$roleservice = new ReadRole($roleRepository);
-        //$roleservice->read(0);
         //RoleService::read(0);
 
         $handler = new ReadRoleCommandHandler($roleRepository);
@@ -115,8 +112,6 @@ class RoleTest extends MockeryTestCase
 
         $roleRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
 
-        //$roleservice = new UpdateRole($groupRepository);
-        //$roleservice->update(0, "Test", "Dummy");
         //RoleService::update(0, "Test", "Dummy");
 
         $handler = new UpdateRoleCommandHandler($roleRepository);
@@ -131,8 +126,6 @@ class RoleTest extends MockeryTestCase
 
         $roleRepository->shouldReceive('delete')->once()->with(0);
 
-        //$roleservice = new DeleteRole($roleRepository);
-        //$roleservice->delete(0);
         //RoleService::delete(0);
 
         $handler = new DeleteRoleCommandHandler($roleRepository);

@@ -14,7 +14,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand($id, $name, $desc)
         );
     }
@@ -27,7 +27,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommand($id)
         );
     }
@@ -40,7 +40,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCommand($id, $name, $desc)
         );
     }
@@ -54,7 +54,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\addUserToGroup\AddUserToGroupCommand($userId, $groupId)
         );
     }
@@ -68,7 +68,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\removeUserFromGroup\RemoveUserFromGroupCommand($userId, $groupId)
         );
     }
@@ -82,7 +82,7 @@ final class GroupService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommand($roleId, $groupId)
         );
     }
@@ -96,7 +96,7 @@ final class GroupService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommand($id)
         );
     }
@@ -110,7 +110,7 @@ final class GroupService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommand($groupId)
         );
     }
@@ -124,7 +124,7 @@ final class GroupService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommand($groupId)
         );
     }

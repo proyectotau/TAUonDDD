@@ -13,7 +13,7 @@ final class %Usecase%%Entity%
     private $bus;
 
     public function __construct(%Entity%Repository $%entity%){
-        $this->bus = app('Joselfonseca\LaravelTactician\CommandBusInterface');
+        $this->bus = app('CommandBus');
 
         app()->bind('%fcer%',
             function () use ($%entity%){

@@ -15,7 +15,7 @@ final class RoleService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommand($id, $name, $desc)
         );
     }
@@ -28,7 +28,7 @@ final class RoleService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommand($id)
         );
     }
@@ -41,7 +41,7 @@ final class RoleService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommand($id, $name, $desc)
         );
     }
@@ -55,7 +55,7 @@ final class RoleService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\addGroupToRole\AddGroupToRoleCommand($groupId, $roleId)
         );
     }
@@ -69,8 +69,22 @@ final class RoleService
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole\RemoveGroupFromRoleCommand($groupId, $roleId)
+        );
+    }
+
+    public static function removeModuleFromRole($moduleId, $roleId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\removeModuleFromRole\RemoveModuleFromRoleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\removeModuleFromRole\RemoveModuleFromRoleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository'),
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository')
+            )
+        );
+
+        app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\removeModuleFromRole\RemoveModuleFromRoleCommand($moduleId, $roleId)
         );
     }
 
@@ -83,22 +97,22 @@ final class RoleService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand($id)
         );
     }
 
     public static function addModuleToRole($moduleId, $roleId)
     {
-        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\AddModuleToRole\AddModuleToRoleCommandHandler',
-            new \ProyectoTAU\TAU\Module\Administration\Role\Application\AddModuleToRole\AddModuleToRoleCommandHandler(
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommandHandler(
                 app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository'),
                 app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository')
             )
         );
 
-        app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
-            new \ProyectoTAU\TAU\Module\Administration\Role\Application\AddModuleToRole\AddModuleToRoleCommand($moduleId, $roleId)
+        app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommand($moduleId, $roleId)
         );
     }
 
@@ -114,8 +128,25 @@ final class RoleService
             )
         );
 
-        return app('Joselfonseca\LaravelTactician\CommandBusInterface')->handle(
+        return app('CommandBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommand($roleId)
+        );
+    }
+
+    /*
+    * TODO: Move to Query
+    */
+    public static function getModulesFromRole($roleId): array
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository'
+                )
+            )
+        );
+
+        return app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommand($roleId)
         );
     }
 }

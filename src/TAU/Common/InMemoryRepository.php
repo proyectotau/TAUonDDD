@@ -261,9 +261,14 @@ class InMemoryRepository
         $this->role_module[$role->getId()][$module->getId()] = [$role, $module];
     }
 
+    public function removeModuleFromRole(Module $module, Role $role)
+    {
+        unset($this->role_module[$role->getId()][$module->getId()]);
+    }
+
     public function getModulesFromRole(Role $role): array
     {
-        return $this->extractY($this->role_module, 'canRun', $this->moduleDataStore, $role);
+        return $this->extractY($this->role_module, 'canrun', $this->moduleDataStore, $role);
     }
 
     public function getRolesFromModule(Module $module): array

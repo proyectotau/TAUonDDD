@@ -4,13 +4,18 @@ namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
+use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\addGroupToRole\AddGroupToRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\addGroupToRole\AddGroupToRoleCommandHandler;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole\RemoveGroupFromRoleCommand;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\removeGroupFromRole\RemoveGroupFromRoleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
-use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
+
 
 class GroupRoleRelationTest  extends TestCase
 {
@@ -24,10 +29,10 @@ class GroupRoleRelationTest  extends TestCase
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        RoleService::addGroupToRole(0,0);
+        //RoleService::addGroupToRole(0,0);
 
-        //$handler = new AddGroupToRoleCommandHandler($groupRepository, $roleRepository);
-        //$handler->handle(new AddGroupToRoleCommand(0,0));
+        $handler = new AddGroupToRoleCommandHandler($groupRepository, $roleRepository);
+        $handler->handle(new AddGroupToRoleCommand(0,0));
 
         $actual = InMemoryRepository::getInstance()->getGroupsFromRole($role);
 
@@ -51,10 +56,10 @@ class GroupRoleRelationTest  extends TestCase
 
         InMemoryRepository::getInstance()->addGroupToRole($group, $role);
 
-        $actual = RoleService::getGroupsFromRole(0);
+        //$actual = RoleService::getGroupsFromRole(0);
 
-        //$handler = new GetGroupsFromRoleCommandHandler($roleRepository);
-        //$actual = $handler->handle(new GetGroupsFromRoleCommand(0));
+        $handler = new GetGroupsFromRoleCommandHandler($roleRepository);
+        $actual = $handler->handle(new GetGroupsFromRoleCommand(0));
 
         $this->assertSame([
             'grantedby' => [
@@ -76,10 +81,10 @@ class GroupRoleRelationTest  extends TestCase
 
         InMemoryRepository::getInstance()->addGroupToRole($group, $role);
 
-        RoleService::removeGroupFromRole(0, 0);
+        //RoleService::removeGroupFromRole(0, 0);
 
-        //$handler = new RemoveGroupFromRoleCommandHandler($groupRepository, $roleRepository);
-        //$handler->handle(new RemoveGroupFromRoleCommand(0, 0));
+        $handler = new RemoveGroupFromRoleCommandHandler($groupRepository, $roleRepository);
+        $handler->handle(new RemoveGroupFromRoleCommand(0, 0));
 
         $actual = InMemoryRepository::getInstance()->getGroupsFromRole($role);
 
