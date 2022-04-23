@@ -6,7 +6,7 @@ if( ! function_exists("app") ){
         static $app = null;
 
         if( $app == null ){
-            $app = new \League\Container\container();
+            $app = new \League\Container\Container();
         }
 
         if( $alias != null )
