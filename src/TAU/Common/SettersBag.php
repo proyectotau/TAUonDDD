@@ -2,6 +2,8 @@
 
 namespace ProyectoTAU\TAU\Common;
 
+use phpDocumentor\Reflection\Types\True_;
+
 trait SettersBag
 {
     private $setters = [];
@@ -22,8 +24,8 @@ trait SettersBag
 
     public function __call($name, $arguments)
     {
-        $trace = debug_backtrace();
         if( ! $this->isSetterAllowed($name) ) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Disallowed getter/setter ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -32,13 +34,35 @@ trait SettersBag
             return null;
         }
 
-        //echo "Llamando al método de objeto '$name' " . implode(', ', $arguments). "\n";
-
         $attribute = strtolower(substr($name, 3));
-        if( substr($name, 0, 1) === 's' ){
+        if($this->isSetter($name)){
             $this->$attribute = $arguments[0];
-        } else {
+        } elseif( $this->isGetter($name) ) {
             return $this->$attribute;
+        } else {
+            $name(...$arguments);
         }
+    }
+
+    public function equals($o): bool
+    {
+        foreach ($this->setters as $getter){
+            if( $this->isGetter($getter) )
+            {
+                if( $this->$getter() != $o->$getter() )
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private function isSetter($name): bool
+    {
+        return substr($name, 0, 3) === 'set';
+    }
+
+    private function isGetter($name): bool
+    {
+        return substr($name, 0, 3) === 'get';
     }
 }

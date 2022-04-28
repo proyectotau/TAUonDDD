@@ -9,9 +9,14 @@ use ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository;
 
 class InMemoryModuleRepository implements ModuleRepository
 {
+    public function clear(): void
+    {
+        InMemoryRepository::getInstance()->clearModule();
+    }
+
     public function create(Module $module): void
     {
-        InMemoryRepository::getInstance()->createModule($module);
+        InMemoryRepository::getInstance()->createModule(clone $module);
     }
 
     public function read($id): Module

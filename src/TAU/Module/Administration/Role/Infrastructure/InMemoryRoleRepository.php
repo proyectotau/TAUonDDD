@@ -10,9 +10,14 @@ use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 
 class InMemoryRoleRepository implements RoleRepository
 {
+    public function clear(): void
+    {
+        InMemoryRepository::getInstance()->clearRole();
+    }
+
     public function create(Role $role): void
     {
-        InMemoryRepository::getInstance()->createRole($role);
+        InMemoryRepository::getInstance()->createRole(clone $role);
     }
 
     public function read($id): Role

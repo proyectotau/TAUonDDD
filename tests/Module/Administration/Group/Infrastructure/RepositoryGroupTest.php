@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Module\Administration\Group\Infrastructure;
+namespace ProyectoTAU\Tests\Module\Administration\Group\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
 
-final class InMemoryGroupTest extends TestCase
+final class RepositoryGroupTest extends TestCase
 {
     public function testItCanCreateGroup()
     {
-        $groupRepository = new InMemoryGroupRepository();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $expected = new Group(0, "Test", "Dummy Group");
         $groupRepository->create($expected);
@@ -21,7 +21,8 @@ final class InMemoryGroupTest extends TestCase
 
     public function testItCanReadGroup()
     {
-        $groupRepository = new InMemoryGroupRepository();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $expected = new Group(0, "Test", "Dummy Group");
         $groupRepository->create($expected);
@@ -32,12 +33,13 @@ final class InMemoryGroupTest extends TestCase
 
     public function testItCanUpdateGroup()
     {
-        $groupRepository = new InMemoryGroupRepository();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
-        $expected = new Group(0, "Test", "Dummy Group");
-        $groupRepository->create($expected);
+        $groupRepository->create(new Group(0, "Test", "Dummy Group"));
 
         $groupRepository->update(0, "TestOk", "DummyOk");
+        $expected = new Group(0, "TestOk", "DummyOk");
 
         $actual = $groupRepository->read(0);
 
@@ -47,7 +49,8 @@ final class InMemoryGroupTest extends TestCase
 
     public function testItCanDeleteGroup()
     {
-        $groupRepository = new InMemoryGroupRepository();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $groupRepository->create(new Group(0, "Test", "Dummy Group"));
 

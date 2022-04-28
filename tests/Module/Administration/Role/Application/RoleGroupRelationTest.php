@@ -3,11 +3,10 @@
 namespace ProyectoTAU\Tests\Module\Administration\Role\Application;
 
 use PHPUnit\Framework\TestCase;
+use ProyectoTAU\TAU\Common\AssertsArraySubset;
 use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\addRoleToGroup\AddRoleToGroupCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommand;
@@ -18,12 +17,14 @@ use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 
 class RoleGroupRelationTest extends TestCase
 {
+    use AssertsArraySubset;
+
     public function testItCanAddRoleToGroup()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
@@ -33,66 +34,75 @@ class RoleGroupRelationTest extends TestCase
         $handler = new AddRoleToGroupCommandHandler($roleRepository, $groupRepository);
         $handler->handle(new AddRoleToGroupCommand(0,0));
 
-        $actual = InMemoryRepository::getInstance()->getRolesFromGroup($group);
+        $actual = $groupRepository->getRolesFromGroup($group);
 
-        $this->assertSame([
+        $expected = [
             'plays' => [
                 $role
             ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanGetRolesFromGroup()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToGroup($role, $group);
+        $groupRepository->addRoleToGroup($role, $group);
 
         //$actual = GroupService::getRolesFromGroup(0);
 
         $handler = new GetRolesFromGroupCommandHandler($groupRepository);
         $actual = $handler->handle(new GetRolesFromGroupCommand(0));
 
-        $this->assertSame([
+        $expected = [
             'plays' => [
                 $role
             ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanRemoveRoleFromGroup()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy", "fakelogin"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToGroup($role, $group);
+        $groupRepository->addRoleToGroup($role, $group);
 
         //GroupService::removeRoleFromGroup(0);
 
         $handler = new RemoveRoleFromGroupCommandHandler($roleRepository, $groupRepository);
         $handler->handle(new RemoveRoleFromGroupCommand(0, 0));
 
-        $actual = InMemoryRepository::getInstance()->getRolesFromGroup($group);
+        $actual = $groupRepository->getRolesFromGroup($group);
 
-        $this->assertSame([
+        $expected = [
             'plays' => [
             ],
             'available' => [
                 $role
             ]
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 }

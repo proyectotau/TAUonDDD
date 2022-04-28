@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Module\Administration\Role\Infrastructure;
+namespace ProyectoTAU\Tests\Module\Administration\Role\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
 
-final class InMemoryRoleTest extends TestCase
+final class RepositoryRoleTest extends TestCase
 {
     public function testItCanCreateRole()
     {
-        $roleRepository = new InMemoryRoleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
 
         $expected = new Role(0, "Test", "Dummy Role");
         $roleRepository->create($expected);
@@ -21,7 +21,8 @@ final class InMemoryRoleTest extends TestCase
 
     public function testItCanReadRole()
     {
-        $roleRepository = new InMemoryRoleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
 
         $expected = new Role(0, "Test", "Dummy Role");
         $roleRepository->create($expected);
@@ -32,12 +33,13 @@ final class InMemoryRoleTest extends TestCase
 
     public function testItCanUpdateRole()
     {
-        $roleRepository = new InMemoryRoleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
 
-        $expected = new Role(0, "Test", "Dummy Role");
-        $roleRepository->create($expected);
+        $roleRepository->create(new Role(0, "Test", "Dummy Role"));
 
         $roleRepository->update(0, "TestOk", "DummyOk");
+        $expected = new Role(0, "TestOk", "DummyOk");
 
         $actual = $roleRepository->read(0);
 
@@ -47,7 +49,8 @@ final class InMemoryRoleTest extends TestCase
 
     public function testItCanDeleteRole()
     {
-        $roleRepository = new InMemoryRoleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
 
         $roleRepository->create(new Role(0, "Test", "Dummy Role"));
 

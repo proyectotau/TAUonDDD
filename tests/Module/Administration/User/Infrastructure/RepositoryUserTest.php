@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Module\Administration\User\Infrastructure;
+namespace ProyectoTAU\Tests\Module\Administration\User\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
-use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository;
 
-final class InMemoryUserTest extends TestCase
+final class RepositoryUserTest extends TestCase
 {
     public function testItCanCreateUser()
     {
-        $userRepository = new InMemoryUserRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
 
         $expected = new User(0, "Test", "Dummy", "fakelogin");
         $userRepository->create($expected);
@@ -21,7 +21,8 @@ final class InMemoryUserTest extends TestCase
 
     public function testItCanReadUser()
     {
-        $userRepository = new InMemoryUserRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
 
         $expected = new User(0, "Test", "Dummy", "fakelogin");
         $userRepository->create($expected);
@@ -32,12 +33,13 @@ final class InMemoryUserTest extends TestCase
 
     public function testItCanUpdateUser()
     {
-        $userRepository = new InMemoryUserRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
 
-        $expected = new User(0, "Test", "Dummy", "fakelogin");
-        $userRepository->create($expected);
+        $userRepository->create(new User(0, "Test", "Dummy", "fakelogin"));
 
         $userRepository->update(0, "TestOk", "DummyOk", "fakeloginOk");
+        $expected = new User(0, "TestOk", "DummyOk", "fakeloginOk");
 
         $actual = $userRepository->read(0);
 
@@ -48,7 +50,8 @@ final class InMemoryUserTest extends TestCase
 
     public function testItCanDeleteUser()
     {
-        $userRepository = new InMemoryUserRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
 
         $userRepository->create(new User(0, "Test", "Dummy", "fakelogin"));
 

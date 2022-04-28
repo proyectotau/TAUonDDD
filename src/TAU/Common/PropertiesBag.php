@@ -17,7 +17,7 @@ trait PropertiesBag
         return $this->attributes;
     }
 
-    protected function propertiesBagToString()
+    protected function propertiesBagToString(): string
     {
         $s = '';
         foreach ($this->attributes as $attr)
@@ -36,15 +36,15 @@ trait PropertiesBag
      * @param $name
      * @return bool
      */
-    protected function defined($name): bool
+    protected function isDefined($name): bool
     {
         return array_key_exists($name, $this->data);
     }
 
 	public function __set($name, $value)
     {
-        $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Disallowed property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -58,8 +58,8 @@ trait PropertiesBag
 	
 	public function __get($name)
     {
-        $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Disallowed property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -68,7 +68,8 @@ trait PropertiesBag
             return null;
         }
 
-        if( ! $this->defined($name)) {
+        if( ! $this->isDefined($name)) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Undefined property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -82,8 +83,8 @@ trait PropertiesBag
 	
 	public function __isset($name)
     {
-        $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Disallowed property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -92,7 +93,8 @@ trait PropertiesBag
             return null;
         }
 
-        if( ! $this->defined($name)) {
+        if( ! $this->isDefined($name)) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Undefined property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -106,8 +108,8 @@ trait PropertiesBag
 
     public function __unset($name)
     {
-        $trace = debug_backtrace();
         if( ! $this->isPropertyAllowed($name) ) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Disallowed property ' . $name .
                 ' in ' . $trace[0]['file'] .
@@ -116,7 +118,8 @@ trait PropertiesBag
             return null;
         }
 
-        if( ! $this->defined($name)) {
+        if( ! $this->isDefined($name)) {
+            $trace = debug_backtrace();
             trigger_error(
                 'Undefined property ' . $name .
                 ' in ' . $trace[0]['file'] .

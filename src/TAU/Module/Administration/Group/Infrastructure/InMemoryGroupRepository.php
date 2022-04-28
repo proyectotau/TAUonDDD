@@ -10,9 +10,14 @@ use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 
 class InMemoryGroupRepository implements GroupRepository
 {
+    public function clear(): void
+    {
+        InMemoryRepository::getInstance()->clearGroup();
+    }
+
     public function create(Group $group): void
     {
-        InMemoryRepository::getInstance()->createGroup($group);
+        InMemoryRepository::getInstance()->createGroup(clone $group);
     }
 
     public function read($id): Group

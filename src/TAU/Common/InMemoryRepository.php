@@ -48,14 +48,29 @@ class InMemoryRepository
         return self::$instance;
     }
 
-    public function clear()
+    public function clearUser(): void
+    {
+        $this->userDataStore = [];
+        $this->user_group = [];
+    }
+
+    public function clearGroup(): void
     {
         $this->groupDataStore = [];
-        $this->userDataStore = [];
-        $this->roleDataStore = [];
-        $this->moduleDataStore = [];
         $this->user_group = [];
         $this->group_role = [];
+    }
+
+    public function clearRole(): void
+    {
+        $this->roleDataStore = [];
+        $this->group_role = [];
+        $this->role_module = [];
+    }
+
+    public function clearModule(): void
+    {
+        $this->moduleDataStore = [];
         $this->role_module = [];
     }
 
@@ -80,8 +95,8 @@ class InMemoryRepository
         $this->failIfNotExists('User', $id);
 
         $this->userDataStore[$id]->setName($name);
-        $this->userDataStore[$id]->setName($surname);
-        $this->userDataStore[$id]->setName($login);
+        $this->userDataStore[$id]->setSurname($surname);
+        $this->userDataStore[$id]->setLogin($login);
     }
 
     public function deleteUser($id): void
@@ -112,7 +127,7 @@ class InMemoryRepository
         $this->failIfNotExists('Group', $id);
 
         $this->groupDataStore[$id]->setName($name);
-        $this->groupDataStore[$id]->setName($desc);
+        $this->groupDataStore[$id]->setDesc($desc);
     }
 
     public function deleteGroup($id): void
@@ -143,7 +158,7 @@ class InMemoryRepository
         $this->failIfNotExists('Role', $id);
 
         $this->roleDataStore[$id]->setName($name);
-        $this->roleDataStore[$id]->setName($desc);
+        $this->roleDataStore[$id]->setDesc($desc);
     }
 
     public function deleteRole($id): void
@@ -174,7 +189,7 @@ class InMemoryRepository
         $this->failIfNotExists('Module', $id);
 
         $this->moduleDataStore[$id]->setName($name);
-        $this->moduleDataStore[$id]->setName($desc);
+        $this->moduleDataStore[$id]->setDesc($desc);
     }
 
     public function deleteModule($id): void

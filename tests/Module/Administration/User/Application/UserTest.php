@@ -4,7 +4,6 @@ namespace ProyectoTAU\Tests\Module\Administration\User\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
@@ -20,6 +19,8 @@ use ProyectoTAU\TAU\Module\Administration\User\Application\delete\DeleteUserComm
 
 
 class DummyUserRepository implements UserRepository {
+
+    public function clear(): void {}
 
     public function create(User $user): void
     {
@@ -72,8 +73,6 @@ final class UserTest extends MockeryTestCase {
 
 	public function testItCanCreateAdminUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('create')
@@ -89,8 +88,6 @@ final class UserTest extends MockeryTestCase {
 
     public function testItCanReadAdminUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('read')->once()->with(0);
@@ -103,8 +100,6 @@ final class UserTest extends MockeryTestCase {
 
     public function testItCanUpdateAdminUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy", "fakelogin");
@@ -117,8 +112,6 @@ final class UserTest extends MockeryTestCase {
 
     public function testItCanDeleteAdminUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $userRepository = Mockery::mock(DummyUserRepository::class);
 
         $userRepository->shouldReceive('delete')->once()->with(0);

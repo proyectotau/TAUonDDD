@@ -3,9 +3,7 @@
 namespace ProyectoTAU\Tests\Module\Administration\Role\Application;
 
 use PHPUnit\Framework\TestCase;
-use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
+use ProyectoTAU\TAU\Common\AssertsArraySubset;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Module\Application\addRoleToModule\AddRoleToModuleCommand;
@@ -19,12 +17,14 @@ use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 
 class RoleModuleRelationTest extends TestCase
 {
+    use AssertsArraySubset;
+
     public function testItCanAddRoleToModule()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $moduleRepository = new InMemoryModuleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $moduleRepository->create($module = new Module(0, "Test", "Dummy"));
@@ -34,66 +34,75 @@ class RoleModuleRelationTest extends TestCase
         $handler = new AddRoleToModuleCommandHandler($roleRepository, $moduleRepository);
         $handler->handle(new AddRoleToModuleCommand(0,0));
 
-        $actual = InMemoryRepository::getInstance()->getRolesFromModule($module);
+        $actual = $moduleRepository->getRolesFromModule($module);
 
-        $this->assertSame([
+        $expected = [
             'authorizedby' => [
                 $role
             ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanGetRolesFromModule()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $moduleRepository = new InMemoryModuleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy"));
         $moduleRepository->create($module = new Module(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToModule($role, $module);
+        $moduleRepository->addRoleToModule($role, $module);
 
         //$actual = ModuleService::getRolesFromModule(0);
 
         $handler = new GetRolesFromModuleCommandHandler($moduleRepository);
         $actual = $handler->handle(new GetRolesFromModuleCommand(0));
 
-        $this->assertSame([
+        $expected = [
             'authorizedby' => [
                 $role
             ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanRemoveRoleFromModule()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $roleRepository = new InMemoryRoleRepository();
-        $moduleRepository = new InMemoryModuleRepository();
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $roleRepository->create($role = new Role(0, "Test", "Dummy", "fakelogin"));
         $moduleRepository->create($module = new Module(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addRoleToModule($role, $module);
+        $moduleRepository->addRoleToModule($role, $module);
 
         //ModuleService::removeRoleFromModule(0, 0);
 
         $handler = new RemoveRoleFromModuleCommandHandler($roleRepository,$moduleRepository);
         $handler->handle(new RemoveRoleFromModuleCommand(0, 0));
 
-        $actual = InMemoryRepository::getInstance()->getRolesFromModule($module);
+        $actual = $moduleRepository->getRolesFromModule($module);
 
-        $this->assertSame([
+        $expected = [
             'authorizedby' => [
             ],
             'available' => [
                 $role
             ]
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 }

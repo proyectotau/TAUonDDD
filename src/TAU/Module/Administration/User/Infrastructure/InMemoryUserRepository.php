@@ -9,9 +9,14 @@ use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 class InMemoryUserRepository implements UserRepository
 {
+    public function clear(): void
+    {
+        InMemoryRepository::getInstance()->clearUser();
+    }
+
     public function create(User $user): void
     {
-        InMemoryRepository::getInstance()->createUser($user);
+        InMemoryRepository::getInstance()->createUser(clone $user);
     }
 
     public function read($id): User

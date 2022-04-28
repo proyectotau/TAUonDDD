@@ -6,6 +6,8 @@ use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 
 interface ModuleRepository
 {
+    public function clear(): void;
+
     public function create(Module $module): void;
     public function read($id): Module;
     public function update($id, $name, $desc): void;

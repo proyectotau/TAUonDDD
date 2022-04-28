@@ -6,6 +6,8 @@ use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 
 interface UserRepository
 {
+    public function clear(): void;
+
     public function create(User $user): void;
     public function read($id): User;
     public function update($id, $name, $surname, $login): void;

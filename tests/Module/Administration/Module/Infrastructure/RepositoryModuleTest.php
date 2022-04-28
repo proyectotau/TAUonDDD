@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Module\Administration\Module\Infrastructure;
+namespace ProyectoTAU\Tests\Module\Administration\Module\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
-use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
 
-final class InMemoryModuleTest extends TestCase
+final class RepositoryModuleTest extends TestCase
 {
     public function testItCanCreateModule()
     {
-        $moduleRepository = new InMemoryModuleRepository();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $expected = new Module(0, "Test", "Dummy Module");
         $moduleRepository->create($expected);
@@ -21,7 +21,8 @@ final class InMemoryModuleTest extends TestCase
 
     public function testItCanReadModule()
     {
-        $moduleRepository = new InMemoryModuleRepository();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $expected = new Module(0, "Test", "Dummy Module");
         $moduleRepository->create($expected);
@@ -32,12 +33,13 @@ final class InMemoryModuleTest extends TestCase
 
     public function testItCanUpdateModule()
     {
-        $moduleRepository = new InMemoryModuleRepository();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
-        $expected = new Module(0, "Test", "Dummy Module");
-        $moduleRepository->create($expected);
+        $moduleRepository->create(new Module(0, "Test", "Dummy Module"));
 
         $moduleRepository->update(0, "TestOk", "DummyOk");
+        $expected = new Module(0, "TestOk", "DummyOk");
 
         $actual = $moduleRepository->read(0);
 
@@ -47,7 +49,8 @@ final class InMemoryModuleTest extends TestCase
 
     public function testItCanDeleteModule()
     {
-        $moduleRepository = new InMemoryModuleRepository();
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
 
         $moduleRepository->create(new Module(0, "Test", "Dummy Module"));
 

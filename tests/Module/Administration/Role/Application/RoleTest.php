@@ -4,7 +4,6 @@ namespace ProyectoTAU\Tests\Module\Administration\Role\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use ProyectoTAU\TAU\Common\InMemoryRepository;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
@@ -21,6 +20,8 @@ use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 
 class DummyRoleRepository implements RoleRepository {
+
+    public function clear(): void {}
 
     public function create(Role $role): void
     {
@@ -75,8 +76,6 @@ class RoleTest extends MockeryTestCase
 
     public function testItCanCreateAdminRole()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
         $roleRepository->shouldReceive('create')
@@ -92,8 +91,6 @@ class RoleTest extends MockeryTestCase
 
     public function testItCanReadAdminRole()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
         $roleRepository->shouldReceive('read')->once()->with(0);
@@ -106,8 +103,6 @@ class RoleTest extends MockeryTestCase
 
     public function testItCanUpdateAdminRole()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
         $roleRepository->shouldReceive('update')->once()->with(0, "Test", "Dummy");
@@ -120,8 +115,6 @@ class RoleTest extends MockeryTestCase
 
     public function testItCanDeleteAdminRole()
     {
-        InMemoryRepository::getInstance()->clear();
-
         $roleRepository = Mockery::mock(DummyRoleRepository::class);
 
         $roleRepository->shouldReceive('delete')->once()->with(0);

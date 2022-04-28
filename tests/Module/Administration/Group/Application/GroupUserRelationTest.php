@@ -3,9 +3,7 @@
 namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use PHPUnit\Framework\TestCase;
-use ProyectoTAU\TAU\Common\InMemoryRepository;
-use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
+use ProyectoTAU\TAU\Common\AssertsArraySubset;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Application\addGroupToUser\AddGroupToUserCommand;
@@ -18,12 +16,14 @@ use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
 
 class GroupUserRelationTest extends TestCase
 {
+    use AssertsArraySubset;
+
     public function testItCanAddGroupToUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $userRepository = new InMemoryUserRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
@@ -33,47 +33,53 @@ class GroupUserRelationTest extends TestCase
         $handler = new AddGroupToUserCommandHandler($groupRepository, $userRepository);
         $handler->handle(new AddGroupToUserCommand(0, 0) );
 
-        $actual = InMemoryRepository::getInstance()->getGroupsFromUser($user);
+        $actual = $userRepository->getGroupsFromUser($user);
 
-        $this->assertSame([
+        $expected = [
             'belongsto' => [
-                            $group
-                         ],
+                $group
+            ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanGetGroupsFromUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $userRepository = new InMemoryUserRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
 
-        InMemoryRepository::getInstance()->addUserToGroup($user, $group);
+        $groupRepository->addUserToGroup($user, $group);
 
         //$actual = UserService::getGroupsFromUser(0);
 
         $handler = new GetGroupsFromUserCommandHandler($userRepository);
         $actual = $handler->handle(new GetGroupsFromUserCommand(0));
 
-        $this->assertSame([
+        $expected = [
             'belongsto' => [
-                            $group
-                         ],
+                $group
+            ],
             'available' => []
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 
     public function testItCanRemoveGroupFromUser()
     {
-        InMemoryRepository::getInstance()->clear();
-
-        $userRepository = new InMemoryUserRepository();
-        $groupRepository = new InMemoryGroupRepository();
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
+        $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
+        $groupRepository->clear();
 
         $userRepository->create($user = new User(0, "Test", "Dummy", "fakelogin"));
         $groupRepository->create($group = new Group(0, "Test", "Dummy"));
@@ -83,13 +89,16 @@ class GroupUserRelationTest extends TestCase
         $handler = new RemoveGroupFromUserCommandHandler($groupRepository, $userRepository);
         $handler->handle(new RemoveGroupFromUserCommand(0, 0));
 
-        $actual = InMemoryRepository::getInstance()->getGroupsFromUser($user);
+        $actual = $userRepository->getGroupsFromUser($user);
 
-            $this->assertSame([
+        $expected = [
             'belongsto' => [],
             'available' => [
                 $group
             ]
-        ], $actual);
+        ];
+        $message = '';
+        $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
+        $this->assertTrue($result, $message);
     }
 }

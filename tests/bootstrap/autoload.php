@@ -9,12 +9,21 @@ use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepo
 use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
 use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
 
+use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\SQLiteUserRepository;
+
 /*
  * Instantiate all repositories
  */
+//$userRepository = '\ProyectoTAU\TAU\Module\Administration\User\Infrastructure\\'.$_ENV['UserRepository'];
+
 app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new InMemoryUserRepository());
+//app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new SQLiteUserRepository());
+
 app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new InMemoryGroupRepository());
+//app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new SQLiteGroupRepository());
+
 app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new InMemoryRoleRepository());
+
 app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', new InMemoryModuleRepository());
 
 /*

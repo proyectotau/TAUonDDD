@@ -73,6 +73,14 @@ class User
         return $this->belongsto;
     }
 
+    public function equals($o): bool
+    {
+        return $this->getid()       == $o->getid()
+            && $this->getName()     == $o->getName()
+            && $this->getSurname()  == $o->getSurname()
+            && $this->getLogin()    == $o->getLogin();
+    }
+
     public function __toString()
     {
         return
