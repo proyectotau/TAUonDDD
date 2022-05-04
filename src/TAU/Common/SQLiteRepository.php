@@ -2,15 +2,12 @@
 
 namespace ProyectoTAU\TAU\Common;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use PDO;
 use PDOException;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
-use ProyectoTAU\TAU\Module\Administration\User\Domain\UserId;
-use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupId;
 
 /*
  * @see https://phpenthusiast.com/blog/the-singleton-design-pattern-in-php
@@ -23,16 +20,11 @@ class SQLiteRepository
     private static $instance = null;
     private static $db = null;
 
-    // Tables
+    // Primary Keys Cache
     private $userDataStore = [];
     private $groupDataStore = [];
     private $roleDataStore = [];
     private $moduleDataStore = [];
-
-    // Relations
-    private $user_group = [];
-    private $group_role = [];
-    private $role_module = [];
 
     // The constructor is private
     // to prevent initiation with outer code.
@@ -51,7 +43,7 @@ class SQLiteRepository
 
     // The object is created from within the class itself
     // only if the class has no instance.
-    public static function getInstance()
+    public static function getInstance(): ?self
     {
         if (self::$instance == null)
         {
@@ -66,10 +58,9 @@ class SQLiteRepository
      */
     public function clearUser()
     {
-        $ps = self::$db->prepare('DELETE FROM user_group;');
+        $ps = self::$db->query('DELETE FROM user_group;');
         $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM User;');
+        $ps = self::$db->query('DELETE FROM User;');
         $this->executeOrFail($ps);
     }
 
@@ -77,8 +68,9 @@ class SQLiteRepository
     {
         $ps = self::$db->query('DELETE FROM user_group;');
         $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM "Group";');
+        $ps = self::$db->query('DELETE FROM group_role;');
+        $this->executeOrFail($ps);
+        $ps = self::$db->query('DELETE FROM "Group";');
         $this->executeOrFail($ps);
     }
 
@@ -86,11 +78,9 @@ class SQLiteRepository
     {
         $ps = self::$db->query('DELETE FROM group_role;');
         $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM "Group";');
+        $ps = self::$db->query('DELETE FROM role_module;');
         $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM Role;');
+        $ps = self::$db->query('DELETE FROM Role;');
         $this->executeOrFail($ps);
     }
 
@@ -98,11 +88,7 @@ class SQLiteRepository
     {
         $ps = self::$db->query('DELETE FROM role_module;');
         $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM Role;');
-        $this->executeOrFail($ps);
-
-        $ps = self::$db->prepare('DELETE FROM Module;');
+        $ps = self::$db->query('DELETE FROM Module;');
         $this->executeOrFail($ps);
     }
 
@@ -126,13 +112,13 @@ class SQLiteRepository
 
     public function readUser($id): User
     {
-        $ps = self::$db->prepare('SELECT user_pk, user_id, name, surname, login FROM User WHERE user_id = :id;');
+        $ps = self::$db->prepare('SELECT user_pk, user_id, name, surname, login FROM User WHERE user_id = :user_id;');
 
-        $this->executeOrFail($ps, [':id' => $id]);
+        $this->executeOrFail($ps, [':user_id' => $id]);
 
         $resultSet = $ps->fetch(PDO::FETCH_ASSOC);
         if( $resultSet === false )
-            throw new InvalidArgumentException("User with id = {$id} not found");
+            throw new \InvalidArgumentException("User with id = $id not found");
 
         $ref = new \ReflectionClass(User::class);
         $user = $this->castUser($ref->newInstanceWithoutConstructor());
@@ -153,10 +139,10 @@ class SQLiteRepository
                                             'name = :name,'.
                                             'surname = :surname,'.
                                             'login = :login'.
-                                            ' WHERE user_id = :id;');
+                                            ' WHERE user_id = :user_id;');
 
         $this->executeOrFail($ps, [
-            ':id' => $id,
+            ':user_id' => $id,
             ':name' => $name,
             ':surname' => $surname,
             ':login' => $login
@@ -165,25 +151,22 @@ class SQLiteRepository
 
     public function deleteUser($id): void
     {
-        $ps = self::$db->prepare('DELETE FROM User WHERE user_pk = :user_pk;');
+        $ps = self::$db->prepare('DELETE FROM User WHERE user_id = :user_id;');
 
-        $user_pk = $this->userDataStore[$id];
-
-        $this->executeOrFail($ps, [':user_pk' => $user_pk]);
+        $this->executeOrFail($ps, [':user_id' => $id]);
 
         unset($this->userDataStore[$id]);
     }
 
-    public function getGroupsFromUser(User $user): array // TODO id instead of User
+    public function getGroupsFromUser(User $user): array
     {
         $ps = self::$db->prepare('SELECT group_pk, g.group_id, name, description FROM "Group" g'.
                                         ' INNER JOIN user_group rel ON g.group_pk = rel.group_fk'.
-                                        ' WHERE rel.user_fk = :user_fk;');
+                                        ' WHERE rel.user_id = :user_id;');
 
-        $id = $user->getid();
-        $user_fk = $this->userDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':user_fk' => $user_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':user_id' => $user->getid()
+        ]);
 
         $groups = [];
         foreach ($resultSet as $entry) {
@@ -219,28 +202,31 @@ class SQLiteRepository
         return $o;
     }
 
-    private function queryOrFail($ps, $params = []): array
+    private function queryOrFail($ps, $params = [], $debug = 0): array
     {
-        $this->executeOrFail($ps, $params);
+        $this->executeOrFail($ps, $params, $debug);
         $resultSet =  $ps->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultSet;
     }
 
-    private function executeOrFail($ps, $params = [], $a = 0): void
+    private function executeOrFail($ps, $params = [], $debug = 0): void
     {
-        $a = 1;
-        if($a) {
+        if($debug) { //TODO: toggle to enable
             $sql = $ps->queryString;
             $b = str_replace(array_keys($params), array_values($params), $sql);
             echo "\n$b\n";
         }
 
-        $result = $ps->execute($params);
+        try {
+            $result = $ps->execute($params);
+        } catch (PDOException $e){
+            $result = false;
+        }
 
         if( $result === false ) {
-            $a = 1;
-            if($a) {
+            $debug = 1;
+            if($debug) {
                 $sql = $ps->queryString;
                 $b = str_replace(array_keys($params), array_values($params), $sql);
                 echo "\n$b\n";
@@ -289,15 +275,15 @@ class SQLiteRepository
         $this->groupDataStore[$group->getId()] = self::$db->lastInsertId();
     }
 
-    public function readGroup($id)
+    public function readGroup($id): Group
     {
-        $ps = self::$db->prepare('SELECT group_pk, group_id, name, description FROM "Group" WHERE group_id = :id;');
+        $ps = self::$db->prepare('SELECT group_pk, group_id, name, description FROM "Group" WHERE group_id = :group_id;');
 
-        $this->executeOrFail($ps, [':id' => $id]);
+        $this->executeOrFail($ps, [':group_id' => $id]);
 
         $resultSet = $ps->fetch(PDO::FETCH_ASSOC);
         if( $resultSet === false )
-            throw new InvalidArgumentException("Group with id = {$id} not found");
+            throw new \InvalidArgumentException("Group with id = $id not found");
 
         $ref = new \ReflectionClass(Group::class);
         $group = $this->castGroup($ref->newInstanceWithoutConstructor());
@@ -319,10 +305,10 @@ class SQLiteRepository
         $ps = self::$db->prepare('UPDATE "Group" SET '.
                                             'name = :name,'.
                                             'description = :description'.
-                                            ' WHERE group_id = :id;');
+                                            ' WHERE group_id = :group_id;');
 
         $this->executeOrFail($ps, [
-            ':id' => $id,
+            ':group_id' => $id,
             ':name' => $name,
             ':description' => $desc
         ]);
@@ -330,25 +316,22 @@ class SQLiteRepository
 
     public function deleteGroup($id)
     {
-        $ps = self::$db->prepare('DELETE FROM "Group" WHERE group_pk = :group_pk;');
+        $ps = self::$db->prepare('DELETE FROM "Group" WHERE group_id = :group_id;');
 
-        $group_pk = $this->groupDataStore[$id];
-
-        $this->executeOrFail($ps, [':group_pk' => $group_pk]);
+        $this->executeOrFail($ps, [':group_id' => $id]);
 
         unset($this->groupDataStore[$id]);
     }
 
-    public function getUsersFromGroup(Group $group)
+    public function getUsersFromGroup(Group $group): array
     {
         $ps = self::$db->prepare('SELECT user_pk, u.user_id, name, surname, login FROM User u'.
                                         ' INNER JOIN user_group rel ON u.user_pk = rel.user_fk'.
-                                        ' WHERE rel.group_fk = :group_fk;');
+                                        ' WHERE rel.group_id = :group_id;');
 
-        $id = $group->getId();
-        $group_fk = $this->groupDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':group_fk' => $group_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':group_id' => $group->getId()
+        ]);
 
         $users = [];
         foreach ($resultSet as $entry) {
@@ -398,29 +381,26 @@ class SQLiteRepository
 
     public function addUserToGroup(User $user, Group $group)
     {
-        /*$ps = self::$db->prepare('INSERT INTO user_group (user_fk, group_fk, user_id, group_id)'.
-                                        ' VALUES (:user_fk, :group_fk, :user_id, :group_id);');*/
-        $ps = self::$db->prepare('INSERT INTO user_group (user_fk, group_fk)'.
-                                        ' VALUES (:user_fk, :group_fk);');
+        $ps = self::$db->prepare('INSERT INTO user_group (user_fk, group_fk, user_id, group_id)'.
+                                        ' VALUES (:user_fk, :group_fk, :user_id, :group_id);');
 
         $this->executeOrFail($ps, [
             ':user_fk' => $this->userDataStore[$user->getId()],
             ':group_fk' => $this->groupDataStore[$group->getId()],
-            //':user_id' => $user->getId(),
-            //':group_id' => $group->getId()
+            ':user_id' => $user->getId(),
+            ':group_id' => $group->getId()
         ]);
     }
 
     public function removeUserFromGroup(User $user, Group $group)
     {
-        $ps = self::$db->prepare('DELETE FROM user_group WHERE user_fk = :user_fk'.
-                                        ' AND group_fk = :group_fk;');
+        $ps = self::$db->prepare('DELETE FROM user_group'.
+                                        ' WHERE user_id = :user_id'.
+                                        ' AND group_id = :group_id;');
 
         $this->executeOrFail($ps, [
-            ':user_fk' => $this->userDataStore[$user->getId()],
-            ':group_fk' => $this->groupDataStore[$group->getId()],
-            //':user_id' => $user->getId(),
-            //':group_id' => $group->getId()
+            ':user_id' => $user->getId(),
+            ':group_id' => $group->getId()
         ]);
     }
 
@@ -438,15 +418,15 @@ class SQLiteRepository
         $this->roleDataStore[$role->getId()] = self::$db->lastInsertId();
     }
 
-    public function readRole($id)
+    public function readRole($id): Role
     {
-        $ps = self::$db->prepare('SELECT role_pk, role_id, name, description FROM Role WHERE role_id = :id;');
+        $ps = self::$db->prepare('SELECT role_pk, role_id, name, description FROM Role WHERE role_id = :role_id;');
 
-        $this->executeOrFail($ps, [':id' => $id]);
+        $this->executeOrFail($ps, [':role_id' => $id]);
 
         $resultSet = $ps->fetch(PDO::FETCH_ASSOC);
         if( $resultSet === false )
-            throw new InvalidArgumentException("Role with id = {$id} not found");
+            throw new \InvalidArgumentException("Role with id = $id not found");
 
         $ref = new \ReflectionClass(Role::class);
         $role = $this->castRole($ref->newInstanceWithoutConstructor());
@@ -481,16 +461,15 @@ class SQLiteRepository
         ]);
     }
 
-    public function getGroupsFromRole(Role $role)
+    public function getGroupsFromRole(Role $role): array
     {
         $ps = self::$db->prepare('SELECT group_pk, g.group_id, name, description FROM "Group" g'.
-            ' INNER JOIN group_role rel ON g.group_pk = rel.group_fk'.
-            ' WHERE rel.role_fk = :role_fk;');
+                                        ' INNER JOIN group_role rel ON g.group_pk = rel.group_fk'.
+                                        ' WHERE rel.role_id = :role_id;');
 
-        $id = $role->getId();
-        $role_fk = $this->roleDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':role_fk' => $role_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':role_id' => $role->getId()
+        ]);
 
         $groups = [];
         foreach ($resultSet as $entry) {
@@ -518,20 +497,19 @@ class SQLiteRepository
 
     public function removeGroupFromRole(Group $group, Role $role)
     {
-        $ps = self::$db->prepare('DELETE FROM group_role WHERE group_fk = :group_fk'.
-                                        ' AND role_fk = :role_fk;');
+        $ps = self::$db->prepare('DELETE FROM group_role'.
+                                        ' WHERE group_id = :group_id'.
+                                        ' AND role_id = :role_id;');
 
         $this->executeOrFail($ps, [
-            ':group_fk' => $this->groupDataStore[$group->getId()],
-            ':role_fk' => $this->roleDataStore[$role->getId()],
-            //':group_id' => $group->getId(),
-            //':role_id' => $role->getId()
+            ':group_id' => $group->getId(),
+            ':role_id' => $role->getId()
         ]);
     }
 
     public function addGroupToUser(Group $group, User $user)
     {
-        $ps = self::$db->prepare('INSERT INTO user_group (user_fk, group_fk, group_id, user_id)'.
+        $ps = self::$db->prepare('INSERT INTO user_group (user_fk, group_fk, user_id, group_id)'.
                                         ' VALUES (:user_fk, :group_fk, :user_id, :group_id);');
 
         $this->executeOrFail($ps, [
@@ -544,26 +522,25 @@ class SQLiteRepository
 
     public function removeGroupFromUser(Group $group, User $user)
     {
-        $ps = self::$db->prepare('DELETE FROM user_group WHERE user_fk = :user_fk'.
-            ' AND group_fk = :group_fk;');
+        $ps = self::$db->prepare('DELETE FROM user_group'.
+                                        ' WHERE user_id = :user_id'.
+                                        ' AND group_id = :group_id;');
 
         $this->executeOrFail($ps, [
-            ':user_fk' => $this->userDataStore[$user->getId()],
-            ':group_fk' => $this->groupDataStore[$group->getId()],
-            //':role_id' => $role->getId()
-            //':group_id' => $group->getId(),
+            ':user_id' => $user->getId(),
+            ':group_id' => $group->getId()
         ]);
     }
 
     public function updateRole($id, $name, $desc)
     {
         $ps = self::$db->prepare('UPDATE Role SET '.
-            'name = :name,'.
-            'description = :description'.
-            ' WHERE role_id = :id;');
+                                        'name = :name,'.
+                                        'description = :description'.
+                                        ' WHERE role_id = :role_id;');
 
         $this->executeOrFail($ps, [
-            ':id' => $id,
+            ':role_id' => $id,
             ':name' => $name,
             ':description' => $desc
         ]);
@@ -571,11 +548,11 @@ class SQLiteRepository
 
     public function deleteRole($id)
     {
-        $ps = self::$db->prepare('DELETE FROM Role WHERE role_pk = :role_pk;');
+        $ps = self::$db->prepare('DELETE FROM Role WHERE role_id = :role_id;');
 
-        $role_pk = $this->roleDataStore[$id];
-
-        $this->executeOrFail($ps, [':role_pk' => $role_pk]);
+        $this->executeOrFail($ps, [
+            ':role_id' => $id
+        ]);
 
         unset($this->roleDataStore[$id]);
     }
@@ -593,16 +570,15 @@ class SQLiteRepository
         ]);
     }
 
-    public function getRolesFromGroup(Group $group)
+    public function getRolesFromGroup(Group $group): array
     {
         $ps = self::$db->prepare('SELECT role_pk, r.role_id, name, description FROM Role r'.
-            ' INNER JOIN group_role rel ON r.role_pk = rel.role_fk'.
-            ' WHERE rel.group_fk = :group_fk;');
+                                        ' INNER JOIN group_role rel ON r.role_pk = rel.role_fk'.
+                                        ' WHERE rel.group_id = :group_id;');
 
-        $id = $group->getId();
-        $group_fk = $this->groupDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':group_fk' => $group_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':group_id' => $group->getId()
+        ]);
 
         $roles = [];
         foreach ($resultSet as $entry) {
@@ -628,7 +604,7 @@ class SQLiteRepository
         return $r;
     }
 
-    private function getAllRoles()
+    private function getAllRoles(): array
     {
         $ps = self::$db->prepare('SELECT role_pk, role_id, role_id, name, description FROM Role;');
 
@@ -656,21 +632,20 @@ class SQLiteRepository
 
     public function removeRoleFromGroup(Role $role, Group $group)
     {
-        $ps = self::$db->prepare('DELETE FROM group_role WHERE role_fk = :role_fk'.
-                                        ' AND group_fk = :group_fk;');
+        $ps = self::$db->prepare('DELETE FROM group_role'.
+                                        ' WHERE role_id = :role_id'.
+                                        ' AND group_id = :group_id;');
 
         $this->executeOrFail($ps, [
-            ':role_fk' => $this->roleDataStore[$role->getId()],
-            ':group_fk' => $this->groupDataStore[$group->getId()],
-            //':role_id' => $role->getId(),
-            //':group_id' => $group->getId()
+            ':role_id' => $role->getId(),
+            ':group_id' => $group->getId()
         ]);
     }
 
     public function addModuleToRole(Module $module, Role $role)
     {
         $ps = self::$db->prepare('INSERT INTO role_module (role_fk, module_fk, role_id, module_id)'.
-            ' VALUES (:role_fk, :module_fk, :role_id, :module_id);');
+                                        ' VALUES (:role_fk, :module_fk, :role_id, :module_id);');
 
         $this->executeOrFail($ps, [
             ':role_fk' => $this->roleDataStore[$role->getId()],
@@ -682,27 +657,25 @@ class SQLiteRepository
 
     public function removeModuleFromRole(Module $module, Role $role)
     {
-        $ps = self::$db->prepare('DELETE FROM role_module WHERE role_fk = :role_fk'.
-                                        ' AND module_fk = :module_fk;');
+        $ps = self::$db->prepare('DELETE FROM role_module'.
+                                        ' WHERE role_id = :role_id'.
+                                        ' AND module_id = :module_id;');
 
         $this->executeOrFail($ps, [
-            ':module_fk' => $this->moduleDataStore[$module->getId()],
-            ':role_fk' => $this->roleDataStore[$role->getId()],
-            //':module_id' => $module->getId(),
-            //':role_id' => $role->getId()
+            ':module_id' => $module->getId(),
+            ':role_id' => $role->getId()
         ]);
     }
 
-    public function getModulesFromRole(Role $role)
+    public function getModulesFromRole(Role $role): array
     {
         $ps = self::$db->prepare('SELECT module_pk, m.module_id, name, description FROM Module m'.
                                         ' INNER JOIN role_module rel ON m.module_pk = rel.module_fk'.
-                                        ' WHERE rel.role_fk = :role_fk;');
+                                        ' WHERE rel.role_id = :role_id;');
 
-        $id = $role->getId();
-        $role_fk = $this->roleDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':role_fk' => $role_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':role_id' => $role->getId()
+        ]);
 
         $modules = [];
         foreach ($resultSet as $entry) {
@@ -772,15 +745,18 @@ class SQLiteRepository
         $this->moduleDataStore[$module->getId()] = self::$db->lastInsertId();
     }
 
-    public function readModule($id)
+    public function readModule($id): Module
     {
-        $ps = self::$db->prepare('SELECT module_pk, module_id, name, description FROM Module WHERE module_id = :id;');
+        $ps = self::$db->prepare('SELECT module_pk, module_id, name, description FROM Module'.
+                                        ' WHERE module_id = :module_id;');
 
-        $this->executeOrFail($ps, [':id' => $id]);
+        $this->executeOrFail($ps, [
+            ':module_id' => $id
+        ]);
 
         $resultSet = $ps->fetch(PDO::FETCH_ASSOC);
         if( $resultSet === false )
-            throw new InvalidArgumentException("Module with id = {$id} not found");
+            throw new \InvalidArgumentException("Module with id = $id not found");
 
         $ref = new \ReflectionClass(Module::class);
         $module = $this->castModule($ref->newInstanceWithoutConstructor());
@@ -802,10 +778,10 @@ class SQLiteRepository
         $ps = self::$db->prepare('UPDATE Module SET '.
                                         'name = :name,'.
                                         'description = :description'.
-                                        ' WHERE module_id = :id;');
+                                        ' WHERE module_id = :module_id;');
 
         $this->executeOrFail($ps, [
-            ':id' => $id,
+            ':module_id' => $id,
             ':name' => $name,
             ':description' => $desc
         ]);
@@ -813,11 +789,11 @@ class SQLiteRepository
 
     public function deleteModule($id)
     {
-        $ps = self::$db->prepare('DELETE FROM Module WHERE module_pk = :module_pk;');
+        $ps = self::$db->prepare('DELETE FROM Module WHERE module_id = :module_id;');
 
-        $module_pk = $this->moduleDataStore[$id];
-
-        $this->executeOrFail($ps, [':module_pk' => $module_pk]);
+        $this->executeOrFail($ps, [
+            ':module_id' => $id
+        ]);
 
         unset($this->moduleDataStore[$id]);
     }
@@ -832,16 +808,15 @@ class SQLiteRepository
         $this->removeModuleFromRole($module, $role);
     }
 
-    public function getRolesFromModule(Module $module)
+    public function getRolesFromModule(Module $module): array
     {
         $ps = self::$db->prepare('SELECT role_pk, r.role_id, name, description FROM Role r'.
-            ' INNER JOIN role_module rel ON r.role_pk = rel.role_fk'.
-            ' WHERE rel.module_fk = :module_fk;');
+                                        ' INNER JOIN role_module rel ON r.role_pk = rel.role_fk'.
+                                        ' WHERE rel.module_id = :module_id;');
 
-        $id = $module->getId();
-        $module_fk = $this->moduleDataStore[$id];
-
-        $resultSet = $this->queryOrFail($ps, [':module_fk' => $module_fk]);
+        $resultSet = $this->queryOrFail($ps, [
+            ':module_id' => $module->getId()
+        ]);
 
         $roles = [];
         foreach ($resultSet as $entry) {

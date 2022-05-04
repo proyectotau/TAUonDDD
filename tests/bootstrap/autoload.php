@@ -18,7 +18,7 @@ use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\SQLiteUserReposito
  * Instantiate all repositories
  */
 //$userRepository = '\ProyectoTAU\TAU\Module\Administration\User\Infrastructure\\'.$_ENV['UserRepository'];
-if(0) {
+if(1) {
     app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new InMemoryUserRepository());
     app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new InMemoryGroupRepository());
     app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new InMemoryRoleRepository());
