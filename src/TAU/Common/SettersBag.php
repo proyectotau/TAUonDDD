@@ -2,8 +2,6 @@
 
 namespace ProyectoTAU\TAU\Common;
 
-use phpDocumentor\Reflection\Types\True_;
-
 trait SettersBag
 {
     private $setters = [];
@@ -24,6 +22,14 @@ trait SettersBag
 
     public function __call($name, $arguments)
     {
+        //TODO: hack ;-(
+        if( in_array($name, ['setPropertiesBag', 'setSettersBag'], true) ){
+            $this->$name(...$arguments);
+            return;
+        }elseif( in_array($name, ['getPropertiesBag','getSettersBag'], true) ){
+            return $this->$name(...$arguments);
+        }
+
         if( ! $this->isSetterAllowed($name) ) {
             $trace = debug_backtrace();
             trigger_error(

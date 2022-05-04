@@ -48,6 +48,12 @@ trait AssertsArraySubset
             $message = "Mismatched Types: Expected (gettype($expected)) != Actual (gettype($actual))";
             return false;
         } elseif (gettype($expected) == 'object' ) {
+            $expected_class = get_class($expected);
+            $actual_class = get_class($actual);
+            if( $expected_class != $actual_class ){
+                $message = "Objects classes: Expected ($expected_class) != Actual ($actual_class)";
+                return false;
+            }
             if( ! $expected->equals($actual) ) {
                 $message = "Objects: Expected ($expected) != Actual ($actual)";
                 return false;

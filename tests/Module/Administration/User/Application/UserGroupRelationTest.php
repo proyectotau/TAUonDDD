@@ -19,7 +19,7 @@ class UserGroupRelationTest extends TestCase
     use AssertsArraySubset;
 
     /**
-     * @dataProvider availableGroupsProvider
+     * @dataProvider availableUsersProvider
      */
     public function testItCanAddUserToGroup($users, $groups, $relations, $available)
     {
@@ -38,12 +38,13 @@ class UserGroupRelationTest extends TestCase
         }
 
         $expected = [
-            'belongsto' => [],
+            'members' => [],
             'available' => []
         ];
 
-        foreach ($available as $group)
+        foreach ($available as $group) {
             $expected['available'][$group->getId()] = $group;
+        }
 
         $handler = new AddUserToGroupCommandHandler($userRepository, $groupRepository);
 
@@ -51,11 +52,11 @@ class UserGroupRelationTest extends TestCase
         foreach ($relations as $pair) {
             //GroupService::addUserToGroup($pair[0]->getId(), $pair[1]->getId()); // (user,group) pair
             $handler->handle(new AddUserToGroupCommand($pair[0]->getId(), $pair[1]->getId()));
-            $expected['belongsto'][$pair[1]->getId()] = $pair[1];
+            $expected['members'][$pair[0]->getId()] = $pair[0];
         }
 
         // assert
-        $actual = $userRepository->getGroupsFromUser($users[0]);
+        $actual = $groupRepository->getUsersFromGroup($groups[0]);
 
         $message = '';
         $result = $this->AssertsArrayIsASubsetOf($expected, $actual, $message);
@@ -114,15 +115,15 @@ class UserGroupRelationTest extends TestCase
         $groupRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository');
         $groupRepository->clear();
 
-        $userRepository->create($user = new User(0, "Test1", "Dummy1", "fakelogin1"));
-        $groupRepository->create($group = new Group(0, "Test1", "Dummy1"));
+        $userRepository->create($user = new User(1, "Test1", "Dummy1", "fakelogin1"));
+        $groupRepository->create($group = new Group(1, "Test1", "Dummy1"));
 
         $groupRepository->addUserToGroup($user, $group);
 
         $expected = [
             'members' => [],
             'available' => [
-                $user
+               $user->getId() => $user
             ]
         ];
 
@@ -139,7 +140,10 @@ class UserGroupRelationTest extends TestCase
         $this->assertTrue($result, $message);
     }
 
-    public function availableGroupsProvider(): array
+    /*
+     * Providers
+     */
+    public function availableGroupsProvider(): array //TODO unused
     {
         $user1 = new User(1, "Test1", "Dummy1", "fakelogin1");
 
@@ -153,7 +157,6 @@ class UserGroupRelationTest extends TestCase
         return array(
             "User 1 belongs to none group at all, all groups available" =>
             array($users, $groups, [
-
             ], [
                 $group1,
                 $group2,
@@ -179,7 +182,6 @@ class UserGroupRelationTest extends TestCase
                 [$user1, $group2],
                 [$user1, $group3]
             ], [
-
             ])
         );
     }
