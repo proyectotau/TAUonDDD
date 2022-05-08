@@ -88,20 +88,6 @@ final class RoleService
         );
     }
 
-    //TODO: Move to Query (rename Command to Query)
-    public static function read($id): Role
-    {
-        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler',
-            new \ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler(
-                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository')
-            )
-        );
-
-        return app('CommandBus')->handle(
-            new \ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand($id)
-        );
-    }
-
     public static function addModuleToRole($moduleId, $roleId)
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\addModuleToRole\AddModuleToRoleCommandHandler',
@@ -116,9 +102,19 @@ final class RoleService
         );
     }
 
-    /*
-     * TODO: Move to Query
-     */
+    public static function read($id): Role
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\read\ReadRoleCommand($id)
+        );
+    }
+
     public static function getGroupsFromRole($roleId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommandHandler',
@@ -128,14 +124,11 @@ final class RoleService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommand($roleId)
         );
     }
 
-    /*
-    * TODO: Move to Query
-    */
     public static function getModulesFromRole($roleId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommandHandler',
@@ -145,7 +138,7 @@ final class RoleService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Role\Application\getModulesFromRole\GetModulesFromRoleCommand($roleId)
         );
     }

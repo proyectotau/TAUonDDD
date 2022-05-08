@@ -4,7 +4,7 @@ namespace ProyectoTAU\TAU\Common;
 
 use League\Tactician\Middleware;
 
-class CommandRunner implements Middleware
+class QueryRunner implements Middleware
 {
     private $handler;
 
@@ -17,6 +17,6 @@ class CommandRunner implements Middleware
     {
         $commandName = \get_class($command);
         $commandHandler = $commandName.$this->handler;
-        app()->get($commandHandler)->handle($command);
+        return app()->get($commandHandler)->handle($command);
     }
 }

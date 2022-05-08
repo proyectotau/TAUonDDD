@@ -14,11 +14,11 @@ use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
  */
 
 // General singleton class.
-class SQLiteRepository
+class SQLiteRepository implements Repository
 {
     // Hold the class instance.
-    private static $instance = null;
-    private static $db = null;
+    private static ?Repository $instance = null;
+    private static ?PDO $db = null;
 
     // Primary Keys Cache
     private $userDataStore = [];
@@ -43,7 +43,7 @@ class SQLiteRepository
 
     // The object is created from within the class itself
     // only if the class has no instance.
-    public static function getInstance(): ?self
+    public static function getInstance(): Repository
     {
         if (self::$instance == null)
         {
@@ -54,9 +54,28 @@ class SQLiteRepository
     }
 
     /*
+     * Transactions
+     */
+    public function begin(): void
+    {
+        self::$db->beginTransaction();
+    }
+
+    public function commit(): void
+    {
+        self::$db->commit();
+    }
+
+    public function rollBack(): void
+    {
+        self::$db->rollBack();
+    }
+
+
+    /*
      * @see https://www.tutorialspoint.com/sqlite/sqlite_truncate_table.htm
      */
-    public function clearUser()
+    public function clearUser(): void
     {
         $ps = self::$db->query('DELETE FROM user_group;');
         $this->executeOrFail($ps);
@@ -64,7 +83,7 @@ class SQLiteRepository
         $this->executeOrFail($ps);
     }
 
-    public function clearGroup()
+    public function clearGroup(): void
     {
         $ps = self::$db->query('DELETE FROM user_group;');
         $this->executeOrFail($ps);
@@ -74,7 +93,7 @@ class SQLiteRepository
         $this->executeOrFail($ps);
     }
 
-    public function clearRole()
+    public function clearRole(): void
     {
         $ps = self::$db->query('DELETE FROM group_role;');
         $this->executeOrFail($ps);
@@ -84,7 +103,7 @@ class SQLiteRepository
         $this->executeOrFail($ps);
     }
 
-    public function clearModule()
+    public function clearModule(): void
     {
         $ps = self::$db->query('DELETE FROM role_module;');
         $this->executeOrFail($ps);
@@ -231,8 +250,14 @@ class SQLiteRepository
                 $b = str_replace(array_keys($params), array_values($params), $sql);
                 echo "\n$b\n";
             }
-
-            throw new \Exception($ps->errorInfo(), $ps->errorCode());
+            $errorInfo = $ps->errorInfo();
+            $SQLSTATE_error_code = $errorInfo[0];
+            $Driver_specific_error_code = $errorInfo[1];
+            $Driver_specific_error_message = $errorInfo[2];
+            throw new \Exception(
+                '['.$SQLSTATE_error_code.'] '.$Driver_specific_error_message.
+                ' (Driver specific error code: '.$Driver_specific_error_code.')',
+                $SQLSTATE_error_code);
         }
     }
 
@@ -262,7 +287,7 @@ class SQLiteRepository
         return $groups;
     }
 
-    public function createGroup(Group $group)
+    public function createGroup(Group $group): void
     {
         $ps = self::$db->prepare('INSERT INTO "Group" (group_id, name, description)'.
                                             ' VALUES(:group_id, :name, :description);');
@@ -300,7 +325,7 @@ class SQLiteRepository
         return $group;
     }
 
-    public function updateGroup($id, $name, $desc)
+    public function updateGroup($id, $name, $desc): void
     {
         $ps = self::$db->prepare('UPDATE "Group" SET '.
                                             'name = :name,'.
@@ -314,7 +339,7 @@ class SQLiteRepository
         ]);
     }
 
-    public function deleteGroup($id)
+    public function deleteGroup($id): void
     {
         $ps = self::$db->prepare('DELETE FROM "Group" WHERE group_id = :group_id;');
 
@@ -404,7 +429,7 @@ class SQLiteRepository
         ]);
     }
 
-    public function createRole(Role $role)
+    public function createRole(Role $role): void
     {
         $ps = self::$db->prepare('INSERT INTO Role (role_id, name, description)'.
                                         ' VALUES(:role_id, :name, :description);');
@@ -532,7 +557,7 @@ class SQLiteRepository
         ]);
     }
 
-    public function updateRole($id, $name, $desc)
+    public function updateRole($id, $name, $desc): void
     {
         $ps = self::$db->prepare('UPDATE Role SET '.
                                         'name = :name,'.
@@ -546,7 +571,7 @@ class SQLiteRepository
         ]);
     }
 
-    public function deleteRole($id)
+    public function deleteRole($id): void
     {
         $ps = self::$db->prepare('DELETE FROM Role WHERE role_id = :role_id;');
 
@@ -732,7 +757,7 @@ class SQLiteRepository
         return $modules;
     }
 
-    public function createModule(Module $module)
+    public function createModule(Module $module): void
     {
         $ps = self::$db->prepare('INSERT INTO Module (module_id, name, description)'.
                                         ' VALUES(:module_id, :name, :description);');
@@ -773,7 +798,7 @@ class SQLiteRepository
         return $module;
     }
 
-    public function updateModule($id, $name, $desc)
+    public function updateModule($id, $name, $desc): void
     {
         $ps = self::$db->prepare('UPDATE Module SET '.
                                         'name = :name,'.
@@ -787,7 +812,7 @@ class SQLiteRepository
         ]);
     }
 
-    public function deleteModule($id)
+    public function deleteModule($id): void
     {
         $ps = self::$db->prepare('DELETE FROM Module WHERE module_id = :module_id;');
 

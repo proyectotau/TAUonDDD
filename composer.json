@@ -17,19 +17,18 @@
     "autoload": {
       "psr-4": {
         "ProyectoTAU\\": "src/"
-      }
+      },
+        "files": [
+            "src/TAU/Common/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
           "ProyectoTAU\\Tests\\": "tests/"
-        },
-        "files": [
-          "tests/app/app.php"
-        ]
+        }
      },
     "require": {
         "league/tactician": "2.0.x-dev",
-        "proyectotau/command-bus": "^1.0",
         "league/container": "4.x-dev",
         "ext-pdo": "*"
     },

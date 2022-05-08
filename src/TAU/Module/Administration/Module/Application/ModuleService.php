@@ -4,6 +4,31 @@ namespace ProyectoTAU\TAU\Module\Administration\Module\Application;
 
 class ModuleService
 {
+    public static function create($id, $name, $desc)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModuleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModuleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository')
+            )
+        );
+
+        app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\create\CreateModuleCommand($id, $name, $desc)
+        );
+    }
+
+    public static function update($id, $name, $desc)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository')
+            )
+        );
+
+        app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommand($id, $name, $desc)
+        );
+    }
 
     public static function delete($moduleId)
     {
@@ -46,7 +71,19 @@ class ModuleService
         );
     }
 
-    //TODO: Move to Query
+    public static function read($id)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModuleCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModuleCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\read\ReadModuleCommand($id)
+        );
+    }
+
     public static function getRolesFromModule($moduleId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\getRolesFromModule\GetRolesFromModuleCommandHandler',
@@ -55,7 +92,7 @@ class ModuleService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Module\Application\getRolesFromModule\GetRolesFromModuleCommand($moduleId)
         );
     }

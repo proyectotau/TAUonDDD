@@ -4,36 +4,51 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 use League\Tactician\CommandBus;
 use ProyectoTAU\TAU\Common\CommandRunner;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\SQLiteGroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\SQLiteModuleRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\SQLiteRoleRepository;
-use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository;
-use ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository;
-use ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository;
-use ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository;
-
-use ProyectoTAU\TAU\Module\Administration\User\Infrastructure\SQLiteUserRepository;
+use ProyectoTAU\TAU\Common\QueryRunner;
+use ProyectoTAU\TAU\Common\Transactional;
 
 /*
  * Instantiate all repositories
  */
-//$userRepository = '\ProyectoTAU\TAU\Module\Administration\User\Infrastructure\\'.$_ENV['UserRepository'];
-if(1) {
-    app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new InMemoryUserRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new InMemoryGroupRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new InMemoryRoleRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', new InMemoryModuleRepository());
-}else{
-    app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new SQLiteUserRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new SQLiteGroupRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new SQLiteRoleRepository());
-    app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', new SQLiteModuleRepository());
+
+
+if( (bool)$_ENV['InMemory'] ) {
+    $userRepository = $_ENV['InMemoryUserRepository'];
+    $groupRepository = $_ENV['InMemoryGroupRepository'];
+    $roleRepository = $_ENV['InMemoryRoleRepository'];
+    $moduleRepository = $_ENV['InMemoryModuleRepository'];
+    $entityManager = $_ENV['InMemoryEntityManager'];
+} else {
+    $userRepository = $_ENV['SQLiteUserRepository'];
+    $groupRepository = $_ENV['SQLiteGroupRepository'];
+    $roleRepository = $_ENV['SQLiteRoleRepository'];
+    $moduleRepository = $_ENV['SQLiteModuleRepository'];
+    $entityManager = $_ENV['SQLiteEntityManager'];
 }
+
+app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', new $userRepository);
+app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', new $groupRepository);
+app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', new $roleRepository);
+app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', new $moduleRepository);
+app()->add('EntityManager', getConcrete($entityManager));
+
 /*
  * Instantiate CommandBus
  */
 app()->add('CommandBus',
     new CommandBus(
+        new Transactional(
+            app()->get('EntityManager')
+        ),
         new CommandRunner()
+    )
+);
+
+/*
+ * Instantiate QueryBus
+ */
+app()->add('QueryBus',
+    new CommandBus(
+        new QueryRunner()
     )
 );

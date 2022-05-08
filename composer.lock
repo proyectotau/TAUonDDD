@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "538212d2a3502d0e797e32a86575b1ed",
+    "content-hash": "4ce9f2b217ec9bc61d26be0a47313b9c",
     "packages": [
         {
             "name": "league/container",
@@ -150,46 +150,6 @@
                 "source": "https://github.com/thephpleague/tactician/tree/master"
             },
             "time": "2021-10-31T15:00:26+00:00"
-        },
-        {
-            "name": "proyectotau/command-bus",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/proyectotau/command-bus.git",
-                "reference": "2ba2ce1dfd12f8a16ca030297006f77c35528ed3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/proyectotau/command-bus/zipball/2ba2ce1dfd12f8a16ca030297006f77c35528ed3",
-                "reference": "2ba2ce1dfd12f8a16ca030297006f77c35528ed3",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ProyectoTAU\\CommandBus\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2"
-            ],
-            "authors": [
-                {
-                    "name": "Proyecto TAU",
-                    "email": "ProyectoTAU2@gmail.com"
-                }
-            ],
-            "description": "Minimalist implementation of CommandBus pattern for test purpose only",
-            "support": {
-                "issues": "https://github.com/proyectotau/command-bus/issues",
-                "source": "https://github.com/proyectotau/command-bus/tree/1.2.0"
-            },
-            "time": "2022-03-21T21:10:53+00:00"
         },
         {
             "name": "psr/container",

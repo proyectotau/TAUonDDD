@@ -29,6 +29,7 @@
 			 </testsuite>
 			 <testsuite name="CommandBus Integration">
 				 <directory suffix="Test.php">./tests/Integration/CommandBus</directory>
+				 <directory suffix="Test.php">./tests/Integration/Services</directory>
 			 </testsuite>
 		 </testsuites>
 		<filter>
@@ -40,4 +41,19 @@
 			<log type="coverage-html" target="coverage-report" lowUpperBound="35" highLowerBound="70" />
 			<log type="coverage-clover" target="coverage-report/coverage.xml"/>
 		</logging>
+		<php>
+			<env name="InMemory" value="true"/>
+
+			<env name="InMemoryUserRepository" value="\ProyectoTAU\TAU\Module\Administration\User\Infrastructure\InMemoryUserRepository"/>
+			<env name="InMemoryGroupRepository" value="\ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\InMemoryGroupRepository"/>
+			<env name="InMemoryRoleRepository" value="\ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\InMemoryRoleRepository"/>
+			<env name="InMemoryModuleRepository" value="\ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\InMemoryModuleRepository"/>
+			<env name="InMemoryEntityManager" value="\ProyectoTAU\TAU\Common\InMemoryRepository::getInstance()"/>
+
+			<env name="SQLiteUserRepository" value="\ProyectoTAU\TAU\Module\Administration\User\Infrastructure\SQLiteUserRepository"/>
+			<env name="SQLiteGroupRepository" value="\ProyectoTAU\TAU\Module\Administration\Group\Infrastructure\SQLiteGroupRepository"/>
+			<env name="SQLiteRoleRepository" value="\ProyectoTAU\TAU\Module\Administration\Role\Infrastructure\SQLiteRoleRepository"/>
+			<env name="SQLiteModuleRepository" value="\ProyectoTAU\TAU\Module\Administration\Module\Infrastructure\SQLiteModuleRepository"/>
+			<env name="SQLiteEntityManager" value="\ProyectoTAU\TAU\Common\SQLiteRepository::getInstance()"/>
+		</php>
 </phpunit>

@@ -2,7 +2,7 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\Group\Application;
 
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 
 final class GroupService
 {
@@ -23,7 +23,7 @@ final class GroupService
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler',
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler(
-                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\UserRepository')
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
             )
         );
 
@@ -87,8 +87,7 @@ final class GroupService
         );
     }
 
-    //TODO: Move to Query
-    public static function read($id): User
+    public static function read($id): Group
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommandHandler',
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommandHandler(
@@ -96,12 +95,11 @@ final class GroupService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\read\ReadGroupCommand($id)
         );
     }
 
-    //TODO: Move to Query
     public static function getUsersFromGroup($groupId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommandHandler',
@@ -110,12 +108,11 @@ final class GroupService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommand($groupId)
         );
     }
 
-    //TODO: Move to Query
     public static function getRolesFromGroup($groupId)
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommandHandler',
@@ -124,8 +121,22 @@ final class GroupService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\Group\Application\getRolesFromGroup\GetRolesFromGroupCommand($groupId)
+        );
+    }
+
+    public static function removeRoleFromGroup($roleId, $groupId)
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\removeRoleFromGroup\RemoveRoleFromGroupCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\removeRoleFromGroup\RemoveRoleFromGroupCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository'),
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
+            )
+        );
+
+        app('CommandBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\removeRoleFromGroup\RemoveRoleFromGroupCommand($roleId, $groupId)
         );
     }
 }

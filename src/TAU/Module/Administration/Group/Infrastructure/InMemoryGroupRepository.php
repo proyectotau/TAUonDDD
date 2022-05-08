@@ -42,7 +42,7 @@ class InMemoryGroupRepository implements GroupRepository
 
     public function removeUserFromGroup(User $user, Group $group): void
     {
-        InMemoryRepository::getInstance()->removeUserToGroup($user, $group);
+        InMemoryRepository::getInstance()->removeUserFromGroup($user, $group);
     }
 
     public function getUsersFromGroup(Group $group): array
@@ -57,7 +57,7 @@ class InMemoryGroupRepository implements GroupRepository
 
     public function removeRoleFromGroup(Role $role, Group $group): void
     {
-        InMemoryRepository::getInstance()->removeRoleToGroup($role, $group);
+        InMemoryRepository::getInstance()->removeRoleFromGroup($role, $group);
     }
 
     public function getRolesFromGroup(Group $group): array

@@ -73,7 +73,6 @@ final class UserService
         );
     }
 
-    //TODO: Move to Query (rename Command to Query)
     public static function read($id): User
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUserCommandHandler',
@@ -82,12 +81,11 @@ final class UserService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\read\ReadUserCommand($id)
         );
     }
 
-    //TODO: Move to Query
     public static function getGroupsFromUser($userId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommandHandler',
@@ -96,7 +94,7 @@ final class UserService
             )
         );
 
-        return app('CommandBus')->handle(
+        return app('QueryBus')->handle(
             new \ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommand($userId)
         );
     }

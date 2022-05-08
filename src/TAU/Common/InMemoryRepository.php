@@ -13,10 +13,10 @@ use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
  */
 
 // General singleton class.
-class InMemoryRepository
+class InMemoryRepository implements Repository
 {
     // Hold the class instance.
-    private static $instance = null;
+    private static ?Repository $instance = null;
 
     // Tables
     private $userDataStore = [];
@@ -38,7 +38,7 @@ class InMemoryRepository
 
     // The object is created from within the class itself
     // only if the class has no instance.
-    public static function getInstance()
+    public static function getInstance(): Repository
     {
         if (self::$instance == null)
         {
@@ -46,6 +46,21 @@ class InMemoryRepository
         }
 
         return self::$instance;
+    }
+
+    /*
+     * Transactions
+     */
+    public function begin(): void
+    {
+    }
+
+    public function commit(): void
+    {
+    }
+
+    public function rollBack(): void
+    {
     }
 
     public function clearUser(): void
@@ -206,7 +221,7 @@ class InMemoryRepository
         $this->user_group[$user->getId()][$group->getId()] = [$user, $group];
     }
 
-    public function removeUserToGroup(User $user, Group $group)
+    public function removeUserFromGroup(User $user, Group $group)
     {
         unset($this->user_group[$user->getId()][$group->getId()]);
     }
@@ -246,7 +261,7 @@ class InMemoryRepository
         $this->group_role[$group->getId()][$role->getId()] = [$group, $role];
     }
 
-    public function removeRoleToGroup(Role $role, Group $group)
+    public function removeRoleFromGroup(Role $role, Group $group)
     {
         unset($this->group_role[$group->getId()][$role->getId()]);
     }
@@ -295,7 +310,7 @@ class InMemoryRepository
      * Privates
      */
 
-    private function extractX($from, $who, $available, $entityY)
+    private function extractX($from, $who, $available, $entityY): array
     {
         $r = [
             $who => [],
@@ -312,7 +327,7 @@ class InMemoryRepository
         return $r;
     }
 
-    private function extractY($from, $who, $available, $entityX)
+    private function extractY($from, $who, $available, $entityX): array
     {
         $r = [
             $who => [],
