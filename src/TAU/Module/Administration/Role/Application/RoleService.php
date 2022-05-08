@@ -3,7 +3,6 @@
 namespace ProyectoTAU\TAU\Module\Administration\Role\Application;
 
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 
 final class RoleService
 {

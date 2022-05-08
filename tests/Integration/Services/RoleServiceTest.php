@@ -3,9 +3,9 @@
 namespace ProyectoTAU\Tests\Integration\Services;
 
 use PHPUnit\Framework\TestCase;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
-use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 
 class RoleServiceTest  extends TestCase
 {
@@ -14,7 +14,7 @@ class RoleServiceTest  extends TestCase
         $em = app()->get('EntityManager');
         $em->clearGroup();
         $em->clearRole();
-        $em->clearModule(); //TODO: ModuleRoleRelation missing
+        $em->clearModule();
     }
 
     public function testServiceCanCreateRole()
@@ -73,6 +73,36 @@ class RoleServiceTest  extends TestCase
         RoleService::addGroupToRole(1, 1);
 
         RoleService::removeGroupFromRole(1, 1);
+        $this->assertTrue(true);
+    }
+
+    public function testServiceCanAddModuleToRole()
+    {
+        RoleService::create(1, 'Test', 'Dummy');
+        ModuleService::create(1, 'Test', 'Dummy');
+
+        RoleService::addModuleToRole(1,1);
+        $this->assertTrue(true);
+    }
+
+    public function testServiceCanGetModulesFromRole()
+    {
+        RoleService::create(1, 'Test', 'Dummy');
+        ModuleService::create(1, 'Test', 'Dummy');
+        RoleService::addModuleToRole(1,1);
+
+        RoleService::getModulesFromRole(1);
+        $this->assertTrue(true);
+    }
+
+    public function testServiceCanRemoveModuleFromRole()
+    {
+        RoleService::create(1, 'Test', 'Dummy');
+        ModuleService::create(1, 'Test', 'Dummy');
+        RoleService::addModuleToRole(1,1);
+        RoleService::getModulesFromRole(1);
+
+        RoleService::removeModuleFromRole(1,1);
         $this->assertTrue(true);
     }
 }

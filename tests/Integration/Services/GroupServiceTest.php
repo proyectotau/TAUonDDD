@@ -3,9 +3,9 @@
 namespace ProyectoTAU\Tests\Integration\Services;
 
 use PHPUnit\Framework\TestCase;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 use ProyectoTAU\TAU\Module\Administration\User\Application\UserService;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 class GroupServiceTest  extends TestCase
 {
@@ -15,7 +15,6 @@ class GroupServiceTest  extends TestCase
         $em->clearUser();
         $em->clearGroup();
         $em->clearRole();
-         // TODO: RoleGroupRelation missing
     }
 
     public function testServiceCanCreateGroup()

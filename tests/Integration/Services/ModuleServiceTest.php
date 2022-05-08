@@ -3,8 +3,8 @@
 namespace ProyectoTAU\Tests\Integration\Services;
 
 use PHPUnit\Framework\TestCase;
-use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 
 class ModuleServiceTest  extends TestCase
 {
@@ -13,7 +13,6 @@ class ModuleServiceTest  extends TestCase
         $em = app()->get('EntityManager');
         $em->clearRole();
         $em->clearModule();
-         //TODO: ModuleRoleRelation missing
     }
 
     public function testServiceCanCreateModule()
