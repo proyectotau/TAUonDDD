@@ -23,6 +23,6 @@ final class RemoveGroupFromUserCommandHandler
 
         $this->userRepository->removeGroupFromUser($group, $user);
 
-        //$user->removeGroup($group);
+        $user->removeGroup($group);
     }
 }

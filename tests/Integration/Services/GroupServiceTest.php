@@ -9,46 +9,77 @@ use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 class GroupServiceTest  extends TestCase
 {
-    public function setUp(): void
-    {
-        $em = app()->get('EntityManager');
-        $em->clearUser();
-        $em->clearGroup();
-        $em->clearRole();
-    }
+    use RepositoriesProvider;
 
-    public function testServiceCanCreateGroup()
+    /**
+     * @dataProvider groupRepositoryProvider
+     */
+    public function testServiceCanCreateGroup($entityManager, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         $this->assertTrue(true);
     }
 
-    public function testServiceCanReadGroup()
+    /**
+     * @dataProvider groupRepositoryProvider
+     */
+    public function testServiceCanReadGroup($entityManager, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
 
         GroupService::read(1);
         $this->assertTrue(true);
     }
 
-    public function testServiceCanUpdateGroup()
+    /**
+     * @dataProvider groupRepositoryProvider
+     */
+    public function testServiceCanUpdateGroup($entityManager, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
 
         GroupService::update(1, 'TestOK', 'DummyOK');
         $this->assertTrue(true);
     }
 
-    public function testServiceCanDeleteGroup()
+    /**
+     * @dataProvider groupRepositoryProvider
+     */
+    public function testServiceCanDeleteGroup($entityManager, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
 
         GroupService::delete(1);
         $this->assertTrue(true);
     }
 
-    public function testServiceCanAddUserToGroup()
+    /**
+     * @dataProvider userGroupRepositoriesProvider
+     */
+    public function testServiceCanAddUserToGroup($entityManager, $userRepository, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', $userRepository);
+        $userRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         UserService::create(1, 'Test', 'Dummy', 'fakelogin');
         GroupService::create(1, 'Test', 'Dummy');
 
@@ -56,8 +87,17 @@ class GroupServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanGetUsersFromGroup()
+    /**
+     * @dataProvider userGroupRepositoriesProvider
+     */
+    public function testServiceCanGetUsersFromGroup($entityManager, $userRepository, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', $userRepository);
+        $userRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         UserService::create(1, 'Test', 'Dummy', 'fakelogin');
         GroupService::create(1, 'Test', 'Dummy');
         GroupService::addUserToGroup(1, 1);
@@ -66,8 +106,17 @@ class GroupServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanRemoveUserFromGroup()
+    /**
+     * @dataProvider userGroupRepositoriesProvider
+     */
+    public function testServiceCanRemoveUserFromGroup($entityManager, $userRepository, $groupRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', $userRepository);
+        $userRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
         UserService::create(1, 'Test', 'Dummy', 'fakelogin');
         GroupService::create(1, 'Test', 'Dummy');
         GroupService::addUserToGroup(1, 1);
@@ -76,8 +125,17 @@ class GroupServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanAddRoleToGroup()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanAddRoleToGroup($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
 
@@ -85,8 +143,17 @@ class GroupServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanGetRolesFromGroup()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanGetRolesFromGroup($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
         GroupService::addRoleToGroup(1,1);
@@ -95,8 +162,17 @@ class GroupServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanRemoveRoleFromGroup()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanRemoveRoleFromGroup($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
         GroupService::addRoleToGroup(1,1);

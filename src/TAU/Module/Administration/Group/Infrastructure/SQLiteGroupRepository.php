@@ -35,21 +35,6 @@ class SQLiteGroupRepository implements GroupRepository
         SQLiteRepository::getInstance()->deleteGroup($id);
     }
 
-    public function addGroupToUser(Group $group, User $user): void
-    {
-        SQLiteRepository::getInstance()->addGroupToUser($group, $user);
-    }
-
-    public function removeGroupFromUser(Group $group, User $user): void
-    {
-        SQLiteRepository::getInstance()->removeGroupFromUser($group, $user);
-    }
-
-    public function getGroupsFromUser(User $user): array
-    {
-        return SQLiteRepository::getInstance()->getGroupsFromUser($user);
-    }
-
     public function addUserToGroup($user, $group): void
     {
         SQLiteRepository::getInstance()->addUserToGroup($user, $group);

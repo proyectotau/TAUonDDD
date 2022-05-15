@@ -10,8 +10,6 @@ use ProyectoTAU\TAU\Common\Transactional;
 /*
  * Instantiate all repositories
  */
-
-
 if( (bool)$_ENV['InMemory'] ) {
     $userRepository = $_ENV['InMemoryUserRepository'];
     $groupRepository = $_ENV['InMemoryGroupRepository'];

@@ -50,16 +50,6 @@ class SQLiteRoleRepository implements RoleRepository
         return SQLiteRepository::getInstance()->getGroupsFromRole($role);
     }
 
-    public function addRoleToGroup($role, $group): void
-    {
-        SQLiteRepository::getInstance()->addRoleToGroup($role, $group);
-    }
-
-    public function removeRoleFromGroup(Role $role, Group $group): void
-    {
-        SQLiteRepository::getInstance()->removeRoleFromGroup($role, $group);
-    }
-
     public function addModuleToRole(Module $module, Role $role): void
     {
         SQLiteRepository::getInstance()->addModuleToRole($module, $role);

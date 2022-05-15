@@ -4,4 +4,3 @@ workspace.code-workspace
 .idea/
 vendor/
 coverage-report/
-src/TAU/Common/admin.sqlite3

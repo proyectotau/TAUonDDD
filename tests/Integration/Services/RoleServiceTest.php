@@ -9,46 +9,77 @@ use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 
 class RoleServiceTest  extends TestCase
 {
-    public function setUp(): void
-    {
-        $em = app()->get('EntityManager');
-        $em->clearGroup();
-        $em->clearRole();
-        $em->clearModule();
-    }
+    use RepositoriesProvider;
 
-    public function testServiceCanCreateRole()
+    /**
+     * @dataProvider roleRepositoryProvider
+     */
+    public function testServiceCanCreateRole($entityManager, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
         $this->assertTrue(true);
     }
 
-    public function testServiceCanReadRole()
+    /**
+     * @dataProvider roleRepositoryProvider
+     */
+    public function testServiceCanReadRole($entityManager, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
 
         RoleService::read(1);
         $this->assertTrue(true);
     }
 
-    public function testServiceCanUpdateRole()
+    /**
+     * @dataProvider roleRepositoryProvider
+     */
+    public function testServiceCanUpdateRole($entityManager, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
 
         RoleService::update(1, 'TestOK', 'DummyOK');
         $this->assertTrue(true);
     }
 
-    public function testServiceCanDeleteRole()
+    /**
+     * @dataProvider roleRepositoryProvider
+     */
+    public function testServiceCanDeleteRole($entityManager, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
 
         RoleService::delete(1);
         $this->assertTrue(true);
     }
 
-    public function testServiceCanAddGroupToRole()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanAddGroupToRole($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
 
@@ -56,8 +87,17 @@ class RoleServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanGetGroupsFromRole()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanGetGroupsFromRole($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
         RoleService::addGroupToRole(1, 1);
@@ -66,8 +106,17 @@ class RoleServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanRemoveGroupFromRole()
+    /**
+     * @dataProvider groupRoleRepositoriesProvider
+     */
+    public function testServiceCanRemoveGroupFromRole($entityManager, $groupRepository, $roleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
         GroupService::create(1, 'Test', 'Dummy');
         RoleService::create(1, 'Test', 'Dummy');
         RoleService::addGroupToRole(1, 1);
@@ -76,8 +125,17 @@ class RoleServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanAddModuleToRole()
+    /**
+     * @dataProvider roleModuleRepositoriesProvider
+     */
+    public function testServiceCanAddModuleToRole($entityManager, $roleRepository, $moduleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', $moduleRepository);
+        $moduleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
         ModuleService::create(1, 'Test', 'Dummy');
 
@@ -85,8 +143,17 @@ class RoleServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanGetModulesFromRole()
+    /**
+     * @dataProvider roleModuleRepositoriesProvider
+     */
+    public function testServiceCanGetModulesFromRole($entityManager, $roleRepository, $moduleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', $moduleRepository);
+        $moduleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
         ModuleService::create(1, 'Test', 'Dummy');
         RoleService::addModuleToRole(1,1);
@@ -95,8 +162,17 @@ class RoleServiceTest  extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testServiceCanRemoveModuleFromRole()
+    /**
+     * @dataProvider roleModuleRepositoriesProvider
+     */
+    public function testServiceCanRemoveModuleFromRole($entityManager, $roleRepository, $moduleRepository)
     {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', $moduleRepository);
+        $moduleRepository->clear();
+
         RoleService::create(1, 'Test', 'Dummy');
         ModuleService::create(1, 'Test', 'Dummy');
         RoleService::addModuleToRole(1,1);

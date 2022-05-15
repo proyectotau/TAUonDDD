@@ -23,6 +23,6 @@ final class AddRoleToGroupCommandHandler
 
         $this->groupRepository->addRoleToGroup($role, $group);
 
-        $group->addrole($role);
+        $group->addRole($role);
     }
 }

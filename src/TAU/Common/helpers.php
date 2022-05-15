@@ -1,12 +1,11 @@
 <?php
 
-
 if( ! function_exists("app") ){
     function app($alias = null){
         static $app = null;
 
         if( $app == null ){
-            $app = new \League\Container\Container();
+            $app = new \ProyectoTAU\TAU\Common\ContainerExt();
         }
 
         if( $alias != null )

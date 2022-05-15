@@ -24,6 +24,6 @@ final class RemoveRoleFromModuleCommandHandler
 
         $this->moduleRepository->removeRoleFromModule($role, $module);
 
-        //$module->removeRoleFrom($role);
+        $module->removeRole($role);
     }
 }

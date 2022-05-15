@@ -2,6 +2,8 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Domain;
 
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
+
 class User
 {
     private $id;
@@ -63,9 +65,15 @@ class User
 
     public function addGroup($group)
     {
-        $this->belongsto[] = $group;
+        $this->belongsto[$group->getId()] = $group;
         // TODO: Raise AddGroupToUserDomainEvent($this, $group)
         //$user->addGroup($this); //TODO: this causes an infinite loop
+    }
+
+    public function removeGroup(Group $group)
+    {
+        unset($this->belongsto[$group->getId()]);
+        // TODO: Raise RemoveGroupFromUserDomainEvent($role, $this)
     }
 
     public function getGroups(): array
