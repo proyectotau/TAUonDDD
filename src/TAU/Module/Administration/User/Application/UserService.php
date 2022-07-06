@@ -86,6 +86,19 @@ final class UserService
         );
     }
 
+    public static function readAll(): array
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommand()
+        );
+    }
+
     public static function getGroupsFromUser($userId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\User\Application\getGroupsFromUser\GetGroupsFromUserCommandHandler',

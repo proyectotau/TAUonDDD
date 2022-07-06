@@ -152,6 +152,11 @@ class SQLiteRepository implements Repository
         return $user;
     }
 
+    public function readAllUsers(): array
+    {
+        return $this->getAllUsers();
+    }
+
     public function updateUser($id, $name, $surname, $login): void
     {
         $ps = self::$db->prepare('UPDATE User SET '.

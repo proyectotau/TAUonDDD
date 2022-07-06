@@ -31,6 +31,25 @@ final class RepositoryUserTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testItCanReadAllUsers()
+    {
+        $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');
+        $userRepository->clear();
+
+        $usr1 = new User(1, "Test1", "Dummy1", "fakelogin1");
+        $usr2 = new User(2, "Test2", "Dummy2", "fakelogin2");
+        $userRepository->create($usr1);
+        $userRepository->create($usr2);
+
+        $expected = [
+            $usr1,
+            $usr2
+        ];
+
+        $actual = $userRepository->readAll();
+        $this->assertEqualsCanonicalizing($expected, $actual);
+    }
+
     public function testItCanUpdateUser()
     {
         $userRepository = app()->get('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository');

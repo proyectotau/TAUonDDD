@@ -105,6 +105,11 @@ class InMemoryRepository implements Repository
         return $this->userDataStore[$id];
     }
 
+    public function readAllUsers(): array
+    {
+        return $this->userDataStore;
+    }
+
     public function updateUser($id, $name, $surname, $login): void
     {
         $this->failIfNotExists('User', $id);

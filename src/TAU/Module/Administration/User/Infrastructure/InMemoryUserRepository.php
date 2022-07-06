@@ -24,6 +24,11 @@ class InMemoryUserRepository implements UserRepository
         return InMemoryRepository::getInstance()->readUser($id);
     }
 
+    public function readAll(): array
+    {
+        return InMemoryRepository::getInstance()->readAllUsers();
+    }
+
     public function update($id, $name, $surname, $login): void
     {
         InMemoryRepository::getInstance()->updateUser($id, $name, $surname, $login);

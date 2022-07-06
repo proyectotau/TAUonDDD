@@ -41,6 +41,22 @@ class UserServiceTest  extends TestCase
     /**
      * @dataProvider userRepositoryProvider
      */
+    public function testServiceCanReadAllUsers($entityManager, $userRepository)
+    {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository', $userRepository);
+        $userRepository->clear();
+
+        UserService::create(1, 'Test', 'Dummy', 'fakelogin');
+        UserService::create(2, 'Test', 'Dummy', 'fakelogin');
+
+        UserService::readAll();
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider userRepositoryProvider
+     */
     public function testServiceCanUpdateUser($entityManager, $userRepository)
     {
         $this->resetCommandBus($entityManager);

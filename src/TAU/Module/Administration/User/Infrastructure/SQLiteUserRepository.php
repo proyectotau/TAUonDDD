@@ -24,6 +24,11 @@ class SQLiteUserRepository implements UserRepository
         return SQLiteRepository::getInstance()->readUser($id);
     }
 
+    public function readAll(): array
+    {
+        return SQLiteRepository::getInstance()->readAllUsers();
+    }
+
     public function update($id, $name, $surname, $login): void
     {
         SQLiteRepository::getInstance()->updateUser($id, $name, $surname, $login);

@@ -13,6 +13,8 @@ interface UserRepository
     public function update($id, $name, $surname, $login): void;
     public function delete($id): void;
 
+    public function readAll(): array;
+
     public function addGroupToUser(Group $group, User $user): void;
     public function removeGroupFromUser(Group $group, User $user): void;
     public function getGroupsFromUser(User $user): array;

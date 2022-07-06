@@ -27,6 +27,8 @@ interface Repository
 
     public function readUser($id): User;
 
+    public function readAllUsers(): array;
+
     public function updateUser($id, $name, $surname, $login): void;
 
     public function deleteUser($id): void;

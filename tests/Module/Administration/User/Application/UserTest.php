@@ -4,6 +4,8 @@ namespace ProyectoTAU\Tests\Module\Administration\User\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommand;
+use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
@@ -40,6 +42,14 @@ class DummyUserRepository implements UserRepository {
         }
 
         return new User(0,null,null, null);
+    }
+
+    public function readAll(): array
+    {
+        return [
+            new User(0,null,null, null),
+            new User(1,null,null, null)
+        ];
     }
 
     public function update($id, $name, $surname, $login): void
@@ -96,6 +106,18 @@ final class UserTest extends MockeryTestCase {
 
         $handler = new ReadUserCommandHandler($userRepository);
         $handler->handle(new ReadUserCommand(0));
+    }
+
+    public function testItCanReadAllAdminUsers()
+    {
+        $userRepository = Mockery::mock(DummyUserRepository::class);
+
+        $userRepository->shouldReceive('readAll')->once();
+
+        //UserService::readAll();
+
+        $handler = new ReadAllUsersCommandHandler($userRepository);
+        $handler->handle(new ReadAllUsersCommand());
     }
 
     public function testItCanUpdateAdminUser()
