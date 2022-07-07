@@ -42,6 +42,22 @@ class GroupServiceTest  extends TestCase
     /**
      * @dataProvider groupRepositoryProvider
      */
+    public function testServiceCanReadAllGroups($entityManager, $groupRepository)
+    {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\User\Domain\GroupRepository', $groupRepository);
+        $groupRepository->clear();
+
+        GroupService::create(1, 'Test', 'Dummy');
+        GroupService::create(2, 'Test', 'Dummy');
+
+        GroupService::readAll();
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider groupRepositoryProvider
+     */
     public function testServiceCanUpdateGroup($entityManager, $groupRepository)
     {
         $this->resetCommandBus($entityManager);

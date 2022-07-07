@@ -142,6 +142,11 @@ class InMemoryRepository implements Repository
         return $this->groupDataStore[$id];
     }
 
+    public function readAllGroups(): array
+    {
+        return $this->groupDataStore;
+    }
+
     public function updateGroup($id, $name, $desc): void
     {
         $this->failIfNotExists('Group', $id);

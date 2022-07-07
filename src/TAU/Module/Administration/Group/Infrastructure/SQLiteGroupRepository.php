@@ -25,6 +25,11 @@ class SQLiteGroupRepository implements GroupRepository
         return SQLiteRepository::getInstance()->readGroup($id);
     }
 
+    public function readAll(): array
+    {
+        return SQLiteRepository::getInstance()->readAllGroups();
+    }
+
     public function update($id, $name, $desc): void
     {
         SQLiteRepository::getInstance()->updateGroup($id, $name, $desc);

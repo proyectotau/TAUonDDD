@@ -100,6 +100,19 @@ final class GroupService
         );
     }
 
+    public static function readAll(): array
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommand()
+        );
+    }
+
     public static function getUsersFromGroup($groupId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Group\Application\getUsersFromGroup\GetUsersFromGroupCommandHandler',

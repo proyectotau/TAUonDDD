@@ -330,6 +330,11 @@ class SQLiteRepository implements Repository
         return $group;
     }
 
+    public function readAllGroups(): array
+    {
+        return $this->getAllGroups();
+    }
+
     public function updateGroup($id, $name, $desc): void
     {
         $ps = self::$db->prepare('UPDATE "Group" SET '.

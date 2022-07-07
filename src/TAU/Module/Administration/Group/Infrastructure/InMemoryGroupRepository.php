@@ -25,6 +25,11 @@ class InMemoryGroupRepository implements GroupRepository
         return InMemoryRepository::getInstance()->readGroup($id);
     }
 
+    public function readAll(): array
+    {
+        return InMemoryRepository::getInstance()->readAllGroups();
+    }
+
     public function update($id, $name, $desc): void
     {
         InMemoryRepository::getInstance()->updateGroup($id, $name, $desc);

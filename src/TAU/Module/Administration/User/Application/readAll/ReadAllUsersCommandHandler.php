@@ -2,7 +2,6 @@
 
 namespace ProyectoTAU\TAU\Module\Administration\User\Application\readAll;
 
-use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\UserRepository;
 
 final class ReadAllUsersCommandHandler

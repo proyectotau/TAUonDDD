@@ -4,8 +4,12 @@ namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommand;
+use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
@@ -17,6 +21,7 @@ use ProyectoTAU\TAU\Module\Administration\Group\Application\update\UpdateGroupCo
 use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\delete\DeleteGroupCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
+use ProyectoTAU\Tests\Module\Administration\User\Application\DummyUserRepository;
 
 class DummyGroupRepository implements GroupRepository {
 
@@ -40,6 +45,15 @@ class DummyGroupRepository implements GroupRepository {
 
         return new Group(0, "Test", "Dummy");
     }
+
+    public function readAll(): array
+    {
+        return [
+            new Group(0,null, null),
+            new Group(1,null, null)
+        ];
+    }
+
     public function update($id, $name, $desc): void
     {
         // Should receive a call once with the same Dummy Group as argument
@@ -97,6 +111,18 @@ class GroupTest extends MockeryTestCase
 
         $handler = new ReadGroupCommandHandler($groupRepository);
         $handler->handle(new ReadGroupCommand(0));
+    }
+
+    public function testItCanReadAllAdminGroups()
+    {
+        $groupRepository = Mockery::mock(DummyGroupRepository::class);
+
+        $groupRepository->shouldReceive('readAll')->once();
+
+        //GroupService::readAll();
+
+        $handler = new ReadAllGroupsCommandHandler($groupRepository);
+        $handler->handle(new ReadAllGroupsCommand());
     }
 
     public function testItCanUpdateAdminGroup()
