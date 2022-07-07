@@ -3,6 +3,7 @@
 namespace ProyectoTAU\Tests\Module\Administration\Module\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 
 final class RepositoryModuleTest extends TestCase
@@ -29,6 +30,25 @@ final class RepositoryModuleTest extends TestCase
 
         $actual = $moduleRepository->read(0);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testItCanReadAllModules()
+    {
+        $moduleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository');
+        $moduleRepository->clear();
+
+        $mod1 = new Module(1, "Test1", "Dummy Module1");
+        $mod2 = new Module(2, "Test2", "Dummy Module2");
+        $moduleRepository->create($mod1);
+        $moduleRepository->create($mod2);
+
+        $expected = [
+            $mod1,
+            $mod2
+        ];
+
+        $actual = $moduleRepository->readAll();
+        $this->assertEqualsCanonicalizing($expected, $actual);
     }
 
     public function testItCanUpdateModule()

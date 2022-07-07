@@ -3,6 +3,7 @@
 namespace ProyectoTAU\Tests\Integration\Services;
 
 use PHPUnit\Framework\TestCase;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\GroupService;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 use ProyectoTAU\TAU\Module\Administration\Module\Application\ModuleService;
 
@@ -35,6 +36,22 @@ class ModuleServiceTest  extends TestCase
         ModuleService::create(1, 'Test', 'Dummy');
 
         ModuleService::read(1);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider moduleRepositoryProvider
+     */
+    public function testServiceCanReadAllModules($entityManager, $moduleRepository)
+    {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository', $moduleRepository);
+        $moduleRepository->clear();
+
+        ModuleService::create(1, 'Test', 'Dummy');
+        ModuleService::create(2, 'Test', 'Dummy');
+
+        ModuleService::readAll();
         $this->assertTrue(true);
     }
 

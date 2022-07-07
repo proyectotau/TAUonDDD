@@ -4,12 +4,10 @@ namespace ProyectoTAU\Tests\Module\Administration\Group\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllRolesCommand;
+use ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommand;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\GroupRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
-use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommand;
-use ProyectoTAU\TAU\Module\Administration\User\Application\readAll\ReadAllUsersCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\User\Domain\User;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Group\Application\create\CreateGroupCommand;
@@ -122,7 +120,7 @@ class GroupTest extends MockeryTestCase
         //GroupService::readAll();
 
         $handler = new ReadAllGroupsCommandHandler($groupRepository);
-        $handler->handle(new ReadAllRolesCommand());
+        $handler->handle(new ReadAllGroupsCommand());
     }
 
     public function testItCanUpdateAdminGroup()

@@ -813,6 +813,11 @@ class SQLiteRepository implements Repository
         return $module;
     }
 
+    public function readAllModules(): array
+    {
+        return $this->getAllModules();
+    }
+
     public function updateModule($id, $name, $desc): void
     {
         $ps = self::$db->prepare('UPDATE Module SET '.

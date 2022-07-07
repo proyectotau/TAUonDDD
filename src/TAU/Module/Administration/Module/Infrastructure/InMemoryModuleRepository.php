@@ -24,6 +24,11 @@ class InMemoryModuleRepository implements ModuleRepository
         return InMemoryRepository::getInstance()->readModule($id);
     }
 
+    public function readAll(): array
+    {
+        return InMemoryRepository::getInstance()->readAllModules();
+    }
+
     public function update($id, $name, $desc): void
     {
         InMemoryRepository::getInstance()->updateModule($id, $name, $desc);

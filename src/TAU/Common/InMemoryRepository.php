@@ -214,6 +214,11 @@ class InMemoryRepository implements Repository
         return $this->moduleDataStore[$id];
     }
 
+    public function readAllModules(): array
+    {
+        return $this->moduleDataStore;
+    }
+
     public function updateModule($id, $name, $desc): void
     {
         $this->failIfNotExists('Module', $id);

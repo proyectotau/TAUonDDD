@@ -25,6 +25,11 @@ class SQLiteModuleRepository implements ModuleRepository
         return SQLiteRepository::getInstance()->readModule($id);
     }
 
+    public function readAll(): array
+    {
+        return SQLiteRepository::getInstance()->readAllModules();
+    }
+
     public function update($id, $name, $desc): void
     {
         SQLiteRepository::getInstance()->updateModule($id, $name, $desc);

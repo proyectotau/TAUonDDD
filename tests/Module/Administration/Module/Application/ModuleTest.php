@@ -4,6 +4,8 @@ namespace ProyectoTAU\Tests\Module\Administration\Module\Application;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\readAll\ReadAllModulesCommand;
+use ProyectoTAU\TAU\Module\Administration\Module\Application\readAll\ReadAllModulesCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository;
@@ -16,6 +18,7 @@ use ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModule
 use ProyectoTAU\TAU\Module\Administration\Module\Application\update\UpdateModuleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Module\Application\delete\DeleteModuleCommand;
 use ProyectoTAU\TAU\Module\Administration\Module\Application\delete\DeleteModuleCommandHandler;
+use ProyectoTAU\Tests\Module\Administration\Group\Application\DummyGroupRepository;
 
 
 class DummyModuleRepository implements ModuleRepository {
@@ -38,6 +41,14 @@ class DummyModuleRepository implements ModuleRepository {
             throw new \InvalidArgumentException("Mismatched Module received by read method");
         }
         return new Module(0,null,null);
+    }
+
+    public function readAll(): array
+    {
+        return [
+            new Module(0,null, null),
+            new Module(1,null, null)
+        ];
     }
 
     public function update($id, $name, $desc): void
@@ -94,6 +105,18 @@ class ModuleTest extends MockeryTestCase
 
         $handler = new ReadModuleCommandHandler($moduleRepository);
         $handler->handle(new ReadModuleCommand(0));
+    }
+
+    public function testItCanReadAllAdminModules()
+    {
+        $moduleRepository = Mockery::mock(DummyModuleRepository::class);
+
+        $moduleRepository->shouldReceive('readAll')->once();
+
+        //ModuleService::readAll();
+
+        $handler = new ReadAllModulesCommandHandler($moduleRepository);
+        $handler->handle(new ReadAllModulesCommand());
     }
 
     public function testItCanUpdateAdminModule()

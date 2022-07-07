@@ -84,6 +84,19 @@ class ModuleService
         );
     }
 
+    public static function readAll(): array
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\readAll\ReadAllModulesCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\readAll\ReadAllModulesCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Module\Domain\ModuleRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Module\Application\readAll\ReadAllModulesCommand()
+        );
+    }
+
     public static function getRolesFromModule($moduleId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Module\Application\getRolesFromModule\GetRolesFromModuleCommandHandler',
