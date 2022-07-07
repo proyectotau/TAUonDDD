@@ -114,6 +114,19 @@ final class RoleService
         );
     }
 
+    public static function readAll(): array
+    {
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\readAll\ReadAllRolesCommandHandler',
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\readAll\ReadAllRolesCommandHandler(
+                app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository')
+            )
+        );
+
+        return app('QueryBus')->handle(
+            new \ProyectoTAU\TAU\Module\Administration\Role\Application\readAll\ReadAllRolesCommand()
+        );
+    }
+
     public static function getGroupsFromRole($roleId): array
     {
         app()->add('ProyectoTAU\TAU\Module\Administration\Role\Application\getGroupsFromRole\GetGroupsFromRoleCommandHandler',

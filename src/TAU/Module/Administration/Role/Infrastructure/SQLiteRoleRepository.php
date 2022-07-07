@@ -25,6 +25,11 @@ class SQLiteRoleRepository implements RoleRepository
         return SQLiteRepository::getInstance()->readRole($id);
     }
 
+    public function readAll(): array
+    {
+        return SQLiteRepository::getInstance()->readAllRoles();
+    }
+
     public function update($id, $name, $desc): void
     {
         SQLiteRepository::getInstance()->updateRole($id, $name, $desc);

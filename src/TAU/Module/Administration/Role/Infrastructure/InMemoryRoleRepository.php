@@ -25,6 +25,11 @@ class InMemoryRoleRepository implements RoleRepository
         return InMemoryRepository::getInstance()->readRole($id);
     }
 
+    public function readAll(): array
+    {
+        return InMemoryRepository::getInstance()->readAllRoles();
+    }
+
     public function update($id, $name, $desc): void
     {
         InMemoryRepository::getInstance()->updateRole($id, $name, $desc);

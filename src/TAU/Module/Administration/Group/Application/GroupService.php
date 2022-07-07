@@ -109,7 +109,7 @@ final class GroupService
         );
 
         return app('QueryBus')->handle(
-            new \ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllGroupsCommand()
+            new \ProyectoTAU\TAU\Module\Administration\Group\Application\readAll\ReadAllRolesCommand()
         );
     }
 

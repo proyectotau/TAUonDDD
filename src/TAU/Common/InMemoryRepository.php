@@ -178,6 +178,11 @@ class InMemoryRepository implements Repository
         return $this->roleDataStore[$id];
     }
 
+    public function readAllRoles(): array
+    {
+        return $this->roleDataStore;
+    }
+
     public function updateRole($id, $name, $desc): void
     {
         $this->failIfNotExists('Role', $id);

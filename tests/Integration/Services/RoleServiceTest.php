@@ -42,6 +42,22 @@ class RoleServiceTest  extends TestCase
     /**
      * @dataProvider roleRepositoryProvider
      */
+    public function testServiceCanReadAllRoles($entityManager, $roleRepository)
+    {
+        $this->resetCommandBus($entityManager);
+        app()->add('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository', $roleRepository);
+        $roleRepository->clear();
+
+        RoleService::create(1, 'Test', 'Dummy');
+        RoleService::create(2, 'Test', 'Dummy');
+
+        RoleService::readAll();
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider roleRepositoryProvider
+     */
     public function testServiceCanUpdateRole($entityManager, $roleRepository)
     {
         $this->resetCommandBus($entityManager);

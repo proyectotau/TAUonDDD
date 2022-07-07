@@ -7,6 +7,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Module\Domain\Module;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\readAll\ReadAllRolesCommand;
+use ProyectoTAU\TAU\Module\Administration\Role\Application\readAll\ReadAllRolesCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommand;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\create\CreateRoleCommandHandler;
@@ -16,7 +18,6 @@ use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleComm
 use ProyectoTAU\TAU\Module\Administration\Role\Application\update\UpdateRoleCommandHandler;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommand;
 use ProyectoTAU\TAU\Module\Administration\Role\Application\delete\DeleteRoleCommandHandler;
-use ProyectoTAU\TAU\Module\Administration\Role\Application\RoleService;
 
 
 class DummyRoleRepository implements RoleRepository {
@@ -40,6 +41,14 @@ class DummyRoleRepository implements RoleRepository {
         }
 
         return new Role(0, "Test", "Dummy");
+    }
+
+    public function readAll(): array
+    {
+        return [
+            new Role(0,null, null),
+            new Role(1,null, null)
+        ];
     }
 
     public function update($id, $name, $desc): void
@@ -99,6 +108,18 @@ class RoleTest extends MockeryTestCase
 
         $handler = new ReadRoleCommandHandler($roleRepository);
         $handler->handle(new ReadRoleCommand(0));
+    }
+
+    public function testItCanReadAllAdminRoles()
+    {
+        $roleRepository = Mockery::mock(DummyRoleRepository::class);
+
+        $roleRepository->shouldReceive('readAll')->once();
+
+        //RoleService::readAll();
+
+        $handler = new ReadAllRolesCommandHandler($roleRepository);
+        $handler->handle(new ReadAllRolesCommand());
     }
 
     public function testItCanUpdateAdminRole()

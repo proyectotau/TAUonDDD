@@ -3,6 +3,7 @@
 namespace ProyectoTAU\Tests\Module\Administration\Role\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
+use ProyectoTAU\TAU\Module\Administration\Group\Domain\Group;
 use ProyectoTAU\TAU\Module\Administration\Role\Domain\Role;
 
 final class RepositoryRoleTest extends TestCase
@@ -29,6 +30,25 @@ final class RepositoryRoleTest extends TestCase
 
         $actual = $roleRepository->read(0);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testItCanReadAllRoles()
+    {
+        $roleRepository = app()->get('ProyectoTAU\TAU\Module\Administration\Role\Domain\RoleRepository');
+        $roleRepository->clear();
+
+        $rol1 = new Role(1, "Test1", "Dummy Role1");
+        $rol2 = new Role(2, "Test2", "Dummy Role2");
+        $roleRepository->create($rol1);
+        $roleRepository->create($rol2);
+
+        $expected = [
+            $rol1,
+            $rol2
+        ];
+
+        $actual = $roleRepository->readAll();
+        $this->assertEqualsCanonicalizing($expected, $actual);
     }
 
     public function testItCanUpdateRole()

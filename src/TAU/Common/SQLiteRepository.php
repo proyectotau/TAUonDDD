@@ -478,6 +478,11 @@ class SQLiteRepository implements Repository
         return $role;
     }
 
+    public function readAllRoles(): array
+    {
+        return $this->getAllRoles();
+    }
+
     private function castRole($o): Role
     {
         return $o;
